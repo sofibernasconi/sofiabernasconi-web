@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="robots" content="noindex">
+<title>Sofía Bernasconi</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,800;1,800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden;background:#c1bfc1}
+  body{font-family:Helvetica,Arial,sans-serif;touch-action:none}
+  canvas{display:block;position:fixed;top:0;left:0;width:100%;height:100%}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+
+<script>
+/* ---------------------------------------------------------------------------
+   Lo que hace funcionar el impreso de referencia:
+   1. dos tintas planas, sin medios tonos: el gris se fabrica sólo con el
+      espaciado entre letras, nunca con opacidad.
+   2. tres estados discretos de tracking (pegado / suelto / muy suelto),
+      no un degradado continuo.
+   3. la palabra principal es el HUECO; el texto la rodea y la aprieta.
+   4. bandas macizas de texto arriba y abajo que encajonan la composición.
+   5. mucho vacío: el campo no está lleno, el texto se concentra en el borde
+      de la forma y se disuelve hacia afuera.
+   6. retícula de líneas fija y aireada: cada fila se lee como una pasada.
+--------------------------------------------------------------------------- */
+
+const PALETAS = {
+  // tonos tomados del impreso con el cuentagotas: gris #c1bfc1, tinta #e22eee
+  rosa:   { fondo:'#c1bfc1', tinta:'#e22eee' },
+  suave:  { fondo:'#c1bfc1', tinta:'#d586e7' },
+  papel: { fondo:'#efeeea', tinta:'#15150f' }     // abrí con #papel en la URL
+};
+const P = PALETAS[location.hash.replace('#','')] || PALETAS.rosa;
+document.body.style.background = P.fondo;
+
+const cv  = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const masc  = document.createElement('canvas');   // el nombre, nítido
+const mctx  = masc.getContext('2d', {willReadFrequently:true});
+const halo  = document.createElement('canvas');   // el nombre, muy difuso
+const hctx  = halo.getContext('2d', {willReadFrequently:true});
+let W,H,DPR,cols,rows,cw,ch,FS;
+
+const PALABRAS = ['BERNASCONI'];    // el texto chico
+const HUECO    = ['SOFIA'];         // la palabra principal, en blanco
+const CELL = 9;
+// grotesca neutra, sin remates: el bitmap de pantalla noventera
+const TIPO = "Helvetica, 'Helvetica Neue', Arial, sans-serif";
+const HAY_TRACK = ('letterSpacing' in ctx);
+const BANDA = 3;                                  // filas macizas arriba y abajo
+
+function isMobile(){ return window.innerWidth < 760; }
+function azar(a,b){ const s=Math.sin(a*12.9898+b*78.233)*43758.5453; return s-Math.floor(s); }
+
+function resize(){
+  DPR = Math.min(2, window.devicePixelRatio||1);
+  W = window.innerWidth;
+  H = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
+  cv.width=W*DPR; cv.height=H*DPR;
+  cv.style.width=W+'px'; cv.style.height=H+'px';
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+
+  cw = isMobile() ? CELL*0.8 : CELL;
+  ch = cw*2.0;                                    // retícula aireada
+  FS = ch*0.66;
+  cols = Math.ceil(W/cw)+2;
+  rows = Math.ceil(H/ch)+1;
+  masc.width=cols; masc.height=rows;
+  halo.width=cols; halo.height=rows;
+  medidas.clear();
+  dibujaNombre();
+}
+
+function pintaNombre(g, blur){
+  g.setTransform(1,0,0,1,0,0);
+  g.filter = blur ? `blur(${blur}px)` : 'none';
+  g.globalAlpha = 1;
+  g.fillStyle='#fff'; g.filter='none'; g.fillRect(0,0,cols,rows);
+  g.filter = blur ? `blur(${blur}px)` : 'none';
+  g.fillStyle='#000'; g.textBaseline='alphabetic';
+
+  const lineas = HUECO;
+  const alto = (rows - BANDA*2.4)/lineas.length;
+  const y0 = BANDA*1.2;
+
+  lineas.forEach((txt,i)=>{
+    let fs = 40;
+    g.font = `italic 800 ${fs}px Inter, sans-serif`;
+    const w = g.measureText(txt).width || 1;
+    fs = fs*cols/w;
+    g.save();
+    g.font = `italic 800 ${fs}px Inter, sans-serif`;
+    const m = g.measureText(txt);
+    const inkH = (m.actualBoundingBoxAscent || fs*0.72);
+    g.translate(0, y0 + alto*(i+1) - alto*0.10);
+    g.scale(1, (alto*0.88)/inkH);
+    g.fillText(txt, 0, 0);
+    g.restore();
+  });
+  g.filter='none';
+}
+function dibujaNombre(){ pintaNombre(mctx, 0.5); pintaNombre(hctx, 5.5); }
+
+const medidas = new Map();
+function anchoPalabra(w, track){
+  const k = w+'|'+track.toFixed(1);
+  if(medidas.has(k)) return medidas.get(k);
+  let a;
+  if(HAY_TRACK){ ctx.letterSpacing = track+'px'; a = ctx.measureText(w).width; }
+  else { a = 0; for(const c of w) a += ctx.measureText(c).width + track; }
+  medidas.set(k,a); return a;
+}
+function escribe(w,x,y,track){
+  if(HAY_TRACK){ ctx.letterSpacing = track+'px'; ctx.fillText(w,x,y); return; }
+  let px=x; for(const c of w){ ctx.fillText(c,px,y); px += ctx.measureText(c).width + track; }
+}
+
+/* Al hacer click la plancha pierde el registro desde ese punto: una onda
+   abre el espaciado a su paso, corre las filas y mete texto adentro del
+   hueco. Después la impresión se vuelve a asentar. */
+let onda = null;                                  // {cx, cy, t0}
+const ONDA_DUR = 1500, ONDA_VEL = 42;             // ms y celdas por segundo
+function golpe(ev){
+  const p = ev.touches ? ev.touches[0] : ev;
+  onda = { cx: p.clientX/cw, cy: p.clientY/ch, t0: performance.now() };
+}
+window.addEventListener('pointerdown', golpe);
+
+let t=0, palabra=0, ultimo=0;
+function frame(now){
+  requestAnimationFrame(frame);
+  const od = onda ? (now - onda.t0) : Infinity;
+  const activa = od < ONDA_DUR;
+  if(!activa) onda = null;
+  if(now - ultimo < (activa ? 40 : 90)) return;   // se reimprime, no se anima
+  ultimo = now;
+
+  // radio de la onda y cuánto le queda de fuerza
+  const oR = activa ? (od/1000)*ONDA_VEL : 0;
+  const oF = activa ? Math.pow(1 - od/ONDA_DUR, 1.4) : 0;
+  t += 0.030;
+  palabra += 0.34;
+
+  const M = mctx.getImageData(0,0,cols,rows).data;
+  const Hl= hctx.getImageData(0,0,cols,rows).data;
+
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = P.tinta;
+  ctx.font = `400 ${FS}px ${TIPO}`;
+  ctx.textBaseline='alphabetic';
+
+  let wi = Math.floor(palabra);
+  const TR = [0, cw*0.72, cw*1.7];                // tres estados, nada intermedio
+
+  for(let r=0;r<rows;r++){
+    const banda = (r < BANDA) || (r >= rows-BANDA);
+    // el cabezal pierde el registro: la fila se lee corrida
+    let desf = Math.round(Math.sin(r*0.13 + t*0.5)*1.0);
+    const y = (r+1)*ch;
+
+    // la onda arrastra la fila entera al pasar por ella
+    let anillo0 = 0;
+    if(oF){
+      const dy = Math.abs(r - onda.cy);
+      anillo0 = Math.exp(-Math.pow(dy - oR, 2)/90) * oF;
+      desf += Math.round(anillo0 * 5 * Math.sin(r*0.9 + t*3));
+    }
+    const rr = Math.max(0, Math.min(rows-1, r+desf));
+
+    let c = 0;
+    while(c < cols){
+      const i = (c + rr*cols)*4;
+      let nivel;
+
+      // fuerza de la onda en esta celda
+      let anillo = 0;
+      if(oF){
+        const d = Math.hypot(c - onda.cx, (r - onda.cy)*1.9);
+        anillo = Math.exp(-Math.pow(d - oR, 2)/120) * oF;
+      }
+
+      if(banda){
+        nivel = 0;                                // banda maciza, a sangre
+      } else {
+        const dentro = M[i] < 128;                // hueco: la palabra principal
+        // la onda empuja texto adentro del hueco al pasar
+        if(dentro && anillo < 0.55){ c++; continue; }
+        // qué tan cerca del contorno: el halo aprieta el texto contra la forma
+        const h = 1 - (Hl[i]/255);
+        let n = dentro ? 2 : h > 0.34 ? 0 : h > 0.14 ? 1 : h > 0.045 ? 2 : 3;
+        // el registro nunca es limpio: algunas palabras saltan de estado
+        const a = azar(c*0.37 + Math.floor(t*0.6), r*1.7);
+        if(a > 0.86) n = Math.max(0, n-1);
+        else if(a < 0.10) n = Math.min(3, n+1);
+        // a su paso la onda abre el espaciado
+        if(anillo > 0.25) n = Math.min(2, n + (anillo > 0.6 ? 2 : 1));
+        if(n === 3){ c += 2; continue; }           // aire
+        nivel = n;
+      }
+
+      const w = PALABRAS[wi % PALABRAS.length]; wi++;
+      const track = TR[nivel];
+      escribe(w, c*cw, y, track);
+      c += Math.max(1, Math.ceil(anchoPalabra(w,track)/cw)) + (nivel===0 ? 1 : 2);
+    }
+  }
+  if(HAY_TRACK) ctx.letterSpacing = '0px';
+}
+
+window.addEventListener('resize', resize);
+window.addEventListener('orientationchange', ()=> setTimeout(resize,150));
+window.addEventListener('hashchange', ()=> location.reload());
+if(window.visualViewport) window.visualViewport.addEventListener('resize', resize);
+
+(document.fonts && document.fonts.load
+  ? document.fonts.load('italic 800 100px Inter').then(()=>document.fonts.ready).catch(()=>{})
+  : Promise.resolve()
+).then(()=>{ resize(); requestAnimationFrame(frame); [200,700].forEach(ms=>setTimeout(resize,ms)); });
+</script>
+</body>
+</html>

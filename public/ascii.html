@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="robots" content="noindex">
+<title>Sofía Bernasconi</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{ --fondo:#efeeea; --tinta:#15150f; }
+  html,body{height:100%;overflow:hidden;background:var(--fondo)}
+  body{font-family:'JetBrains Mono',monospace;touch-action:none}
+  canvas{display:block;position:fixed;top:0;left:0;width:100%;height:100%}
+  .meta{position:fixed;z-index:10;font-size:10px;letter-spacing:.26em;
+        text-transform:uppercase;color:var(--tinta);opacity:.35;pointer-events:none}
+  .meta.br{bottom:4vh;right:5vw}
+  @media(max-width:700px){ .meta{font-size:9px} .meta.br{bottom:3vh} }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="meta br">2026</div>
+
+<script>
+const cv  = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+let W, H, DPR;
+
+// buffer donde se dibuja el nombre y desde donde se lee la luminancia
+const src  = document.createElement('canvas');
+const sctx = src.getContext('2d', {willReadFrequently:true});
+
+// de menos a mas densidad de tinta
+const RAMPA = " .·:;=+*#%@";
+const CELL  = 9;                    // ancho de celda en px (el alto se deriva)
+let cols, rows, cw, ch;
+let t = 0;
+
+function isMobile(){ return window.innerWidth < 760; }
+
+function resize(){
+  DPR = Math.min(2, window.devicePixelRatio || 1);
+  W = window.innerWidth;
+  H = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
+  cv.width = W*DPR; cv.height = H*DPR;
+  cv.style.width = W+'px'; cv.style.height = H+'px';
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+
+  cw = isMobile() ? CELL*0.9 : CELL;
+  ch = cw * 1.72;                    // proporcion de la celda monoespaciada
+  cols = Math.ceil(W/cw) + 1;
+  rows = Math.ceil(H/ch) + 1;
+
+  // el buffer tiene UN pixel por celda: leemos la imagen ya reducida
+  src.width = cols; src.height = rows;
+  dibujaNombre();
+}
+
+// el nombre, a sangre, dentro de la retícula de caracteres
+function dibujaNombre(){
+  sctx.setTransform(1,0,0,1,0,0);
+  sctx.fillStyle = '#fff';
+  sctx.fillRect(0,0,cols,rows);
+  sctx.fillStyle = '#000';
+  sctx.textBaseline = 'alphabetic';
+
+  const lineas = isMobile() ? ['SOFIA','BERNAS','CONI'] : ['SOFIA','BERNASCONI'];
+  const alto = rows / lineas.length;
+
+  lineas.forEach((txt, i) => {
+    let fs = 40;
+    sctx.font = `700 ${fs}px Inter, sans-serif`;
+    const w = sctx.measureText(txt).width || 1;
+    fs = fs * (cols*1.0) / w;                    // cada linea llena el ancho
+    sctx.save();
+    sctx.font = `700 ${fs}px Inter, sans-serif`;
+    // aplastar/estirar para que la linea ocupe exactamente su franja
+    const m = sctx.measureText(txt);
+    const inkH = (m.actualBoundingBoxAscent || fs*0.72);
+    sctx.translate(0, alto*(i+1) - alto*0.12);
+    sctx.scale(1, (alto*0.86) / inkH);
+    sctx.fillText(txt, 0, 0);
+    sctx.restore();
+  });
+}
+
+function frame(){
+  t += 0.01;
+  const img = sctx.getImageData(0,0,cols,rows).data;
+
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = '#15150f';
+  ctx.font = `400 ${ch*0.95}px 'JetBrains Mono', monospace`;
+  ctx.textBaseline = 'alphabetic';
+
+  const N = RAMPA.length - 1;
+
+  for(let r=0; r<rows; r++){
+    // el cabezal: algunas filas leen una fila equivocada del original,
+    // como un terminal que pierde sincronia
+    const desfase = Math.round(Math.sin(r*0.21 + t*1.6) * 1.2
+                  + (Math.sin(t*0.6) > 0.86 ? Math.sin(r*3.1)*3 : 0));
+    const rr = Math.max(0, Math.min(rows-1, r + desfase));
+
+    let linea = '';
+    for(let c=0; c<cols; c++){
+      const i = (c + rr*cols)*4;
+      const lum = (img[i]*0.2126 + img[i+1]*0.7152 + img[i+2]*0.0722)/255;
+      const k = Math.round((1-lum) * N);
+      linea += RAMPA[k];
+    }
+    ctx.fillText(linea, 0, (r+1)*ch);
+  }
+  requestAnimationFrame(frame);
+}
+
+window.addEventListener('resize', resize);
+window.addEventListener('orientationchange', ()=> setTimeout(resize,150));
+if(window.visualViewport) window.visualViewport.addEventListener('resize', resize);
+
+(document.fonts && document.fonts.load
+  ? Promise.all([
+      document.fonts.load('700 100px Inter'),
+      document.fonts.load("400 20px 'JetBrains Mono'")
+    ]).then(()=>document.fonts.ready).catch(()=>{})
+  : Promise.resolve()
+).then(()=>{ resize(); frame(); [200,700].forEach(ms=>setTimeout(resize,ms)); });
+</script>
+</body>
+</html>

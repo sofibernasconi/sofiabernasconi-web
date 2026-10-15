@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Propuesta intro — xerox</title>
+<meta name="robots" content="noindex,nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500&family=Architects+Daughter&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --fondo:#c9c7c0;      /* papel de fotocopia, gris sucio */
+    --tinta:#0b0b0b;      /* toner */
+    --acento:#d8261a;     /* timbre rojo */
+    --tenue:#6b6862;
+  }
+  html,body{height:100%;overflow:hidden;background:var(--fondo)}
+  body{font-family:'JetBrains Mono',monospace;touch-action:none;cursor:crosshair}
+  canvas{display:block;position:fixed;top:0;left:0;width:100%;height:100%}
+  .hint{position:fixed;left:5vw;bottom:5vh;z-index:12;font-size:10px;letter-spacing:.22em;
+        text-transform:uppercase;color:var(--tenue);transition:opacity .8s ease;pointer-events:none}
+  .hint.off{opacity:0}
+  .ui{position:fixed;right:5vw;bottom:5vh;z-index:10;display:flex;gap:1.2rem;
+      font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  .ui{align-items:center;color:var(--tinta)}
+  /* destello de la lampara al copiar */
+  body.flash{background:var(--tinta)}
+  body.flash canvas#cv{filter:invert(1)}
+  body.flash .stamp{color:var(--fondo)}
+  /* exposicion desigual: un lado quemado, el otro lavado */
+  .paper{position:fixed;inset:0;z-index:7;pointer-events:none;
+         background:radial-gradient(120% 80% at 15% 10%, rgba(255,255,255,.55), rgba(255,255,255,0) 55%),
+                    radial-gradient(100% 70% at 90% 95%, rgba(0,0,0,.20), rgba(0,0,0,0) 60%)}
+  /* grano de fotocopia sobre todo */
+  #grain{position:fixed;inset:0;z-index:8;pointer-events:none;opacity:.5;mix-blend-mode:multiply}
+  /* reglas finas: la retícula del afiche */
+  .rule{position:fixed;background:var(--tenue);opacity:.32;z-index:11;pointer-events:none}
+  .rule.top{left:5vw;right:5vw;top:9vh;height:1px}
+  .rule.bot{left:5vw;right:5vw;bottom:9vh;height:1px}
+  .meta{position:fixed;z-index:12;font-family:'JetBrains Mono',monospace;font-weight:400;
+        font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--tenue);
+        pointer-events:none}
+  .stamp{position:fixed;top:0;right:0;z-index:13;font-family:'JetBrains Mono',monospace;
+         font-weight:700;font-size:clamp(34px,5.2vw,64px);letter-spacing:-.03em;color:var(--acento);
+         writing-mode:vertical-rl;padding:4vh .9vw 0 0;line-height:1;pointer-events:none;
+         mix-blend-mode:multiply;opacity:.92}
+  .meta.br{bottom:5vh;right:5vw;text-align:right;line-height:1.9}
+  @media(max-width:700px){
+    .rule.top{top:7vh} .rule.bot{bottom:7vh}
+    .meta{font-size:9px;letter-spacing:.2em}
+    .stamp{font-size:34px;padding-top:3vh}
+    .hint{bottom:3.4vh;font-size:9px}
+    .meta.br{bottom:3.4vh}
+  }
+  .ui label{opacity:.5}
+  .ui input[type=range]{width:110px;accent-color:#111;cursor:pointer}
+  .ui button{font:inherit;letter-spacing:inherit;text-transform:inherit;background:none;border:0;
+             color:#111;opacity:.45;cursor:pointer;padding:.2rem;transition:opacity .3s}
+  .ui button:hover{opacity:1}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="paper"></div>
+<canvas id="grain"></canvas>
+<div class="rule top"></div>
+<div class="rule bot"></div>
+<div class="stamp">2026</div>
+<div class="meta br">CL — US</div>
+<div class="hint" id="hint">[ pasa el cursor para leerlo ]</div>
+
+<script>
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+let W, H, DPR;
+
+// buffer con el nombre dibujado a tamano completo
+const off = document.createElement('canvas');       // copia sucia (xerox)
+const octx = off.getContext('2d');
+const cle = document.createElement('canvas');       // original limpio
+const cctx = cle.getContext('2d');
+
+let BANDS = [];          // {y, h, x, vx, target}
+const BAND_H = 4;   // rebanadas finas: el raspado se ve continuo        // alto de cada franja en px de pantalla
+let pointer = {x:-9999, y:-9999, active:false, px:0, vx:0};
+let t = 0, shatter = 0, chaos = 0;
+
+function isMobile(){ return window.innerWidth < 760; }
+
+// Mide la TINTA real de UN caracter escaneando pixeles.
+// Asi podemos pegar las letras sin espacio y no dependemos de las
+// metricas que cada navegador (Safari/iOS) reporta distinto.
+const probe = document.createElement('canvas');
+const pctx  = probe.getContext('2d', {willReadFrequently:true});
+const FS = 150;
+const HAND = true;                       // escritura a mano: sin encaje por contorno
+const FONT = `400 ${FS}px Caveat, 'Architects Daughter', cursive`;
+const inkCache = new Map();
+// Cuanto se APRIETAN las formas entre si, en px a tamano base (FS).
+// 0 = tangentes exactas (queda una cuna blanca entre curvas)
+// 6 = se muerden un poco y leen como un bloque continuo
+const SQUEEZE = 2;
+
+function inkOf(ch){
+  if(inkCache.has(ch)) return inkCache.get(ch);
+  pctx.font = FONT;
+  const adv = Math.ceil(pctx.measureText(ch).width) || FS;
+  const pad = Math.ceil(FS*0.5), base = Math.ceil(FS*1.35);
+  probe.width  = adv + pad*2;
+  probe.height = Math.ceil(FS*2);
+  pctx.font = FONT;
+  pctx.textAlign='left'; pctx.textBaseline='alphabetic';
+  pctx.clearRect(0,0,probe.width,probe.height);
+  pctx.fillStyle='#000';
+  pctx.fillText(ch, pad, base);
+
+  const Wp=probe.width, Hp=probe.height;
+  const d = pctx.getImageData(0,0,Wp,Hp).data;
+  // perfil por fila: el borde izquierdo y derecho de la tinta en cada altura.
+  // Con esto dos letras pueden acercarse hasta ROZARSE, no solo hasta que
+  // sus cajas se toquen (que es lo que dejaba aire entre curvas).
+  const rowL = new Float32Array(Hp).fill(Infinity);
+  const rowR = new Float32Array(Hp).fill(-Infinity);
+  let x0=Wp, y0=Hp, x1=-1, y1=-1;
+  for(let y=0;y<Hp;y++){
+    for(let x=0;x<Wp;x++){
+      if(d[(x+y*Wp)*4+3] > 4){
+        if(x < rowL[y]) rowL[y]=x;
+        if(x > rowR[y]) rowR[y]=x;
+        if(x<x0)x0=x; if(x>x1)x1=x;
+        if(y<y0)y0=y; if(y>y1)y1=y;
+      }
+    }
+  }
+  if(x1<0) return null;
+  // todo relativo al punto donde se dibuja el caracter
+  for(let y=0;y<Hp;y++){
+    if(rowR[y] > -Infinity){ rowL[y]-=pad; rowR[y]-=pad; }
+  }
+  const r = { dx:x0-pad, dy:y0-base, w:x1-x0+1, h:y1-y0+1, rowL, rowR, Hp, base };
+  inkCache.set(ch, r);
+  return r;
+}
+
+// Coloca las letras hasta que se ROZAN (contacto real, sin traslape)
+function layout(word){
+  // A mano la palabra se traza de un tiron: nada de encajar letra por letra,
+  // eso destruiria el ritmo natural de la escritura.
+  if(HAND){
+    const k = inkOf(word); if(!k) return null;
+    return { gl:[{ ch:word, x:-k.dx }], w:k.w, top:k.dy, h:k.h, Hp:k.Hp };
+  }
+  const chars=[...word];
+  const first=inkOf(chars[0]); if(!first) return null;
+  const Hp=first.Hp;
+  const lineR = new Float32Array(Hp).fill(-Infinity);   // perfil derecho acumulado
+  const gl=[]; let right=0, top=Infinity, bottom=-Infinity;
+
+  chars.forEach((ch,i)=>{
+    const k = inkOf(ch); if(!k) return;
+    let x;
+    if(i===0){ x = -k.dx; }
+    else{
+      // maximo acercamiento sin que se toquen los pixeles
+      let best = -Infinity;
+      for(let y=0;y<Hp;y++){
+        if(lineR[y] > -Infinity && k.rowR[y] > -Infinity){
+          const cand = lineR[y] - k.rowL[y] + 1 + SQUEEZE;
+          if(cand > best) best = cand;
+        }
+      }
+      x = (best > -Infinity) ? best : (right - k.dx);
+    }
+    gl.push({ ch, x });
+    for(let y=0;y<Hp;y++){
+      if(k.rowR[y] > -Infinity){
+        const rr = x + k.rowR[y];
+        if(rr > lineR[y]) lineR[y] = rr;
+      }
+    }
+    const rr = x + k.dx + k.w;  if(rr > right) right = rr;
+    if(k.dy < top) top = k.dy;
+    if(k.dy + k.h > bottom) bottom = k.dy + k.h;
+  });
+  if(!gl.length) return null;
+  return { gl, w: right, top, h: bottom - top, Hp };
+}
+
+// Perfil superior/inferior de una linea ya escalada en X, para que las
+// lineas tambien se rocen en vertical en vez de apoyarse por su caja
+const tmp = document.createElement('canvas');
+const tctx = tmp.getContext('2d', {willReadFrequently:true});
+function colProfile(line, sx, ox, widthPx){
+  const h = Math.ceil(line.h)+2;
+  tmp.width = Math.max(1, Math.ceil(widthPx)); tmp.height = h;
+  tctx.setTransform(1,0,0,1,0,0);
+  tctx.clearRect(0,0,tmp.width,tmp.height);
+  tctx.fillStyle='#000';
+  tctx.save();
+  tctx.translate(ox, 0); tctx.scale(sx, 1);
+  tctx.font = FONT;
+  tctx.textAlign='left'; tctx.textBaseline='alphabetic';
+  for(const g of line.gl) tctx.fillText(g.ch, g.x, -line.top);
+  tctx.restore();
+
+  const Wt=tmp.width, Ht=tmp.height;
+  const d = tctx.getImageData(0,0,Wt,Ht).data;
+  const top = new Float32Array(Wt).fill(Infinity);
+  const bot = new Float32Array(Wt).fill(-Infinity);
+  for(let y=0;y<Ht;y++)
+    for(let x=0;x<Wt;x++)
+      if(d[(x+y*Wt)*4+3] > 4){
+        if(y < top[x]) top[x]=y;
+        if(y > bot[x]) bot[x]=y;
+      }
+  return { top, bot, n:Wt };
+}
+
+function drawName(){
+  DPR = Math.min(2, window.devicePixelRatio || 1);
+  W = window.innerWidth;
+  H = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
+  cv.width = W*DPR; cv.height = H*DPR;
+  cv.style.width = W+'px'; cv.style.height = H+'px';
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  off.width = W*DPR;  off.height = H*DPR;  octx.setTransform(DPR,0,0,DPR,0,0);
+  cle.width = W*DPR;  cle.height = H*DPR;  cctx.setTransform(DPR,0,0,DPR,0,0);
+  cctx.clearRect(0,0,W,H); cctx.fillStyle='#2b2a27';
+  cctx.textAlign='left'; cctx.textBaseline='alphabetic';
+
+  octx.clearRect(0,0,W,H);
+  octx.fillStyle = '#2b2a27';
+  octx.textAlign = 'left';
+  octx.textBaseline = 'alphabetic';
+
+  const mob = isMobile();
+  const lines = mob ? ['SOFIA','BERNAS','CONI'] : ['SOFIA','BERNASCONI'];
+  const OVER = mob
+    ? [ {l:0.09,  r:0.09},    // SOFIA  : desborda por ambos lados
+        {l:0,     r:0},       // BERNAS : justo al ancho
+        {l:0.035, r:0} ]      // CONI   : se come 1/8 de la C por la izquierda
+    : [ {l:0, r:0}, {l:0, r:0} ];
+
+  const L = lines.map(layout);
+  if(L.some(x=>!x)) return;                    // la tipografia aun no esta lista
+
+  // transformada horizontal de cada linea
+  const T = L.map((l,i)=>{
+    const o = OVER[i] || {l:0,r:0};
+    const targetW = W * (1 + o.l + o.r);
+    return { sx: targetW / l.w, ox: -W*o.l };
+  });
+
+  // apilar hasta que las lineas se rozan
+  const P = L.map((l,i)=> colProfile(l, T[i].sx, T[i].ox, W));
+  const Y = [0];
+  for(let i=1;i<L.length;i++){
+    let best = -Infinity;
+    const a=P[i-1], b=P[i];
+    for(let x=0;x<Math.min(a.n,b.n);x++){
+      if(a.bot[x] > -Infinity && b.top[x] < Infinity){
+        const cand = Y[i-1] + a.bot[x] - b.top[x] + 1 + SQUEEZE;
+        if(cand > best) best = cand;
+      }
+    }
+    Y.push(best > -Infinity ? best : Y[i-1] + L[i-1].h);
+  }
+  const total = Y[Y.length-1] + L[L.length-1].h;
+  const sy = H / total;
+
+  // la hoja entra torcida en la maquina
+  octx.save();
+  octx.translate(W/2, H/2); octx.rotate(TILT); octx.translate(-W/2, -H/2);
+  octx.filter = 'blur(0.6px)';            // apenas, para que el grano agarre
+  L.forEach((l,i) => {
+    octx.save();
+    octx.translate(T[i].ox, Y[i]*sy);
+    octx.scale(T[i].sx, sy);
+    octx.font = FONT;
+    for(const g of l.gl) octx.fillText(g.ch, g.x, -l.top);
+    octx.restore();
+  });
+  octx.filter = 'none';
+  octx.restore();
+
+  // la misma composicion, pero impecable: es lo que revela el cursor
+  L.forEach((l,i) => {
+    cctx.save();
+    cctx.translate(T[i].ox, Y[i]*sy);
+    cctx.scale(T[i].sx, sy);
+    cctx.font = FONT;
+    for(const g of l.gl) cctx.fillText(g.ch, g.x, -l.top);
+    cctx.restore();
+  });
+
+  xerox();                                 // quemar a 1 bit + escupir toner
+}
+
+// ---- FOTOCOPIA ----------------------------------------------------------
+// Una fotocopiadora no tiene grises: quema todo lo que pasa cierto umbral y
+// descarta el resto. En el borde, donde la luz duda, el toner cae al azar:
+// de ahi el filo mordido y la salpicadura alrededor de cada letra.
+const TILT = 0.0035;                       // radianes: la hoja apenas chueca
+function xerox(){
+  const w = off.width, h = off.height;
+  const img = octx.getImageData(0,0,w,h);
+  const d = img.data;
+  // GRAFITO: el lapiz deposita granos, no una capa pareja. Cada pixel del
+  // trazo cae con una probabilidad y una densidad distinta, y en el borde
+  // el grano se dispersa sobre la textura del papel.
+  const HI = 70;
+  for(let i=0;i<d.length;i+=4){
+    const a = d[i+3];
+    let on = false, dens = 0;
+    if(a >= HI){
+      dens = 0.55 + Math.random()*0.45;    // el nucleo del trazo, desparejo
+      on = Math.random() < 0.94;           // huecos donde el papel asoma
+    } else if(a > 4){
+      const p = a/HI;
+      if(Math.random() < p*p*1.5){ on = true; dens = 0.25 + p*0.5; }
+    } else if(Math.random() < 0.00025){
+      on = true; dens = 0.2 + Math.random()*0.3;   // polvo de grafito suelto
+    }
+    if(on){
+      const v = Math.round(28 + (1-dens)*105);     // del casi negro al gris
+      d[i]=v; d[i+1]=v; d[i+2]=v+2; d[i+3]=Math.round(150 + dens*105);
+    } else { d[i+3]=0; }
+  }
+  octx.putImageData(img,0,0);
+
+
+}
+
+function buildBands(){
+  BANDS = [];
+  for(let y=0; y<H; y+=BAND_H){
+    BANDS.push({ y, h: Math.min(BAND_H, H-y), x:0, srcY:y, seed: Math.random(), seed2: Math.random() });
+  }
+}
+
+function resize(){ drawName(); buildBands(); }
+
+// ---- ESTELA DE FOTOCOPIADORA ------------------------------------------
+// El cabezal se atasca y sigue leyendo la MISMA linea mientras el papel
+// avanza: esa linea se repite hacia abajo y deja un raspado, un fantasma.
+// Pasa solo, en bucle. El cursor es lo unico que calma la maquina.
+let scan = 0, foco0 = 0;
+function judder(seed, step){
+  const s = Math.sin(seed*12.9898 + step*78.233) * 43758.5453;
+  return (s - Math.floor(s)) * 2 - 1;
+}
+
+function frame(){
+  t += 0.01;
+  ctx.clearRect(0,0,W,H);
+
+  const foco = pointer.active ? Math.min(1, foco0 + 0.25) : Math.max(0, foco0 - 0.12);
+  foco0 = foco;
+
+  const step  = Math.floor(t*100/9);
+  const RANGO = H * 0.15;                 // hasta donde limpia el cursor
+
+  scan += H * 0.0011;                     // el cabezal recorre la hoja, lento
+  if(scan > H*1.25) scan = -H*0.25;
+  const dragLen = H * 1.30;               // el raspado desborda la hoja entera
+
+  for(const b of BANDS){
+    let mal = 1;                          // 1 = averiado · 0 = limpio
+    if(foco > 0.01){
+      const dp = b.y - pointer.y;
+      mal = 1 - foco * Math.exp(-(dp*dp)/(2*RANGO*RANGO));
+    }
+
+    const dv = b.y - scan;
+    let srcY = b.y, x = 0, alpha = 1, arrastre = 0;
+
+    if(dv > 0 && dv < dragLen){
+      const k = dv / dragLen;             // 0 recien atascado · 1 se suelta
+      arrastre = Math.pow(1-k, 0.35) * mal;   // se suelta muy de a poco
+      // la linea del atasco se repite hacia abajo: raspado
+      srcY = b.y + (scan - b.y) * (0.995 * arrastre + 0.55*mal);
+
+      alpha = 1 - 0.10*arrastre;          // el toner se agota al arrastrar
+    }
+
+
+    x = Math.round(x);
+    b.x    += (x - b.x) * 0.5;
+    b.srcY += (srcY - b.srcY) * 0.55;
+    const sY = Math.max(0, Math.min(H - b.h, b.srcY));
+
+    // fantasma: dos ecos palidos del raspado, desfasados
+    if(arrastre > 0.05){
+      ctx.globalAlpha = 0.22 * arrastre;
+      ctx.drawImage(off, 0, Math.max(0,sY - 14)*DPR, off.width, b.h*DPR, b.x, b.y, W, b.h);
+      ctx.globalAlpha = 0.14 * arrastre;
+      ctx.drawImage(off, 0, Math.max(0,sY - 34)*DPR, off.width, b.h*DPR, b.x, b.y, W, b.h);
+    }
+
+    // la copia
+    ctx.globalAlpha = alpha;
+    ctx.drawImage(off, 0, sY*DPR, off.width, b.h*DPR, b.x, b.y, W, b.h);
+
+    // encima, el original nitido donde el cursor calma la maquina
+    const nitido = 1 - mal;
+    if(nitido > 0.01){
+      ctx.globalAlpha = nitido;
+      ctx.drawImage(cle, 0, b.y*DPR, cle.width, b.h*DPR, 0, b.y, W, b.h);
+    }
+  }
+  ctx.globalAlpha = 1;
+
+  // el filo del atasco: una linea limpia donde empieza el raspado
+  ctx.fillStyle = 'rgba(11,11,11,.35)';
+  ctx.fillRect(0, scan, W, 1);
+  ctx.fillStyle = 'rgba(201,199,192,.45)';
+  for(let i=0;i<2;i++){
+    const yy = scan + Math.abs(judder(i, step))*dragLen*0.7;
+    ctx.fillRect(0, yy, W, 1 + Math.abs(judder(i+9, step))*2);
+  }
+
+  requestAnimationFrame(frame);
+}
+
+// ---- interaccion ----
+const hint = document.getElementById('hint');
+function setPointer(x,y){
+  pointer.vx = x - (pointer.px || x);
+  pointer.px = x;
+  pointer.x = x; pointer.y = y; pointer.active = true;
+  hint.classList.add('off');
+}
+function clearPointer(){ pointer.active = false; pointer.vx = 0; }
+
+cv.addEventListener('pointermove', e => setPointer(e.clientX, e.clientY));
+cv.addEventListener('pointerdown', e => {
+  setPointer(e.clientX, e.clientY);
+  document.body.classList.add('flash');
+  setTimeout(()=>document.body.classList.remove('flash'), 70);
+});
+cv.addEventListener('pointerup',   clearPointer);
+cv.addEventListener('pointerleave',clearPointer);
+
+
+// ---- grano de fotocopia ----
+(function(){
+  const gc = document.getElementById('grain'), gx = gc.getContext('2d');
+  const tile = document.createElement('canvas'); tile.width = tile.height = 140;
+  const tx = tile.getContext('2d');
+  let pat = null, frame = 0;
+  function makeTile(){
+    const img = tx.createImageData(140,140), d = img.data;
+    for(let i=0;i<d.length;i+=4){
+      const v = Math.random()*255;
+      d[i]=d[i+1]=d[i+2]=v; d[i+3]= v>190 ? 255 : 0;   // puntos sueltos, no velo
+    }
+    tx.putImageData(img,0,0);
+    pat = gx.createPattern(tile,'repeat');
+  }
+  function sizeGrain(){
+    const d = Math.min(2, window.devicePixelRatio||1);
+    gc.width = window.innerWidth*d; gc.height = window.innerHeight*d;
+    gc.style.width = window.innerWidth+'px'; gc.style.height = window.innerHeight+'px';
+    gx.setTransform(d,0,0,d,0,0);
+    makeTile();
+  }
+  function paint(){
+    if(frame % 6 === 0){                       // el grano respira, no vibra
+      makeTile();
+      gx.clearRect(0,0,window.innerWidth,window.innerHeight);
+      gx.fillStyle = pat;
+      gx.fillRect(0,0,window.innerWidth,window.innerHeight);
+    }
+    frame++;
+    requestAnimationFrame(paint);
+  }
+  sizeGrain(); paint();
+  window.addEventListener('resize', sizeGrain);
+})();
+
+window.addEventListener('resize', resize);
+window.addEventListener('orientationchange', ()=> setTimeout(resize,150));
+if(window.visualViewport) window.visualViewport.addEventListener('resize', resize);
+
+// La medida del texto depende de la tipografia: si medimos antes de que Syne
+// termine de bajar, el navegador mide con la fuente de reemplazo y el nombre
+// sale con otro tamano. Por eso la pedimos explicitamente y recalculamos.
+function boot(){ resize(); frame(); }
+function ensureFont(){
+  if(!(document.fonts && document.fonts.load)) return Promise.resolve();
+  return Promise.all([
+    document.fonts.load('400 200px Caveat'),
+    document.fonts.load("400 200px 'Architects Daughter'")
+  ]).then(()=> document.fonts.ready).catch(()=>{});
+}
+ensureFont().then(()=>{ boot(); [120,400,1200,2500].forEach(ms=>setTimeout(resize,ms)); });
+// red de seguridad: si la fuente llega mas tarde, se redibuja
+if(document.fonts){ document.fonts.addEventListener('loadingdone', ()=>{ if(BANDS.length) resize(); }); }
+window.addEventListener('load', ()=>{ if(BANDS.length) resize(); });
+</script>
+</body>
+</html>

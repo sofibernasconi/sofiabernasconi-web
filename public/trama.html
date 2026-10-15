@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Sofía Bernasconi</title>
+<meta name="robots" content="noindex,nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700&family=Archivo:wght@600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --fondo:#efeeea;
+    --tinta:#15150f;
+  }
+  html,body{height:100%;overflow:hidden;background:var(--fondo)}
+  body{font-family:'JetBrains Mono',monospace;touch-action:none}
+  canvas{display:block;position:fixed;top:0;left:0;width:100%;height:100%}
+  .meta{position:fixed;z-index:10;font-size:10px;letter-spacing:.26em;
+        text-transform:uppercase;color:var(--tinta);opacity:.35;pointer-events:none}
+  .meta.br{bottom:4vh;right:5vw}
+  @media(max-width:700px){ .meta{font-size:9px;letter-spacing:.2em} .meta.br{bottom:3vh} }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="meta br">2026</div>
+
+<script>
+const cv  = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const off = document.createElement('canvas');
+const octx = off.getContext('2d');
+let W, H, DPR;
+
+let BANDS = [];
+const BAND_H = 4;
+let t = 0;
+
+function isMobile(){ return window.innerWidth < 760; }
+
+// ---- medir la tinta real de cada letra (independiente del navegador) ----
+const probe = document.createElement('canvas');
+const pctx  = probe.getContext('2d', {willReadFrequently:true});
+const FS = 150;
+const FONT = `700 ${FS}px Inter, Archivo, 'Helvetica Neue', sans-serif`;
+const inkCache = new Map();
+const SQUEEZE = 2;
+
+function inkOf(ch){
+  if(inkCache.has(ch)) return inkCache.get(ch);
+  pctx.font = FONT;
+  const adv = Math.ceil(pctx.measureText(ch).width) || FS;
+  const pad = Math.ceil(FS*0.5), base = Math.ceil(FS*1.35);
+  probe.width = adv + pad*2; probe.height = Math.ceil(FS*2);
+  pctx.font = FONT; pctx.textAlign='left'; pctx.textBaseline='alphabetic';
+  pctx.clearRect(0,0,probe.width,probe.height);
+  pctx.fillStyle='#000'; pctx.fillText(ch, pad, base);
+
+  const Wp=probe.width, Hp=probe.height;
+  const d = pctx.getImageData(0,0,Wp,Hp).data;
+  const rowL = new Float32Array(Hp).fill(Infinity);
+  const rowR = new Float32Array(Hp).fill(-Infinity);
+  let x0=Wp, y0=Hp, x1=-1, y1=-1;
+  for(let y=0;y<Hp;y++) for(let x=0;x<Wp;x++)
+    if(d[(x+y*Wp)*4+3] > 4){
+      if(x<rowL[y]) rowL[y]=x;
+      if(x>rowR[y]) rowR[y]=x;
+      if(x<x0)x0=x; if(x>x1)x1=x; if(y<y0)y0=y; if(y>y1)y1=y;
+    }
+  if(x1<0) return null;
+  for(let y=0;y<Hp;y++) if(rowR[y]>-Infinity){ rowL[y]-=pad; rowR[y]-=pad; }
+  const r = { dx:x0-pad, dy:y0-base, w:x1-x0+1, h:y1-y0+1, rowL, rowR, Hp };
+  inkCache.set(ch, r); return r;
+}
+
+// letras hasta rozarse
+function layout(word){
+  const chars=[...word];
+  const first=inkOf(chars[0]); if(!first) return null;
+  const Hp=first.Hp;
+  const lineR = new Float32Array(Hp).fill(-Infinity);
+  const gl=[]; let right=0, top=Infinity, bottom=-Infinity;
+  chars.forEach((ch,i)=>{
+    const k=inkOf(ch); if(!k) return;
+    let x;
+    if(i===0) x = -k.dx;
+    else{
+      let best=-Infinity;
+      for(let y=0;y<Hp;y++)
+        if(lineR[y]>-Infinity && k.rowR[y]>-Infinity){
+          const c = lineR[y]-k.rowL[y]+1+SQUEEZE;
+          if(c>best) best=c;
+        }
+      x = best>-Infinity ? best : right-k.dx;
+    }
+    gl.push({ch,x});
+    for(let y=0;y<Hp;y++) if(k.rowR[y]>-Infinity){
+      const rr=x+k.rowR[y]; if(rr>lineR[y]) lineR[y]=rr;
+    }
+    const rr=x+k.dx+k.w; if(rr>right) right=rr;
+    if(k.dy<top) top=k.dy;
+    if(k.dy+k.h>bottom) bottom=k.dy+k.h;
+  });
+  if(!gl.length) return null;
+  return { gl, w:right, top, h:bottom-top };
+}
+
+// perfil de columnas para apilar lineas hasta que se rozan
+const tmp = document.createElement('canvas');
+const tctx = tmp.getContext('2d', {willReadFrequently:true});
+function colProfile(line, sx, ox, widthPx){
+  tmp.width = Math.max(1,Math.ceil(widthPx)); tmp.height = Math.ceil(line.h)+2;
+  tctx.setTransform(1,0,0,1,0,0);
+  tctx.clearRect(0,0,tmp.width,tmp.height);
+  tctx.fillStyle='#000'; tctx.save();
+  tctx.translate(ox,0); tctx.scale(sx,1);
+  tctx.font=FONT; tctx.textAlign='left'; tctx.textBaseline='alphabetic';
+  for(const g of line.gl) tctx.fillText(g.ch, g.x, -line.top);
+  tctx.restore();
+  const Wt=tmp.width, Ht=tmp.height;
+  const d=tctx.getImageData(0,0,Wt,Ht).data;
+  const top=new Float32Array(Wt).fill(Infinity), bot=new Float32Array(Wt).fill(-Infinity);
+  for(let y=0;y<Ht;y++) for(let x=0;x<Wt;x++)
+    if(d[(x+y*Wt)*4+3]>4){ if(y<top[x])top[x]=y; if(y>bot[x])bot[x]=y; }
+  return {top,bot,n:Wt};
+}
+
+function drawName(){
+  DPR = Math.min(2, window.devicePixelRatio||1);
+  W = window.innerWidth;
+  H = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
+  cv.width=W*DPR; cv.height=H*DPR;
+  cv.style.width=W+'px'; cv.style.height=H+'px';
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  off.width=W*DPR; off.height=H*DPR; octx.setTransform(DPR,0,0,DPR,0,0);
+  octx.clearRect(0,0,W,H);
+  octx.fillStyle='#15150f'; octx.textAlign='left'; octx.textBaseline='alphabetic';
+
+  const mob = isMobile();
+  const lines = mob ? ['SOFIA','BERNAS','CONI'] : ['SOFIA','BERNASCONI'];
+  const OVER = mob ? [ {l:.09,r:.09}, {l:0,r:0}, {l:.035,r:0} ] : [ {l:0,r:0}, {l:0,r:0} ];
+
+  const L = lines.map(layout);
+  if(L.some(x=>!x)) return;
+
+  const T = L.map((l,i)=>{
+    const o = OVER[i]||{l:0,r:0};
+    return { sx: W*(1+o.l+o.r)/l.w, ox: -W*o.l };
+  });
+
+  const P = L.map((l,i)=> colProfile(l, T[i].sx, T[i].ox, W));
+  const Y = [0];
+  for(let i=1;i<L.length;i++){
+    let best=-Infinity; const a=P[i-1], b=P[i];
+    for(let x=0;x<Math.min(a.n,b.n);x++)
+      if(a.bot[x]>-Infinity && b.top[x]<Infinity){
+        const c = Y[i-1]+a.bot[x]-b.top[x]+1+SQUEEZE;
+        if(c>best) best=c;
+      }
+    Y.push(best>-Infinity ? best : Y[i-1]+L[i-1].h);
+  }
+  const total = Y[Y.length-1] + L[L.length-1].h;
+  const sy = H/total;
+
+  L.forEach((l,i)=>{
+    octx.save();
+    octx.translate(T[i].ox, Y[i]*sy);
+    octx.scale(T[i].sx, sy);
+    octx.font=FONT;
+    for(const g of l.gl) octx.fillText(g.ch, g.x, -l.top);
+    octx.restore();
+  });
+}
+
+function buildBands(){
+  BANDS = [];
+  for(let y=0; y<H; y+=BAND_H)
+    BANDS.push({ y, h: Math.min(BAND_H, H-y), srcY: y });
+}
+function resize(){ drawName(); buildBands(); }
+
+// ---- TRAMA -----------------------------------------------------------
+// El nombre no se dibuja como letra solida: se dibuja como TRAMA. Dos
+// retículas de lineas, en angulos casi iguales, se recortan una a la otra.
+// Su interferencia produce moire: bandas que recorren el nombre y lo hacen
+// aparecer y disolverse. La letra nunca fue solida; siempre fue la trama.
+
+const work  = document.createElement('canvas');
+const wctx  = work.getContext('2d');
+
+// una baldosa de rayas que luego rotamos
+function tramaTile(periodo, duty){
+  const c = document.createElement('canvas');
+  const p = Math.max(2, Math.round(periodo));
+  c.width = p; c.height = p;
+  const x = c.getContext('2d');
+  x.fillStyle = '#000';
+  x.fillRect(0, 0, p, Math.max(1, Math.round(p*duty)));
+  return c;
+}
+
+let fase = 0;
+const tileCache = new Map();
+function tileFor(p, duty){
+  const k = Math.round(p*2)+'|'+Math.round(duty*20);
+  if(!tileCache.has(k)) tileCache.set(k, tramaTile(p, duty));
+  return tileCache.get(k);
+}
+
+function recorta(c2d, angGrados, periodo, duty, despl){
+  const tile = tileFor(periodo, duty);
+  const pat  = c2d.createPattern(tile, 'repeat');
+  const m = new DOMMatrix()
+    .translateSelf(W/2, H/2)
+    .rotateSelf(angGrados)
+    .translateSelf(-W/2, -H/2 + despl);
+  pat.setTransform(m);
+  c2d.globalCompositeOperation = 'destination-in';
+  c2d.fillStyle = pat;
+  c2d.fillRect(0, 0, W, H);
+  c2d.globalCompositeOperation = 'source-over';
+}
+
+function frame(){
+  fase += 0.0022;
+  ctx.clearRect(0,0,W,H);
+
+  work.width = off.width; work.height = off.height;
+  wctx.setTransform(DPR,0,0,DPR,0,0);
+  wctx.clearRect(0,0,W,H);
+  wctx.drawImage(off, 0, 0, off.width, off.height, 0, 0, W, H);
+
+  // La primera trama gira muy lento. La segunda casi igual, con una
+  // diferencia minima de angulo y de paso: de ahi nace el moire.
+  const base   = 22 + Math.sin(fase*0.7) * 9;
+  const paso   = 7.5 + Math.sin(fase*1.3) * 2.2;
+  const delta  = 2.2 + Math.sin(fase*0.45) * 1.6;   // desalineo entre tramas
+
+  recorta(wctx, base,         paso,          0.52, Math.sin(fase*2.1)*40);
+  recorta(wctx, base + delta, paso * 1.035,  0.52, Math.cos(fase*1.7)*40);
+
+  ctx.drawImage(work, 0, 0, work.width, work.height, 0, 0, W, H);
+  requestAnimationFrame(frame);
+}
+
+window.addEventListener('resize', resize);
+window.addEventListener('orientationchange', ()=> setTimeout(resize,150));
+if(window.visualViewport) window.visualViewport.addEventListener('resize', resize);
+
+function boot(){ resize(); frame(); }
+(document.fonts && document.fonts.load
+  ? Promise.all([document.fonts.load('700 200px Inter')]).then(()=>document.fonts.ready).catch(()=>{})
+  : Promise.resolve()
+).then(()=>{ boot(); [150,600,1600].forEach(ms=>setTimeout(resize,ms)); });
+</script>
+</body>
+</html>

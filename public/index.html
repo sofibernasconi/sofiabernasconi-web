@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sofía Bernasconi — Artista visual y artes mediales</title>
+<meta name="description" content="Sofía Bernasconi Le Roy, artista visual chilena de artes mediales. Videoinstalación, performance, arte y tecnología: obras que exploran los límites del cuerpo en diálogo con el territorio y la máquina.">
+<meta name="author" content="Sofía Bernasconi Le Roy">
+<link rel="canonical" href="https://sofiabernasconi.com/">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="assets/favicon-512.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#f7f6f4">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sofía Bernasconi">
+<meta property="og:title" content="Sofía Bernasconi — Artista visual y artes mediales">
+<meta property="og:description" content="Sofía Bernasconi Le Roy, artista visual chilena de artes mediales. Videoinstalación, performance, arte y tecnología: obras que exploran los límites del cuerpo en diálogo con el territorio y la máquina.">
+<meta property="og:url" content="https://sofiabernasconi.com/">
+<meta property="og:image" content="https://sofiabernasconi.com/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="es_CL">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sofía Bernasconi — Artista visual y artes mediales">
+<meta name="twitter:description" content="Sofía Bernasconi Le Roy, artista visual chilena de artes mediales. Videoinstalación, performance, arte y tecnología: obras que exploran los límites del cuerpo en diálogo con el territorio y la máquina.">
+<meta name="twitter:image" content="https://sofiabernasconi.com/assets/og.jpg">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<style>
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+  html{background:#0a0a0b}
+  html,body{margin:0;height:100%}
+  body{overflow:hidden}
+  #bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:#0a0a0b;transition:background-color 1.2s ease}
+  body.reveal #bg{background:#f7f6f4}
+  #c{position:fixed;inset:0;z-index:110;pointer-events:none}
+  #c canvas{position:fixed;inset:0;pointer-events:none}
+  #blurlayer{position:fixed;inset:0;pointer-events:none;filter:blur(2.6px);z-index:110}
+  #topmask{position:fixed;top:0;left:0;width:100%;height:8vh;background:#0a0a0b;transition:background-color 1.2s ease;z-index:100;pointer-events:none}
+  body.reveal #topmask{background:#f7f6f4}
+  #lang{position:fixed;top:36px;right:36px;z-index:120;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;color:#111116;opacity:0;transition:opacity .9s ease;pointer-events:none}
+  body.menu-on #lang{opacity:1;pointer-events:auto}
+  #lang span{cursor:pointer;opacity:.4;transition:opacity .3s}
+  #lang span.on{opacity:1}
+  #menu{position:fixed;top:70px;right:36px;z-index:120;display:flex;flex-direction:column;align-items:flex-end;gap:.75rem;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:0;transform:translateY(10px);transition:opacity .9s ease,transform .9s ease;pointer-events:none}
+  body.menu-on #menu{opacity:1;transform:none;pointer-events:auto}
+  #menu a{color:#111116;text-decoration:none;opacity:.7;transition:opacity .3s}
+  #menu a:hover{opacity:1}
+  #logohit{position:fixed;top:26px;left:32px;width:300px;height:70px;z-index:130;display:none;cursor:pointer}
+  body.menu-on #logohit{display:block}
+  #namehit{position:fixed;z-index:105;display:none;cursor:pointer}
+  body.menu-on{overflow-y:auto;overflow-x:hidden}
+  #gallery{position:relative;width:100%;z-index:80;pointer-events:none}
+  body.menu-on #gallery{background:#f7f6f4}
+  body.menu-on{scroll-snap-type:y mandatory}
+  .proj{min-height:100vh;scroll-snap-align:start;position:relative;padding:26vh 6% 8vh;display:flex;align-items:center}
+  .proj .cap{position:fixed;left:6%;top:24vh;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.1em;color:#fff;mix-blend-mode:difference;opacity:0;transition:font-weight .2s ease;z-index:90;pointer-events:auto;cursor:pointer;will-change:transform,opacity,filter;max-width:88vw}
+  .proj .cap .orig{font-style:italic;font-size:.9em;opacity:.62}
+  .proj .cap .ten{display:none}
+  body.en .proj .cap .ten{display:inline}
+  body.en .proj .cap .tes{display:none}
+  /* Tono medio: el blanco sólido sólo sirve en móvil, donde el título cae
+     encima de la foto. En escritorio queda sobre el fondo claro de la página,
+     así que ahí se mantiene la inversión (se lee negro). */
+  /* En móvil el título es fijo: aparece cuando la obra todavía no llegó —o sea
+     sobre el papel, donde la inversión lo deja negro— y después queda encima de
+     la foto. Sólo en ese momento, y sólo en las obras de tono medio, pasa a
+     blanco sólido. La clase la pone el script midiendo el cruce real. */
+  /* copia blanca del título, recortada a la franja que pisa la foto */
+  .proj .cap.capw{mix-blend-mode:normal;color:#fff;pointer-events:none;z-index:91}
+  .proj .cap:hover{font-weight:700}
+  .proj .cap:hover ~ .comp img{transform:scale(1.02);box-shadow:0 12px 46px rgba(0,0,0,.2)}
+  .proj .comp{width:100%;display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:center;gap:2.5vh 3%;pointer-events:auto;cursor:pointer;transform:translateY(5vh)}
+  .proj .comp img{width:auto;height:auto;display:block;opacity:0;transition:opacity 1s ease,transform .35s ease,box-shadow .35s ease;max-height:44vh;max-width:34%;cursor:pointer}
+  .proj .comp:hover img{transform:scale(1.02);box-shadow:0 12px 46px rgba(0,0,0,.2)}
+  .proj .comp img:nth-child(1){max-height:62vh;max-width:50%}
+  .proj .comp img:nth-child(2){max-height:36vh;max-width:28%;margin-top:9vh}
+  .proj .comp img:nth-child(3){max-height:48vh;max-width:34%}
+  .proj .comp img:nth-child(4){max-height:32vh;max-width:25%;margin-top:7vh}
+  .proj .comp img:nth-child(5){max-height:42vh;max-width:31%;margin-top:2vh}
+  body.menu-on .proj .comp img{opacity:1}
+  /* Reflejo Abierto (2ª) — layout anterior: 1ª grande + resto parejo */
+  .proj:nth-child(2) .comp{align-items:center}
+  .proj:nth-child(2) .comp img{max-height:54vh;max-width:44%;margin-top:0}
+  .proj:nth-child(2) .comp img:nth-child(1){max-height:66vh;max-width:56%;margin-top:0}
+  /* Tensiones (5ª) — distribución más suelta y variada */
+  .proj:nth-child(5) .comp{gap:3vh 2.5%}
+  .proj:nth-child(5) .comp img{max-height:40vh;max-width:30%}
+  .proj:nth-child(5) .comp img:nth-child(1){max-height:58vh;max-width:42%;margin-top:4vh}
+  .proj:nth-child(5) .comp img:nth-child(2){max-height:30vh;max-width:22%;margin-top:0}
+  .proj:nth-child(5) .comp img:nth-child(3){max-height:44vh;max-width:33%;margin-top:12vh}
+  .proj:nth-child(5) .comp img:nth-child(4){max-height:34vh;max-width:26%;margin-top:1vh}
+  .proj:nth-child(5) .comp img:nth-child(5){max-height:26vh;max-width:20%;margin-top:10vh}
+  /* Convey me (1ª) — foto principal la más grande de todas (obra protagonista) */
+  .proj:nth-child(1) .comp img:nth-child(1){max-height:72vh;max-width:74%}
+  /* Orilla (3ª) — la 4ª foto (AL6A9590) pequeña */
+  .proj:nth-child(3) .comp img:nth-child(4){max-height:30vh;max-width:21%}
+  .proj .comp .ph{width:230px;height:32vh;background:#f6eeee;border:1px solid #e6cccc;display:flex;align-items:center;justify-content:center;color:#c99;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;text-align:center;opacity:0;transition:opacity 1s ease;padding:1rem;line-height:1.7}
+  body.menu-on .proj .comp .ph{opacity:1}
+
+  @media(max-width:700px){
+    #topmask{height:26vh}
+    .proj{padding:20vh 5% 9vh}
+    .proj:first-child{padding-top:42vh}
+    .proj .comp{gap:3vh 0}
+    .proj .comp img{width:92% !important;max-width:92% !important;height:auto !important;max-height:none !important;margin-top:0 !important;object-fit:contain}
+    .proj:nth-child(1) .comp img:nth-child(1){width:92% !important;max-width:92% !important;max-height:none !important}
+    .proj:nth-child(2) .comp img,.proj:nth-child(3) .comp img,.proj:nth-child(5) .comp img{width:92% !important;max-width:92% !important;max-height:none !important}
+    .proj:nth-child(2) .comp img:nth-child(1),.proj:nth-child(3) .comp img:nth-child(4),.proj:nth-child(5) .comp img:nth-child(1),.proj:nth-child(5) .comp img:nth-child(2),.proj:nth-child(5) .comp img:nth-child(3),.proj:nth-child(5) .comp img:nth-child(4),.proj:nth-child(5) .comp img:nth-child(5){width:92% !important;max-width:92% !important;max-height:none !important}
+    .proj .cap{top:27vh}
+    #c,#blurlayer{transition:opacity .5s ease}
+    body.menu-on.ui-hide #c,body.menu-on.ui-hide #blurlayer{opacity:0}
+    #topmask{transition:opacity .5s ease,background-color 1.2s ease}
+    body.menu-on.ui-hide #topmask{opacity:0}
+  }
+  #menu,#lang{transition:opacity .5s ease}
+  body.menu-on.ui-hide #menu,body.menu-on.ui-hide #lang{opacity:0 !important;pointer-events:none}
+
+  /* ---- intro: el nombre como hueco dentro de un campo de texto ---- */
+  #intro{position:fixed;inset:0;z-index:300;background:#f7f6f4;cursor:pointer}
+  #intro canvas{display:block;width:100%;height:100%}
+  /* al salir, cada palabra es tragada por el punto donde queda el logo */
+  #intro.fuera{background:transparent;pointer-events:none}
+  /* mientras la intro vive, el logo de partículas está oculto */
+  body.intro-viva #c,body.intro-viva #blurlayer{opacity:0}
+  #c,#blurlayer{transition:opacity .55s ease}
+  /* al entrar, el fondo ya está claro: no debe asomar el negro */
+  body.entrando #bg,body.entrando #topmask{transition:none;background:#f7f6f4}
+
+  /* ---- pie de pagina ---- */
+  .foot-site{box-sizing:border-box;width:100%;max-width:100%;padding:7vh 5vw 5vh;display:flex;justify-content:flex-end;position:relative;z-index:85;pointer-events:auto}
+  .foot-site .in{box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-end;gap:.55rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.08em;color:#8f8f8a;text-align:right}
+  .foot-site a{color:inherit;text-decoration:none;transition:color .3s}
+  .foot-site a:hover{color:#111116}
+  .foot-site .ig{display:inline-flex;align-items:center;gap:.45rem;margin-top:.15rem}
+  .foot-site .ig svg{width:17px;height:17px;display:block}
+  @media(max-width:700px){ .foot-site{padding:6vh 5vw 6vh} .foot-site .in{font-size:.72rem} }
+  .foot-site{scroll-snap-align:end;opacity:0;transition:opacity .9s ease}
+  body.menu-on .foot-site{opacity:1}
+
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500;700&family=Inter:ital,wght@1,800&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person",
+ "name":"Sofía Bernasconi Le Roy","alternateName":"Sofía Bernasconi",
+ "jobTitle":"Artista visual y artes mediales",
+ "description":"Artista visual chilena de artes mediales y nuevos medios. Trabaja en videoinstalación, performance y arte y tecnología.",
+ "url":"https://sofiabernasconi.com",
+ "image":"https://sofiabernasconi.com/assets/og.jpg",
+ "email":"contacto@sofiabernasconi.com",
+ "nationality":"Chilean",
+ "address":{"@type":"PostalAddress","addressLocality":"New York","addressCountry":"US"},
+ "alumniOf":[{"@type":"CollegeOrUniversity","name":"New York University"},
+             {"@type":"CollegeOrUniversity","name":"Universidad de Concepción"}],
+ "knowsAbout":["Videoinstalación","Performance","Artes mediales","Nuevos medios","Arte y tecnología","Videoarte","Instalación interactiva"]}
+</script>
+</head>
+<body>
+
+  <h1 class="sr-only">Sofía Bernasconi Le Roy — artista visual y artes mediales</h1>
+  <script>if(location.hash==='#open')document.body.classList.add('reveal','menu-on');</script>
+  <div id="intro"><canvas id="icv"></canvas></div>
+  <div id="bg"></div>
+  <div id="c"></div>
+  <div id="topmask"></div>
+  <div id="lang"><span data-l="es" class="on">ES</span> / <span data-l="en">EN</span></div>
+  <nav id="menu">
+    <a href="bio.html" data-es="Bio" data-en="Bio">Bio</a>
+    <a href="proyectos.html" data-es="Proyectos" data-en="Projects">Proyectos</a>
+    <a href="prensa.html" data-es="Prensa" data-en="Press">Prensa</a>
+    <a href="contacto.html" data-es="Contacto" data-en="Contact">Contacto</a>
+  </nav>
+  <a id="logohit" href="bio.html" aria-label="Bio"></a>
+  <div id="namehit"></div>
+  <div id="gallery">
+    <section class="proj" data-id="convey">
+      <div class="cap">Convey me · 2025–2026</div>
+      <div class="comp"><img src="assets/convey_1.jpg" alt="Convey me, instalación cinética de Sofía Bernasconi (1 de 6)"><img src="assets/convey_2.jpg" alt="Convey me, instalación cinética de Sofía Bernasconi (2 de 6)"><img src="assets/convey_3.jpg" alt="Convey me, instalación cinética de Sofía Bernasconi (3 de 6)"><img src="assets/convey_4.jpg" alt="Convey me, instalación cinética de Sofía Bernasconi (4 de 6)"><img src="assets/convey_5.jpg" alt="Convey me, instalación cinética de Sofía Bernasconi (5 de 6)"><img src="assets/convey_6.jpg" alt="Convey me, instalación cinética de Sofía Bernasconi (6 de 6)"></div>
+    </section>
+    <section class="proj" data-id="reflejo">
+      <div class="cap"><span class="tes">Reflejo Abierto</span><span class="ten">Open Reflection<span class="orig"> (Reflejo Abierto)</span></span> · 2025</div>
+      <div class="comp"><img src="assets/reflejo_1.jpg" alt="Reflejo Abierto, icosaedro interactivo de Sofía Bernasconi (1 de 4)"><img src="assets/reflejo_2.jpg" alt="Reflejo Abierto, icosaedro interactivo de Sofía Bernasconi (2 de 4)"><img src="assets/reflejo_3.jpg" alt="Reflejo Abierto, icosaedro interactivo de Sofía Bernasconi (3 de 4)"><img src="assets/reflejo_4.jpg" alt="Reflejo Abierto, icosaedro interactivo de Sofía Bernasconi (4 de 4)"></div>
+    </section>
+    <section class="proj" data-id="orilla">
+      <div class="cap"><span class="tes">Orilla</span><span class="ten">Shore<span class="orig"> (Orilla)</span></span> · 2025</div>
+      <div class="comp"><img src="assets/orilla_1.jpg" alt="Orilla, instalación sonora interactiva con cuencos de agua (1 de 4)"><img src="assets/orilla_2.jpg" alt="Orilla, instalación sonora interactiva con cuencos de agua (2 de 4)"><img src="assets/orilla_3.jpg" alt="Orilla, instalación sonora interactiva con cuencos de agua (3 de 4)"><img src="assets/orilla_4.jpg" alt="Orilla, instalación sonora interactiva con cuencos de agua (4 de 4)"></div>
+    </section>
+    <section class="proj" data-id="mecanica">
+      <div class="cap"><span class="tes">Mecánica del Tacto</span><span class="ten">Mechanics of Touch<span class="orig"> (Mecánica del Tacto)</span></span> · 2025</div>
+      <div class="comp"><img src="assets/mecanica_1.jpg" alt="Mecánica del Tacto, brazos mecánicos con mini proyectores (1 de 5)"><img src="assets/mecanica_2.jpg" alt="Mecánica del Tacto, brazos mecánicos con mini proyectores (2 de 5)"><img src="assets/mecanica_3.jpg" alt="Mecánica del Tacto, brazos mecánicos con mini proyectores (3 de 5)"><img src="assets/mecanica_4.jpg" alt="Mecánica del Tacto, brazos mecánicos con mini proyectores (4 de 5)"><img src="assets/mecanica_5.jpg" alt="Mecánica del Tacto, brazos mecánicos con mini proyectores (5 de 5)"></div>
+    </section>
+    <section class="proj" data-id="tensiones">
+      <div class="cap"><span class="tes">Tensiones</span><span class="ten">Tensions<span class="orig"> (Tensiones)</span></span> · 2022–2024</div>
+      <div class="comp"><img src="assets/tensiones_1.jpg" alt="Tensiones, videoinstalación con smartphones y cables de acero (1 de 5)"><img src="assets/tensiones_2.jpg" alt="Tensiones, videoinstalación con smartphones y cables de acero (2 de 5)"><img src="assets/tensiones_3.jpg" alt="Tensiones, videoinstalación con smartphones y cables de acero (3 de 5)"><img src="assets/tensiones_4.jpg" alt="Tensiones, videoinstalación con smartphones y cables de acero (4 de 5)"><img src="assets/tensiones_5.jpg" alt="Tensiones, videoinstalación con smartphones y cables de acero (5 de 5)"></div>
+    </section>
+    <section class="proj" data-id="cuerpoaguas">
+      <div class="cap"><span class="tes">Mi cuerpo toca tus aguas</span><span class="ten">My Body Touches Your Waters<span class="orig"> (Mi cuerpo toca tus aguas)</span></span> · 2024–2025</div>
+      <div class="comp"><img src="assets/cuerpoaguas_1.jpg" alt="Mi cuerpo toca tus aguas, videoperformance en los cuerpos de agua del Gran Concepción (1 de 4)"><img src="assets/cuerpoaguas_2.jpg" alt="Mi cuerpo toca tus aguas, videoperformance en los cuerpos de agua del Gran Concepción (2 de 4)"><img src="assets/cuerpoaguas_3.jpg" alt="Mi cuerpo toca tus aguas, videoperformance en los cuerpos de agua del Gran Concepción (3 de 4)"><img src="assets/cuerpoaguas_4.jpg" alt="Mi cuerpo toca tus aguas, videoperformance en los cuerpos de agua del Gran Concepción (4 de 4)"></div>
+    </section>
+    <section class="proj" data-id="cordeles">
+      <div class="cap"><span class="tes">También somos una cortina de cordeles</span><span class="ten">We Are Also a Curtain of Cords<span class="orig"> (También somos una cortina de cordeles)</span></span> · 2020</div>
+      <div class="comp"><img src="assets/cordeles_1.jpg" alt="También somos una cortina de cordeles, videoinstalación (1 de 4)"><img src="assets/cordeles_2.jpg" alt="También somos una cortina de cordeles, videoinstalación (2 de 4)"><img src="assets/cordeles_3.jpg" alt="También somos una cortina de cordeles, videoinstalación (3 de 4)"><img src="assets/cordeles_4.jpg" alt="También somos una cortina de cordeles, videoinstalación (4 de 4)"></div>
+    </section>
+    <section class="proj" data-id="sumersiones">
+      <div class="cap"><span class="tes">Sumersiones</span><span class="ten">Submersions<span class="orig"> (Sumersiones)</span></span> · 2019</div>
+      <div class="comp"><img src="assets/sumersiones_1.jpg" alt="Sumersiones, videoinstalación con televisores antiguos (1 de 4)"><img src="assets/sumersiones_2.jpg" alt="Sumersiones, videoinstalación con televisores antiguos (2 de 4)"><img src="assets/sumersiones_3.jpg" alt="Sumersiones, videoinstalación con televisores antiguos (3 de 4)"><img src="assets/sumersiones_4.jpg" alt="Sumersiones, videoinstalación con televisores antiguos (4 de 4)"></div>
+    </section>
+    <section class="proj" data-id="residente">
+      <div class="cap"><span class="tes">Resid(ente)</span><span class="ten">Resid(ent)<span class="orig"> (Resid(ente))</span></span> · 2021</div>
+      <div class="comp"><img src="assets/residente_1.jpg" alt="Resid(ente), laboratorio transdisciplinar de cuerpo y espacio (1 de 4)"><img src="assets/residente_2.jpg" alt="Resid(ente), laboratorio transdisciplinar de cuerpo y espacio (2 de 4)"><img src="assets/residente_3.jpg" alt="Resid(ente), laboratorio transdisciplinar de cuerpo y espacio (3 de 4)"><img src="assets/residente_4.jpg" alt="Resid(ente), laboratorio transdisciplinar de cuerpo y espacio (4 de 4)"></div>
+    </section>
+    <section class="proj" data-id="deshilacha">
+      <div class="cap"><span class="tes">Deshilacha</span><span class="ten">Fraying<span class="orig"> (Deshilacha)</span></span> · 2019</div>
+      <div class="comp"><img src="assets/deshilacha_1.jpg" alt="Deshilacha, cortometraje en la fábrica textil Bellavista-Oveja Tomé (1 de 2)"><img src="assets/deshilacha_2.jpg" alt="Deshilacha, cortometraje en la fábrica textil Bellavista-Oveja Tomé (2 de 2)"></div>
+    </section>
+    <section class="proj" data-id="sumersiones0">
+      <div class="cap"><span class="tes">Bajo el agua</span><span class="ten">Under Water<span class="orig"> (Bajo el agua)</span></span> · 2018</div>
+      <div class="comp"><img src="assets/sumersiones0_1.jpg" alt="Bajo el agua, serie de pinturas de rostros sumergidos (1 de 5)"><img src="assets/sumersiones0_2.jpg" alt="Bajo el agua, serie de pinturas de rostros sumergidos (2 de 5)"><img src="assets/sumersiones0_3.jpg" alt="Bajo el agua, serie de pinturas de rostros sumergidos (3 de 5)"><img src="assets/sumersiones0_4.jpg" alt="Bajo el agua, serie de pinturas de rostros sumergidos (4 de 5)"><img src="assets/sumersiones0_5.jpg" alt="Bajo el agua, serie de pinturas de rostros sumergidos (5 de 5)"></div>
+    </section>
+    <section class="proj" data-id="artwork">
+      <div class="cap"><span class="tes">Artwork para álbumes de música</span><span class="ten">Artwork for music albums<span class="orig"> (Artwork para álbumes de música)</span></span> · 2020</div>
+      <div class="comp"><img src="assets/artwork_1.jpg" alt="Artwork para álbumes de música, portada diseñada por Sofía Bernasconi (1 de 3)"><img src="assets/artwork_2.jpg" alt="Artwork para álbumes de música, portada diseñada por Sofía Bernasconi (2 de 3)"><img src="assets/artwork_3.jpg" alt="Artwork para álbumes de música, portada diseñada por Sofía Bernasconi (3 de 3)"></div>
+    </section>
+  <footer class="foot-site">
+    <div class="in">
+      <a href="mailto:contacto@sofiabernasconi.com">contacto@sofiabernasconi.com</a>
+      <span>Concepción, Chile · New York, USA</span>
+      <a class="ig" href="https://www.instagram.com/sofibernasconi/" target="_blank" rel="noopener" aria-label="Instagram: @sofibernasconi">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.5" cy="6.5" r="1.15" fill="currentColor" stroke="none"/></svg>@sofibernasconi</a>
+    </div>
+  </footer>
+  </div>
+  <script>
+
+  // ---- contraste automatico de los titulos de obra ----
+  // medimos el brillo de las fotos de cada seccion: si es tono medio,
+  // el efecto de inversion deja el texto ilegible, asi que usamos blanco solido.
+  (function(){
+    function medir(img){
+      try{
+        var c=document.createElement('canvas'); c.width=24; c.height=24;
+        var ctx=c.getContext('2d',{willReadFrequently:true});
+        ctx.drawImage(img,0,0,24,24);
+        var d=ctx.getImageData(0,0,24,24).data,s=0,n=0;
+        for(var i=0;i<d.length;i+=4){ s+=(0.2126*d[i]+0.7152*d[i+1]+0.0722*d[i+2])/255; n++; }
+        return s/n;
+      }catch(e){ return null; }
+    }
+    function analiza(proj){
+      var imgs=proj.querySelectorAll('img'); if(!imgs.length) return;
+      var vals=[];
+      imgs.forEach(function(im){ var v=medir(im); if(v!==null) vals.push(v); });
+      if(!vals.length) return;
+      var L=vals.reduce(function(a,b){return a+b;},0)/vals.length;
+      if(L>0.38 && L<0.62) proj.classList.add("midtone");
+    }
+    document.querySelectorAll('.proj').forEach(function(proj){
+      var imgs=proj.querySelectorAll('img'), pend=imgs.length;
+      if(!pend) return;
+      imgs.forEach(function(im){
+        if(im.complete && im.naturalWidth){ if(--pend===0) analiza(proj); }
+        else im.addEventListener('load', function(){ if(--pend===0) analiza(proj); });
+      });
+    });
+  })();
+
+  // Helpers de idioma (globales)
+  function LNG(){var u=new URLSearchParams(location.search).get('lang'),s=null;try{s=localStorage.getItem('lang')}catch(e){}return s||u||'es';}
+  function LHREF(href,l){l=l||LNG();if(!href||/^(https?:|mailto:|tel:|#)/i.test(href))return href;var hash='';var h=href.indexOf('#');if(h>=0){hash=href.slice(h);href=href.slice(0,h);}var base=href,qs='';var q=href.indexOf('?');if(q>=0){base=href.slice(0,q);qs=href.slice(q+1);}var pr=new URLSearchParams(qs);pr.set('lang',l);return base+'?'+pr.toString()+hash;}
+  // Clic en una obra de la galería → abre su página
+  document.addEventListener('click',function(e){
+    if(!document.body.classList.contains('menu-on')) return;
+    const s=e.target.closest('.proj'); if(!s) return;
+    const id=s.getAttribute('data-id'); if(!id) return;
+    if(e.target.closest('.comp') || e.target.closest('.cap')){ window.location.href=LHREF('obra.html?id='+id); }
+  });
+  // Parallax sutil: la leyenda (nombre + año) desciende lentamente al scrollear, hasta que aparece la siguiente obra
+  (function(){
+    const secs=[].slice.call(document.querySelectorAll('.proj'));
+    const DRIFT=46; // cuánto desciende la leyenda (vh) a lo largo de la obra
+    function update(){
+      if(document.body.classList.contains('menu-on')){
+        const vh=window.innerHeight||1;
+        for(const s of secs){
+          const cap=s.querySelector('.cap'); if(!cap) continue;
+          const r=s.getBoundingClientRect(), p=r.top/vh;
+          let op, ty, dis, tf;
+          if(window.innerWidth<700){
+            const bot=r.bottom/vh;                    // móvil: el título acompaña TODA la obra
+            if(p>0.3) op=(0.5-p)/0.2;                 // aparece: llega a full en p=0.3, empieza en p=0.5
+            else if(bot<0.7) op=(bot-0.5)/0.2;        // desaparece: se va justo en el cruce (bot=0.5 = p=0.5 de la siguiente) -> sin solape ni hueco
+            else op=1;
+            if(op<0)op=0; if(op>1)op=1;
+            ty=(p<0?Math.min(1,-p):0)*8; dis=1-op;    // deriva leve, se mantiene arriba
+            tf='translateY('+ty.toFixed(2)+'vh)';
+          } else {
+            const DRIFT=46;                            // desktop: como estaba antes
+            ty=(p<0?Math.min(1,-p):0)*DRIFT;
+            if(p>0.12) op=(0.5-p)/0.38;
+            else if(p<-0.8) op=(p+1)/0.2;
+            else op=1;
+            if(op<0)op=0; if(op>1)op=1;
+            dis=1-op;
+            tf='translateY('+(ty+dis*dis*4).toFixed(2)+'vh) scale('+(1+dis*0.04).toFixed(3)+')';
+          }
+          cap.style.transform=tf;
+          cap.style.opacity=op.toFixed(3);
+          cap.style.filter = dis>0.02 ? 'blur('+(dis*dis*(window.innerWidth<700?2:3.2)).toFixed(2)+'px)' : 'none';
+
+          /* El título es fijo y la foto pasa por detrás: el cruce parte las
+             letras por la mitad. Encima del título va una copia blanca,
+             recortada exactamente a la franja que pisa la foto, así sólo esa
+             porción se ve blanca y el resto sigue negro sobre el papel. */
+          if(s.classList.contains('midtone')){
+            let capw = s.__capw;
+            if(!capw){
+              capw = cap.cloneNode(true);
+              capw.classList.add('capw');
+              s.appendChild(capw);
+              s.__capw = capw;
+            }
+            if(window.innerWidth >= 700){
+              capw.style.display = 'none';
+            } else {
+              capw.style.display = '';
+              capw.style.transform = tf;
+              capw.style.opacity = op.toFixed(3);
+              capw.style.filter = cap.style.filter;
+              // se recorta al rectángulo que comparten título y foto:
+              // por arriba, por abajo y también por los costados
+              let mejor = null, area = 0;
+              if(op > 0.02){
+                const cr = cap.getBoundingClientRect();
+                const imgs = s.querySelectorAll('.comp img');
+                for(let k=0;k<imgs.length;k++){
+                  const ir = imgs[k].getBoundingClientRect();
+                  const w = Math.min(cr.right, ir.right) - Math.max(cr.left, ir.left);
+                  const h = Math.min(cr.bottom, ir.bottom) - Math.max(cr.top, ir.top);
+                  if(w > 1 && h > 1 && w*h > area){ area = w*h; mejor = ir; }
+                }
+                if(mejor){
+                  const t = Math.max(0, mejor.top    - cr.top);
+                  const b = Math.max(0, cr.bottom    - mejor.bottom);
+                  const l = Math.max(0, mejor.left   - cr.left);
+                  const r = Math.max(0, cr.right     - mejor.right);
+                  capw.style.clipPath = 'inset('+t.toFixed(1)+'px '+r.toFixed(1)+'px '
+                                              +b.toFixed(1)+'px '+l.toFixed(1)+'px)';
+                } else capw.style.clipPath = 'inset(50% 0)';
+              } else capw.style.clipPath = 'inset(50% 0)';
+            }
+          }
+        }
+      }
+      requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  })();
+  </script>
+<script>
+// Only the name — held loosely by a soft spring, floating on a noise field.
+// Cursor makes it overflow (desborde) and evaporate; it drifts back, light.
+new p5(function(p){
+  let img, parts=[], nLines=1, W, H, mx=-999, my=-999, blur, nameCY=0, nameH=1, nbx0=0,nby0=0,nbx1=0,nby1=0, parked=false, LS=1, LOX=0, LOY=0, hoverAmt=0, themeLerp=0, startOpen=false, namehit=null;
+  const MINI_S=(window.innerWidth<700?0.30:0.30), MINI_X=34, MINI_Y=30;   // miniature logo: scale + top-left corner
+  function inName(x,y){ const w=(nbx1-nbx0)*LS, hh=(nby1-nby0)*LS; return x>=LOX&&x<=LOX+w&&y>=LOY&&y<=LOY+hh; }
+  const FONT='Syne';           // base typeface for the name (swap this to try others)
+  function makeText(){
+    const fs=200, mob=window.innerWidth<700;
+    const m=p.createGraphics(10,10); m.textFont(FONT); m.textStyle(p.BOLD); m.textSize(fs);
+    let g;
+    if(mob){
+      const lines=['SOFIA','BERNASCONI']; nLines=lines.length;   // mismo logo en todo el sitio
+      let tw=0;
+      for(const l of lines) tw=Math.max(tw, Math.ceil(m.textWidth(l)));
+      m.remove();
+      const pad=20, lead=fs*1.04;
+      g=p.createGraphics(tw+pad*2, Math.ceil(lead*(lines.length-1)+fs*1.25)); g.pixelDensity(1);
+      g.background(255); g.fill(0); g.noStroke();
+      g.textFont(FONT); g.textStyle(p.BOLD); g.textSize(fs); g.textAlign(p.LEFT,p.CENTER);
+      const cy=g.height/2 - lead*(lines.length-1)/2;
+      lines.forEach((l,i)=>g.text(l, pad, cy+i*lead));
+    } else {
+      nLines=1;
+      m.drawingContext.wordSpacing='75px';
+      const txt='SOFIA BERNASCONI', tw=Math.ceil(m.textWidth(txt)); m.remove();
+      g=p.createGraphics(tw+40, Math.ceil(fs*1.35)); g.pixelDensity(1);
+      g.background(255); g.fill(0); g.noStroke();
+      g.textFont(FONT); g.textStyle(p.BOLD); g.textSize(fs); g.textAlign(p.CENTER,p.CENTER); g.drawingContext.wordSpacing='75px';
+      g.text(txt, g.width/2, g.height/2);
+    }
+    g.loadPixels();
+    return g;
+  }
+  const R=160;                 // cursor influence radius
+  const INTRO=510;             // frames for the timed intro assembly (~8.5s + delay)
+
+  const VSTRETCH=1.55;         // stretch the name vertically (opción 04)
+  function targetW(){ return (window.innerWidth<700 ? window.innerWidth*0.99 : Math.min(window.innerWidth*0.72,900)); }
+  function setHomes(){
+    const tw=targetW(), s=tw/img.width;
+    const h=img.height*s*VSTRETCH;
+    const ox=(W-tw)/2, oy=(W<700 ? Math.max(H*0.05,(H-h)/2) : (H-h)/2);   // móvil: nombre a pantalla completa
+    nameCY=oy+h/2; nameH=h; nbx0=ox; nby0=oy; nbx1=ox+tw; nby1=oy+h;
+    for(const q of parts){ q.hx=ox+q.ix*s; q.hy=oy+q.iy*s*VSTRETCH; q.hyL=oy+(q.iy % (img.height/nLines))*s*VSTRETCH; }
+  }
+  function build(){
+    parts=[]; W=window.innerWidth; H=window.innerHeight;
+    img.loadPixels();
+    const s=targetW()/img.width;
+    const step=Math.max(2,Math.round((W<700?1.8:2.4)/s));  // lighter on phones / eases load
+    for(let y=0;y<img.height;y+=step)
+      for(let x=0;x<img.width;x+=step)
+        if(img.pixels[4*(x+y*img.width)]<115)
+          parts.push({ix:x,iy:y,ox:0,oy:0,ovx:0,ovy:0,ev:0,seed:p.random(1000),sz:p.random(0.5,1.15),fst:p.random(0,150)});
+    setHomes();
+  }
+  p.setup=function(){
+    W=window.innerWidth; H=window.innerHeight;
+    let c=p.createCanvas(W,H); c.parent('c'); p.pixelDensity(Math.min(2, window.devicePixelRatio||1));
+    blur=p.createGraphics(W,H); blur.pixelDensity(1); blur.elt.id='blurlayer'; document.body.appendChild(blur.elt);
+    namehit=document.getElementById('namehit');
+    startOpen = location.hash==='#open';
+    const boot=()=>{ img=makeText(); build(); if(startOpen){ parked=true; LS=MINI_S; LOX=MINI_X; LOY=MINI_Y; themeLerp=1; } };
+    // la intro nueva lo llama al entrar: el logo aparece ya reducido en la esquina
+    window.__park=function(){ parked=true; LS=MINI_S; LOX=MINI_X; LOY=MINI_Y; themeLerp=1; startOpen=true; p.loop(); };
+    // mientras la intro esté encima, este sketch no dibuja: se lo comía todo
+    if(document.getElementById('intro')) p.noLoop();
+    if(document.fonts&&document.fonts.load){ document.fonts.load('700 120px \"'+FONT+'\"').then(boot).catch(boot); } else boot();
+    window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;
+      document.body.style.cursor=inName(mx,my)?'pointer':'default';});
+    window.addEventListener('click',e=>{
+      if(!inName(e.clientX,e.clientY)) return;
+      if(!parked){ parked=true; document.body.classList.add('reveal'); setTimeout(()=>document.body.classList.add('menu-on'),650); }
+      else { window.location.href='bio.html'; }
+      document.body.style.cursor='default';});
+    window.addEventListener('mouseout',()=>{mx=-999;my=-999});
+    // touch support for phones (no hover -> drag a finger to open the name)
+    const touch=e=>{ const c=e.touches&&e.touches[0]; if(c){mx=c.clientX;my=c.clientY;} };
+    window.addEventListener('touchstart',touch,{passive:true});
+    window.addEventListener('touchmove',touch,{passive:true});
+    window.addEventListener('touchend',()=>{mx=-999;my=-999});
+  };
+  p.draw=function(){
+    p.clear(); blur.clear();
+    if(parked){
+      LS+=(MINI_S-LS)*0.1; LOX+=(MINI_X-LOX)*0.1; LOY+=(MINI_Y-LOY)*0.1;   // shrink to corner
+      themeLerp+=(1-themeLerp)*0.05;                                       // black -> white
+      hoverAmt+=((inName(mx,my)?1:0)-hoverAmt)*0.11;                       // mini frozen unless hovered; ramps gently
+    } else { LS=1; LOX=nbx0; LOY=nby0; hoverAmt=1; }
+    if(namehit){ if(parked){ namehit.style.display='none'; } else { namehit.style.display='block'; namehit.style.left=nbx0+'px'; namehit.style.top=nby0+'px'; namehit.style.width=(nbx1-nbx0)+'px'; namehit.style.height=(nby1-nby0)+'px'; } }
+    const act = parked ? hoverAmt : 1;                 // full life when large; hover-gated when mini
+    const col = 255*(1-themeLerp);                       // blanco puro en negro -> negro puro en blanco
+    const t=p.frameCount*0.003;
+    const wt=p.frameCount*0.01;
+    const cX=LOX+(nbx1-nbx0)*LS/2, cY=LOY+(nby1-nby0)*LS/2;
+    for(const q of parts){
+      const fade=startOpen?1:Math.min(1, Math.max(0,(p.frameCount-q.fst)/40));
+      const hx=LOX+(q.hx-nbx0)*LS, hy=LOY+(q.hy-nby0)*LS;   // home scaled/placed by layout
+      const wv=(W<700?q.hyL:q.hy);   // móvil: y relativa a cada línea -> SOFIA y BERNASCONI en fase (misma dirección), misma onda de antes
+      const waveX=( Math.sin(wv*0.07 - wt*1.2)*20 + Math.sin(wv*0.15 + wt*0.8)*8 )*(1-q.ev)*LS*act;
+      const baseX=hx+waveX, baseY=hy;
+      const px=baseX+q.ox, py=baseY+q.oy;
+      const k=0.016*(1-0.99*q.ev);
+      let ax=-q.ox*k, ay=-q.oy*k;
+      ax += (p.noise(q.seed,t)-0.5)*0.05*LS*act;
+      const Reff=R*LS;                               // cursor radius shrinks with the mini logo
+      const dx=px-mx, dy=py-my, d=Math.hypot(dx,dy);
+      if(d<Reff){ q.ev=Math.min(1, q.ev+(1-d/Reff)*0.09); }
+      if(q.ev>0.02){
+        const a=p.noise(px*0.0016, py*0.0016, t*0.4)*p.TWO_PI*2.0;
+        const drift=0.5*q.ev*LS*act;
+        ax+=Math.cos(a)*drift; ay+=Math.sin(a)*drift;
+        ax+=(px-cX)*0.00075*q.ev*LS*act; ay+=(py-cY)*0.00075*q.ev*LS*act;
+      }
+      q.ev*=0.991;
+      const fr=0.92+0.05*q.ev;
+      q.ovx=(q.ovx+ax)*fr; q.ovy=(q.ovy+ay)*fr;
+      const cap=3.2*Math.max(LS,0.5), sp=Math.hypot(q.ovx,q.ovy); if(sp>cap){ q.ovx*=cap/sp; q.ovy*=cap/sp; }
+      q.ox+=q.ovx; q.oy+=q.ovy;
+      const dpx=baseX+q.ox, dpy=baseY+q.oy;
+      q.curX=dpx; q.curY=dpy;
+      const dot=q.sz*1.5*Math.max(LS,0.62)*(1+0.45*(1-themeLerp))*(window.innerWidth<700?0.7:1);  // más densas (mini más legible)
+      p.noStroke(); blur.noStroke();
+      const aC=255*(1-q.ev)*fade;
+      if(aC>4){ p.fill(col,col,col,aC); p.circle(dpx,dpy, dot); }
+      const bA=150*q.ev*fade;
+      if(q.ev>0.03){ blur.fill(col,col,col,bA); blur.circle(dpx,dpy, dot+q.ev*3*LS); }
+    }
+  };
+  let to;
+  p.windowResized=function(){ W=window.innerWidth; H=window.innerHeight; p.resizeCanvas(W,H); blur.resizeCanvas(W,H); clearTimeout(to); to=setTimeout(()=>{ if(img) setHomes(); },120); };
+});
+</script>
+<script>(function(){
+  const setLang=l=>{
+    document.body.classList.toggle('en',l==='en');
+    document.querySelectorAll('#menu a').forEach(a=>{a.textContent=a.getAttribute('data-'+l);});
+    document.querySelectorAll('#lang span').forEach(s=>s.classList.toggle('on',s.getAttribute('data-l')===l));
+    try{localStorage.setItem('lang',l);}catch(e){}
+    document.querySelectorAll('a[href]').forEach(a=>a.setAttribute('href',LHREF(a.getAttribute('href'),l)));
+  };
+  document.querySelectorAll('#lang span').forEach(s=>s.addEventListener('click',()=>setLang(s.getAttribute('data-l'))));
+  setLang(LNG());
+})();</script>
+<!--IDIOMA-CLICK-GUARD-->
+<script>(function(){
+  function L(){var u=null,s=null;try{u=new URLSearchParams(location.search).get('lang');}catch(e){}try{s=localStorage.getItem('lang');}catch(e){}return s||u||'es';}
+  document.addEventListener('click',function(e){
+    var a=e.target&&e.target.closest?e.target.closest('a[href]'):null; if(!a)return;
+    var h=a.getAttribute('href'); if(!h||/^(https?:|mailto:|tel:)/i.test(h)||h.charAt(0)==='#')return;
+    var l=L(),hash='',hi=h.indexOf('#'); if(hi>=0){hash=h.slice(hi);h=h.slice(0,hi);}
+    var base=h,qs='',qi=h.indexOf('?'); if(qi>=0){base=h.slice(0,qi);qs=h.slice(qi+1);}
+    var pr; try{pr=new URLSearchParams(qs);}catch(e){pr=new URLSearchParams();}
+    pr.set('lang',l); a.setAttribute('href', base+'?'+pr.toString()+hash);
+  }, true);
+})();</script>
+<!--INTRO-TEXTO-->
+<script>(function(){
+  const cont = document.getElementById('intro');
+  if(!cont) return;
+  // si llegamos desde otra página el sitio ya está abierto: no hay intro
+  if(location.hash==='#open'){ cont.remove(); return; }
+
+  const P = { fondo:'#f7f6f4', tinta:'#15150f' };   // blanco y negro
+  const PALABRAS = ['BERNASCONI'];      // el texto chico
+  const HUECO    = ['SOFIA'];           // la palabra principal, en blanco
+  const CELL = 8, BANDA = 0;      // sin bandas: el papel queda vacío
+  const TIPO = "Helvetica, 'Helvetica Neue', Arial, sans-serif";
+
+  document.body.classList.add('intro-viva');
+  const cv = document.getElementById('icv');
+  const ctx = cv.getContext('2d');
+  const masc = document.createElement('canvas'), mctx = masc.getContext('2d',{willReadFrequently:true});
+  const halo = document.createElement('canvas'), hctx = halo.getContext('2d',{willReadFrequently:true});
+  const HAY_TRACK = ('letterSpacing' in ctx);
+  let W,H,DPR,cols,rows,cw,ch,FS, vivo = true, MDAT=null, HDAT=null, primerDibujo=false, ESC=1;
+
+  const mob = ()=> window.innerWidth < 760;
+  function azar(a,b){ const s=Math.sin(a*12.9898+b*78.233)*43758.5453; return s-Math.floor(s); }
+
+  function resize(){
+    DPR = Math.min(2, window.devicePixelRatio||1);
+    W = window.innerWidth;
+    H = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
+    cv.width=W*DPR; cv.height=H*DPR;
+    cv.style.width=W+'px'; cv.style.height=H+'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    cw = mob() ? CELL*0.62 : CELL;
+    ch = cw*2.0;
+    FS = ch*0.60;                  // los BERNASCONI, un poco más chicos
+    cols = Math.ceil(W/cw)+2;
+    rows = Math.ceil(H/ch)+1;
+    masc.width=cols; masc.height=rows;
+    halo.width=cols; halo.height=rows;
+    medidas.clear(); anchoLetra.clear();
+    pintaNombre(mctx,0.5); pintaNombre(hctx, mob() ? 1.6 : 2.4);
+    MDAT = mctx.getImageData(0,0,cols,rows).data;      // se cachea: no cambia
+    HDAT = hctx.getImageData(0,0,cols,rows).data;
+  }
+
+  function pintaNombre(g, blur){
+    g.setTransform(1,0,0,1,0,0);
+    g.filter='none'; g.globalAlpha=1;
+    g.fillStyle='#fff'; g.fillRect(0,0,cols,rows);
+    g.filter = `blur(${blur}px)`;
+    g.fillStyle='#000'; g.textBaseline='alphabetic';
+    // en el teléfono la palabra no sale a sangre: se deja aire alrededor
+    // para que las letras cierren y el texto pueda rodearlas por los cuatro lados
+    const M_ANCHO = mob() ? 0.92 : 1.0;          // del ancho de pantalla
+    const M_ALTO  = mob() ? 0.58 : 0.92;         // del alto disponible
+    const util = rows - BANDA*2.4;
+    const alto = util/HUECO.length;
+    const ancho = cols*M_ANCHO, ox = (cols-ancho)/2;
+    const y0 = mob() ? BANDA*1.2 + (util - util*M_ALTO)/2 : BANDA*1.2;
+    const altoLinea = mob() ? (util*M_ALTO)/HUECO.length : alto;
+
+    HUECO.forEach((txt,i)=>{
+      let fs = 40;
+      g.font = `italic 800 ${fs}px Inter, Syne, sans-serif`;
+      const w = g.measureText(txt).width || 1;
+      fs = fs*ancho/w;
+      g.save();
+      g.font = `italic 800 ${fs}px Inter, Syne, sans-serif`;
+      const m = g.measureText(txt);
+      const inkH = (m.actualBoundingBoxAscent || fs*0.72);
+      g.translate(ox, y0 + altoLinea*(i+1) - altoLinea*0.10);
+      g.scale(1, (altoLinea*0.88)/inkH);
+      g.fillText(txt, 0, 0);
+      g.restore();
+    });
+    g.filter='none';
+  }
+
+  const medidas = new Map();
+  function anchoPalabra(w, track){
+    const k = w+'|'+track.toFixed(1);
+    if(medidas.has(k)) return medidas.get(k);
+    let a;
+    if(HAY_TRACK){ ctx.letterSpacing = track+'px'; a = ctx.measureText(w).width; }
+    else { a=0; for(const c of w) a += ctx.measureText(c).width + track; }
+    medidas.set(k,a); return a;
+  }
+  function escribe(w,x,y,track){
+    if(HAY_TRACK){ ctx.letterSpacing = track+'px'; ctx.fillText(w,x,y); return; }
+    let px=x; for(const c of w){ ctx.fillText(c,px,y); px += ctx.measureText(c).width + track; }
+  }
+
+  /* Al entrar al sitio la plancha se rompe en dos tiempos:
+     primero cada palabra sale disparada a un punto cualquiera de la pantalla,
+     girando; después todas son succionadas hacia el punto donde queda el logo. */
+  let salida = null, ultimoPaso = -1;      // {t0, dur}
+  const A_DISPERSA = 0.32;                 // hasta aquí se rompen y salen disparadas
+  const B_FLOTA    = 0.56;                 // hasta aquí quedan flotando sueltas
+
+  /* Azar de verdad. Un hash de senos sobre la retícula produce bandas
+     correlacionadas (se armaban formas). Como durante la salida la plancha
+     está congelada, cada letra recibe siempre el mismo índice y por lo tanto
+     los mismos números de esta tabla. */
+  const NR = 16384, RND = new Float32Array(NR);
+  for(let i=0;i<NR;i++) RND[i] = Math.random();
+  const rnd = (k,o)=> RND[(k*4+o) % NR];
+
+  /* Cada letra se rasteriza UNA vez a un bitmap. En vuelo se dibuja ese bitmap
+     (drawImage) en lugar de componer texto: fillText tiene que medir y formar
+     la letra en cada llamada, y son miles por cuadro. */
+  const G = 2;                       // el glifo se guarda al doble, para que no pixele
+  const glifos = new Map();
+  function glifo(car){
+    let g = glifos.get(car);
+    if(g) return g;
+    const w = Math.ceil((anchoDe(car)+3)*G), h = Math.ceil(FS*1.9*G);
+    const gc = document.createElement('canvas');
+    gc.width = w; gc.height = h;
+    const gx = gc.getContext('2d');
+    gx.font = `400 ${FS*G}px ${TIPO}`;
+    gx.fillStyle = P.tinta;
+    gx.textBaseline = 'alphabetic';
+    const ox = 2*G, oy = Math.round(FS*1.35*G);
+    gx.fillText(car, ox, oy);
+    g = { im:gc, ox, oy };
+    glifos.set(car, g);
+    return g;
+  }
+
+  // ancho de cada letra suelta (la fuente no cambia durante la salida)
+  const anchoLetra = new Map();
+  function anchoDe(car){
+    let a = anchoLetra.get(car);
+    if(a === undefined){
+      if(HAY_TRACK) ctx.letterSpacing = '0px';
+      a = ctx.measureText(car).width;
+      anchoLetra.set(car, a);
+    }
+    return a;
+  }
+
+  /* LA SALIDA: la barra espaciadora
+     Se guarda cada letra de cada BERNASCONI escrito, junto con dónde empieza
+     su palabra y cuánto mide. Después es como tener apretada la barra: todas
+     las palabras se van corriendo a la derecha y, cuando se pasan del borde
+     de la pantalla, saltan enteras al renglón de abajo. Así una y otra vez,
+     bajando un renglón por cada vuelta, hasta que se caen todas por abajo.
+     Nada baja en bloque: lo único que hace bajar es pasarse del borde. */
+  let N = 0, WSX, OFF, WW, PR, PG, GLI = [];
+
+  function construirPartes(){
+    ctx.font = `400 ${FS}px ${TIPO}`;
+    const alfabeto = [...new Set(PALABRAS.join(''))];
+    GLI = alfabeto.map(glifo);
+    const idx = new Map(alfabeto.map((c,i)=>[c,i]));
+
+    const wsx=[], off=[], ww=[], rs=[], gs=[];
+    let wi = Math.floor(palabra);
+    const TR = [0, cw*0.72, cw*1.7];
+    for(let r=0;r<rows;r++){
+      const banda = (r < BANDA) || (r >= rows-BANDA);
+      const desf = Math.round(Math.sin(r*0.13 + t*0.5)*1.0);
+      const rr = Math.max(0, Math.min(rows-1, r+desf));
+      let c = 0;
+      while(c < cols){
+        const i = (c + rr*cols)*4;
+        let nivel;
+        {
+          if(MDAT[i] >= 128){ c++; continue; }   // fuera del nombre no hay nada
+          const h = 1 - (HDAT[i]/255);
+          let nn = h > 0.72 ? 0 : h > 0.50 ? 1 : 2;
+          const a = azar(c*0.37 + Math.floor(t*0.6), r*1.7);
+          if(a > 0.88) nn = Math.max(0, nn-1);
+          else if(a < 0.08) nn = Math.min(2, nn+1);
+          nivel = nn;
+        }
+        const w = PALABRAS[wi % PALABRAS.length]; wi++;
+        const track = TR[nivel];
+        const x0 = c*cw;
+        const ancho = anchoPalabra(w, track);
+        let o = 0;
+        for(let q=0;q<w.length;q++){
+          const car = w[q];
+          wsx.push(x0); off.push(o); ww.push(ancho); rs.push(r); gs.push(idx.get(car));
+          o += anchoDe(car) + track;
+        }
+        c += Math.max(1, Math.ceil(ancho/cw)) + (nivel===0 ? 1 : 2);
+      }
+    }
+    N = wsx.length;
+    WSX = Float32Array.from(wsx);
+    OFF = Float32Array.from(off);
+    WW  = Float32Array.from(ww);
+    PR  = Uint16Array.from(rs);
+    PG  = Uint8Array.from(gs);
+  }
+
+  /* D = cuántos espacios se llevan apretados, en píxeles. La palabra entera
+     salta de renglón cuando su final se pasa del ancho de la pantalla. */
+  function empuje(D){
+    ctx.setTransform(ESC,0,0,ESC,0,0);
+    ctx.clearRect(0,0,W,H);
+    const k = ESC/G;
+    for(let i=0;i<N;i++){
+      const xw = WSX[i] + D;
+      const vuelta = Math.floor((xw + WW[i]) / W);   // cuántas veces se pasó del borde
+      const R = PR[i] + vuelta;
+      if(R > rows) continue;                          // ya se cayó por abajo
+      const g = GLI[PG[i]];
+      const x = xw - vuelta*W + OFF[i];
+      ctx.setTransform(k,0,0,k, ESC*x, ESC*((R+1)*ch));
+      ctx.drawImage(g.im, -g.ox, -g.oy);
+    }
+  }
+
+  /* El puntero va dejando ondas: a su paso la plancha pierde el registro,
+     se abre el espaciado y el texto invade el hueco del nombre. */
+  const ONDA_DUR = 1400, ONDA_VEL = 42;
+  let ondas = [], ultOrigen = null;
+  function emitir(x,y){
+    if(!cw || salida) return;
+    const o = { cx:x/cw, cy:y/ch, t0:performance.now() };
+    if(ultOrigen){
+      const d = Math.hypot(o.cx-ultOrigen.cx, (o.cy-ultOrigen.cy)*1.9);
+      if(d < 7 && performance.now()-ultOrigen.t0 < 420) return;
+    }
+    ultOrigen = o;
+    ondas.push(o);
+    if(ondas.length > 3) ondas.shift();
+  }
+  cont.addEventListener('pointermove', e=> emitir(e.clientX, e.clientY));
+  cont.addEventListener('pointerdown', e=> emitir(e.clientX, e.clientY));
+
+  let t=0, palabra=0, ultimo=0;
+  function frame(now){
+    if(!vivo) return;
+    requestAnimationFrame(frame);
+    const activa = ondas.length > 0;
+    let prog = -1;
+    if(salida){
+      prog = (now - salida.t0)/salida.dur;
+      if(prog >= 1.02){ vivo=false; cont.remove(); return; }
+    } else {
+      if(now - ultimo < (activa ? 40 : 90)) return;
+      t += 0.030; palabra += 0.34;          // durante la salida la plancha se congela
+    }
+    ultimo = now;
+
+    ondas = ondas.filter(o => now - o.t0 < ONDA_DUR);
+
+    const M = MDAT, Hl = HDAT;
+    if(!M || !Hl) return;
+
+    if(prog >= 0){                       // ---- salida: la barra espaciadora ----
+      // arranca golpe a golpe y acelera, como cuando se deja apretada la tecla
+      const total = W*(rows+2);
+      const D = Math.floor(total*Math.pow(Math.min(1,prog), 2.3) / cw) * cw;
+      if(D !== ultimoPaso){ ultimoPaso = D; empuje(D); }
+      return;
+    }
+
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = P.tinta;
+    ctx.font = `400 ${FS}px ${TIPO}`;
+    ctx.textBaseline='alphabetic';
+
+    let wi = Math.floor(palabra);
+    let kk = 0;                                   // índice estable de cada palabra
+    const TR = [0, cw*0.72, cw*1.7];
+
+    // radio y fuerza de cada onda en este cuadro
+    const OO = ondas.map(o=>{
+      const od = now - o.t0;
+      return { cx:o.cx, cy:o.cy, R:(od/1000)*ONDA_VEL, F:Math.pow(1-od/ONDA_DUR,1.4) };
+    });
+
+    for(let r=0;r<rows;r++){
+      const banda = (r < BANDA) || (r >= rows-BANDA);
+      let desf = Math.round(Math.sin(r*0.13 + t*0.5)*1.0);
+      const y = (r+1)*ch;
+
+      for(const o of OO){
+        const a0 = Math.exp(-Math.pow(Math.abs(r-o.cy)-o.R,2)/90)*o.F;
+        desf += Math.round(a0*5*Math.sin(r*0.9 + t*3));
+      }
+      const rr = Math.max(0, Math.min(rows-1, r+desf));
+
+      let c = 0;
+      while(c < cols){
+        const i = (c + rr*cols)*4;
+        let nivel, anillo = 0;
+        for(const o of OO){
+          const d = Math.hypot(c-o.cx, (r-o.cy)*1.9);
+          const a = Math.exp(-Math.pow(d-o.R,2)/120)*o.F;
+          if(a > anillo) anillo = a;
+        }
+
+        {
+          // el nombre es lo escrito; el papel alrededor queda vacío.
+          // sólo la onda del puntero desborda letras fuera de la letra.
+          const dentro = M[i] < 128;
+          if(!dentro && anillo < 0.55){ c++; continue; }
+          const h = 1 - (Hl[i]/255);            // 1 en el macizo, 0 al salir
+          let n = dentro ? (h > 0.72 ? 0 : h > 0.50 ? 1 : 2) : 2;
+          const a = azar(c*0.37 + Math.floor(t*0.6), r*1.7);
+          if(a > 0.88) n = Math.max(0, n-1);
+          else if(a < 0.08) n = Math.min(2, n+1);
+          if(anillo > 0.25) n = Math.min(2, n + (anillo > 0.6 ? 2 : 1));
+          nivel = n;
+        }
+
+        const w = PALABRAS[wi % PALABRAS.length]; wi++;
+        const track = TR[nivel];
+        escribe(w, c*cw, y, track);
+        c += Math.max(1, Math.ceil(anchoPalabra(w,track)/cw)) + (nivel===0 ? 1 : 2);
+      }
+    }
+    if(HAY_TRACK) ctx.letterSpacing = '0px';
+  }
+
+  // ---- entrar al sitio ----
+  let entrando = false;
+  function entrar(e){
+    if(entrando || !cols) return; entrando = true;
+    if(e){ e.stopPropagation(); e.preventDefault(); }
+
+    salida = { t0: performance.now(), dur: 2400 };
+
+    ondas = [];
+    construirPartes();
+    // en teléfono el vuelo se rasteriza a 1:1 (con DPR 3 son nueve veces más píxeles)
+    ESC = 1;
+    cv.width = W*ESC; cv.height = H*ESC;
+    ctx.setTransform(ESC,0,0,ESC,0,0);
+    ctx.imageSmoothingEnabled = true;
+    cont.classList.add('fuera');
+    document.body.classList.add('entrando','reveal');
+    // el logo aparece cuando ya empezaron a llegar las primeras palabras
+    setTimeout(()=>{
+      if(window.__park) window.__park();
+      document.body.classList.remove('intro-viva');   // el logo se enciende
+    }, 2100);
+    setTimeout(()=>document.body.classList.add('menu-on'), 2300);
+  }
+  cont.addEventListener('click', entrar);
+
+  window.addEventListener('resize', resize);
+  window.addEventListener('orientationchange', ()=> setTimeout(resize,150));
+  if(window.visualViewport) window.visualViewport.addEventListener('resize', resize);
+
+  // Arranca de inmediato: NO se espera a las fuentes. (document.fonts.ready
+  // espera a todas las de la página y puede dejar la intro en blanco varios
+  // segundos.) Cuando Inter llega, se vuelve a pintar la máscara.
+  resize();
+  requestAnimationFrame(frame);
+  if(document.fonts && document.fonts.load){
+    document.fonts.load('italic 800 100px Inter').then(()=>resize()).catch(()=>{});
+  }
+  [120, 400, 900, 1800].forEach(ms=>setTimeout(()=>{ if(vivo && !salida) resize(); }, ms));
+})();</script>
+<!--UI-HIDE-ON-SCROLL-->
+<script>(function(){
+  function getST(){return window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0;}
+  var last=0;
+  function on(){
+    var s=getST();
+    if(s<40) document.body.classList.remove('ui-hide');
+    else if(s>last) document.body.classList.add("ui-hide");
+    else if(s<last) document.body.classList.remove("ui-hide");
+    last=s;
+  }
+  window.addEventListener('scroll', on, {passive:true, capture:true});
+  document.addEventListener('scroll', on, {passive:true, capture:true});
+})();</script>
+</body>
+</html>

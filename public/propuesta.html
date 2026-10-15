@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Propuesta intro — franjas</title>
+<meta name="robots" content="noindex,nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --fondo:#ecebe8;      /* blanco roto */
+    --tinta:#1d15d6;      /* azul electrico */
+    --acento:#f2cb1d;     /* amarillo */
+  }
+  html,body{height:100%;overflow:hidden;background:var(--fondo)}
+  body{font-family:'JetBrains Mono',monospace;touch-action:none;cursor:crosshair}
+  canvas{display:block;position:fixed;top:0;left:0;width:100%;height:100%}
+  .hint{position:fixed;left:5vw;bottom:5vh;z-index:10;font-size:11px;letter-spacing:.18em;
+        text-transform:uppercase;color:var(--tinta);opacity:.5;transition:opacity .8s ease;pointer-events:none}
+  .hint.off{opacity:0}
+  .ui{position:fixed;right:5vw;bottom:5vh;z-index:10;display:flex;gap:1.2rem;
+      font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  .ui{align-items:center;color:var(--tinta)}
+  .year{position:fixed;top:4.5vh;right:5vw;z-index:12;font-family:'JetBrains Mono',monospace;
+        font-weight:500;font-size:12px;letter-spacing:.34em;color:var(--acento);
+        pointer-events:none;text-indent:.34em}
+  @media(max-width:700px){ .year{top:3.4vh;right:5vw;font-size:11px} }
+  .ui label{opacity:.5}
+  .ui input[type=range]{width:110px;accent-color:#111;cursor:pointer}
+  .ui button{font:inherit;letter-spacing:inherit;text-transform:inherit;background:none;border:0;
+             color:#111;opacity:.45;cursor:pointer;padding:.2rem;transition:opacity .3s}
+  .ui button:hover{opacity:1}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="year">2026</div>
+<div class="hint" id="hint">arrastra sobre el nombre</div>
+
+<script>
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+let W, H, DPR;
+
+// buffer con el nombre dibujado a tamano completo
+const off = document.createElement('canvas');
+const octx = off.getContext('2d');
+
+let BANDS = [];          // {y, h, x, vx, target}
+const BAND_H = 7;        // alto de cada franja en px de pantalla
+let pointer = {x:-9999, y:-9999, active:false, px:0, vx:0};
+let t = 0, shatter = 0, chaos = 0;
+
+function isMobile(){ return window.innerWidth < 760; }
+
+// Mide la TINTA real de UN caracter escaneando pixeles.
+// Asi podemos pegar las letras sin espacio y no dependemos de las
+// metricas que cada navegador (Safari/iOS) reporta distinto.
+const probe = document.createElement('canvas');
+const pctx  = probe.getContext('2d', {willReadFrequently:true});
+const FS = 150;
+const inkCache = new Map();
+// Cuanto se APRIETAN las formas entre si, en px a tamano base (FS).
+// 0 = tangentes exactas (queda una cuna blanca entre curvas)
+// 6 = se muerden un poco y leen como un bloque continuo
+const SQUEEZE = 6;
+
+function inkOf(ch){
+  if(inkCache.has(ch)) return inkCache.get(ch);
+  pctx.font = `800 ${FS}px Syne, sans-serif`;
+  const adv = Math.ceil(pctx.measureText(ch).width) || FS;
+  const pad = Math.ceil(FS*0.5), base = Math.ceil(FS*1.35);
+  probe.width  = adv + pad*2;
+  probe.height = Math.ceil(FS*2);
+  pctx.font = `800 ${FS}px Syne, sans-serif`;
+  pctx.textAlign='left'; pctx.textBaseline='alphabetic';
+  pctx.clearRect(0,0,probe.width,probe.height);
+  pctx.fillStyle='#000';
+  pctx.fillText(ch, pad, base);
+
+  const Wp=probe.width, Hp=probe.height;
+  const d = pctx.getImageData(0,0,Wp,Hp).data;
+  // perfil por fila: el borde izquierdo y derecho de la tinta en cada altura.
+  // Con esto dos letras pueden acercarse hasta ROZARSE, no solo hasta que
+  // sus cajas se toquen (que es lo que dejaba aire entre curvas).
+  const rowL = new Float32Array(Hp).fill(Infinity);
+  const rowR = new Float32Array(Hp).fill(-Infinity);
+  let x0=Wp, y0=Hp, x1=-1, y1=-1;
+  for(let y=0;y<Hp;y++){
+    for(let x=0;x<Wp;x++){
+      if(d[(x+y*Wp)*4+3] > 4){
+        if(x < rowL[y]) rowL[y]=x;
+        if(x > rowR[y]) rowR[y]=x;
+        if(x<x0)x0=x; if(x>x1)x1=x;
+        if(y<y0)y0=y; if(y>y1)y1=y;
+      }
+    }
+  }
+  if(x1<0) return null;
+  // todo relativo al punto donde se dibuja el caracter
+  for(let y=0;y<Hp;y++){
+    if(rowR[y] > -Infinity){ rowL[y]-=pad; rowR[y]-=pad; }
+  }
+  const r = { dx:x0-pad, dy:y0-base, w:x1-x0+1, h:y1-y0+1, rowL, rowR, Hp, base };
+  inkCache.set(ch, r);
+  return r;
+}
+
+// Coloca las letras hasta que se ROZAN (contacto real, sin traslape)
+function layout(word){
+  const chars=[...word];
+  const first=inkOf(chars[0]); if(!first) return null;
+  const Hp=first.Hp;
+  const lineR = new Float32Array(Hp).fill(-Infinity);   // perfil derecho acumulado
+  const gl=[]; let right=0, top=Infinity, bottom=-Infinity;
+
+  chars.forEach((ch,i)=>{
+    const k = inkOf(ch); if(!k) return;
+    let x;
+    if(i===0){ x = -k.dx; }
+    else{
+      // maximo acercamiento sin que se toquen los pixeles
+      let best = -Infinity;
+      for(let y=0;y<Hp;y++){
+        if(lineR[y] > -Infinity && k.rowR[y] > -Infinity){
+          const cand = lineR[y] - k.rowL[y] + 1 + SQUEEZE;
+          if(cand > best) best = cand;
+        }
+      }
+      x = (best > -Infinity) ? best : (right - k.dx);
+    }
+    gl.push({ ch, x });
+    for(let y=0;y<Hp;y++){
+      if(k.rowR[y] > -Infinity){
+        const rr = x + k.rowR[y];
+        if(rr > lineR[y]) lineR[y] = rr;
+      }
+    }
+    const rr = x + k.dx + k.w;  if(rr > right) right = rr;
+    if(k.dy < top) top = k.dy;
+    if(k.dy + k.h > bottom) bottom = k.dy + k.h;
+  });
+  if(!gl.length) return null;
+  return { gl, w: right, top, h: bottom - top, Hp };
+}
+
+// Perfil superior/inferior de una linea ya escalada en X, para que las
+// lineas tambien se rocen en vertical en vez de apoyarse por su caja
+const tmp = document.createElement('canvas');
+const tctx = tmp.getContext('2d', {willReadFrequently:true});
+function colProfile(line, sx, ox, widthPx){
+  const h = Math.ceil(line.h)+2;
+  tmp.width = Math.max(1, Math.ceil(widthPx)); tmp.height = h;
+  tctx.setTransform(1,0,0,1,0,0);
+  tctx.clearRect(0,0,tmp.width,tmp.height);
+  tctx.fillStyle='#000';
+  tctx.save();
+  tctx.translate(ox, 0); tctx.scale(sx, 1);
+  tctx.font = `800 ${FS}px Syne, sans-serif`;
+  tctx.textAlign='left'; tctx.textBaseline='alphabetic';
+  for(const g of line.gl) tctx.fillText(g.ch, g.x, -line.top);
+  tctx.restore();
+
+  const Wt=tmp.width, Ht=tmp.height;
+  const d = tctx.getImageData(0,0,Wt,Ht).data;
+  const top = new Float32Array(Wt).fill(Infinity);
+  const bot = new Float32Array(Wt).fill(-Infinity);
+  for(let y=0;y<Ht;y++)
+    for(let x=0;x<Wt;x++)
+      if(d[(x+y*Wt)*4+3] > 4){
+        if(y < top[x]) top[x]=y;
+        if(y > bot[x]) bot[x]=y;
+      }
+  return { top, bot, n:Wt };
+}
+
+function drawName(){
+  DPR = Math.min(2, window.devicePixelRatio || 1);
+  W = window.innerWidth;
+  H = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
+  cv.width = W*DPR; cv.height = H*DPR;
+  cv.style.width = W+'px'; cv.style.height = H+'px';
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  off.width = W*DPR;  off.height = H*DPR;  octx.setTransform(DPR,0,0,DPR,0,0);
+
+  octx.clearRect(0,0,W,H);
+  octx.fillStyle = '#1d15d6';
+  octx.textAlign = 'left';
+  octx.textBaseline = 'alphabetic';
+
+  const mob = isMobile();
+  const lines = mob ? ['SOFIA','BERNAS','CONI'] : ['SOFIA','BERNASCONI'];
+  const OVER = mob
+    ? [ {l:0.09,  r:0.09},    // SOFIA  : desborda por ambos lados
+        {l:0,     r:0},       // BERNAS : justo al ancho
+        {l:0.035, r:0} ]      // CONI   : se come 1/8 de la C por la izquierda
+    : [ {l:0, r:0}, {l:0, r:0} ];
+
+  const L = lines.map(layout);
+  if(L.some(x=>!x)) return;                    // la tipografia aun no esta lista
+
+  // transformada horizontal de cada linea
+  const T = L.map((l,i)=>{
+    const o = OVER[i] || {l:0,r:0};
+    const targetW = W * (1 + o.l + o.r);
+    return { sx: targetW / l.w, ox: -W*o.l };
+  });
+
+  // apilar hasta que las lineas se rozan
+  const P = L.map((l,i)=> colProfile(l, T[i].sx, T[i].ox, W));
+  const Y = [0];
+  for(let i=1;i<L.length;i++){
+    let best = -Infinity;
+    const a=P[i-1], b=P[i];
+    for(let x=0;x<Math.min(a.n,b.n);x++){
+      if(a.bot[x] > -Infinity && b.top[x] < Infinity){
+        const cand = Y[i-1] + a.bot[x] - b.top[x] + 1 + SQUEEZE;
+        if(cand > best) best = cand;
+      }
+    }
+    Y.push(best > -Infinity ? best : Y[i-1] + L[i-1].h);
+  }
+  const total = Y[Y.length-1] + L[L.length-1].h;
+  const sy = H / total;
+
+  L.forEach((l,i) => {
+    octx.save();
+    octx.translate(T[i].ox, Y[i]*sy);
+    octx.scale(T[i].sx, sy);
+    octx.font = `800 ${FS}px Syne, sans-serif`;
+    for(const g of l.gl) octx.fillText(g.ch, g.x, -l.top);
+    octx.restore();
+  });
+}
+
+function buildBands(){
+  BANDS = [];
+  for(let y=0; y<H; y+=BAND_H){
+    BANDS.push({ y, h: Math.min(BAND_H, H-y), x:0, vx:0, dy:0, seed: Math.random(), seed2: Math.random() });
+  }
+}
+
+function resize(){ drawName(); buildBands(); }
+
+function frame(){
+  t += 0.01;
+  ctx.clearRect(0,0,W,H);
+
+  const REACH = H * 0.11;          // alto de la franja afectada (mas chico = mas focalizado)
+  const AMP   = W * 0.38;          // cuanto se desplazan
+  shatter *= 0.94;
+
+  // EXTRA = 0  -> version original (arrastre limpio)
+  // EXTRA = 1  -> descomposicion total
+  const EXTRA = 0.95;   // nivel de desarme elegido
+  chaos = pointer.active ? Math.min(1, chaos + 0.18) : 0;   // sube rapido, corta seco
+
+  for(const b of BANDS){
+    const cyb = b.y + b.h/2;
+    const n = b.seed, n2 = b.seed2;
+
+    // 1) respiracion en reposo: desfase minimo, como senal mal sincronizada
+    let target = Math.sin(cyb*0.012 + t*0.9)*3 + Math.sin(cyb*0.05 - t*1.6)*1.6;
+    let dy = 0;
+
+    // 2) arrastre del puntero: las franjas cercanas se van tras el dedo
+    if(pointer.active || chaos > 0.01){
+      const d = (cyb - pointer.y) / REACH;
+      const w = Math.exp(-d*d);
+      const dir = (pointer.x - W/2) / (W/2);
+      target += w * AMP * dir * 0.9 + w * pointer.vx * 2.2;
+
+      // 3) descomposicion progresiva (solo si EXTRA > 0)
+      if(EXTRA > 0.001){
+        const wide = Math.exp(-(d*d)*0.85);   // la descomposicion tampoco se derrama
+        const c = chaos * wide * EXTRA;
+        target += c * (
+            Math.sin(cyb*0.31 + n*6.28 + t*2.1) * W*0.55
+          + (n - 0.5) * W * 1.1
+          + Math.sin(t*3.7 + n2*12.5) * W * 0.22
+        );
+        dy = c * ( Math.sin(cyb*0.17 + n2*6.28 + t*1.3) * H*0.05 + (n2-0.5) * H * 0.06 );
+      }
+    }
+
+    // 4) golpe al tocar: rasgado brusco
+    if(shatter > 0.01){
+      target += (Math.sin(cyb*0.7)*0.5 + Math.sin(cyb*0.13)*0.5) * shatter * W * 0.55;
+    }
+
+    // cuantizar da el aire mecanico/digital de la referencia
+    target = Math.round(target/4)*4;
+
+    // acercamiento amortiguado: sin inercia, no se pasa de largo ni rebota
+    b.x  += (target - b.x) * 0.34;
+    b.dy += (dy - b.dy)   * 0.34;
+
+    ctx.drawImage(off,
+      0, b.y*DPR, off.width, b.h*DPR,
+      b.x, b.y + b.dy, W,    b.h);
+  }
+  requestAnimationFrame(frame);
+}
+
+// ---- interaccion ----
+const hint = document.getElementById('hint');
+function setPointer(x,y){
+  pointer.vx = x - (pointer.px || x);
+  pointer.px = x;
+  pointer.x = x; pointer.y = y; pointer.active = true;
+  hint.classList.add('off');
+}
+function clearPointer(){ pointer.active = false; pointer.vx = 0; }
+
+cv.addEventListener('pointermove', e => setPointer(e.clientX, e.clientY));
+cv.addEventListener('pointerdown', e => { setPointer(e.clientX, e.clientY); shatter = 1; });
+cv.addEventListener('pointerup',   clearPointer);
+cv.addEventListener('pointerleave',clearPointer);
+
+
+window.addEventListener('resize', resize);
+window.addEventListener('orientationchange', ()=> setTimeout(resize,150));
+if(window.visualViewport) window.visualViewport.addEventListener('resize', resize);
+
+// La medida del texto depende de la tipografia: si medimos antes de que Syne
+// termine de bajar, el navegador mide con la fuente de reemplazo y el nombre
+// sale con otro tamano. Por eso la pedimos explicitamente y recalculamos.
+function boot(){ resize(); frame(); }
+function ensureFont(){
+  if(!(document.fonts && document.fonts.load)) return Promise.resolve();
+  return Promise.all([
+    document.fonts.load('800 200px Syne'),
+    document.fonts.load('700 200px Syne')
+  ]).then(()=> document.fonts.ready).catch(()=>{});
+}
+ensureFont().then(()=>{ boot(); [120,400,1200,2500].forEach(ms=>setTimeout(resize,ms)); });
+// red de seguridad: si la fuente llega mas tarde, se redibuja
+if(document.fonts){ document.fonts.addEventListener('loadingdone', ()=>{ if(BANDS.length) resize(); }); }
+window.addEventListener('load', ()=>{ if(BANDS.length) resize(); });
+</script>
+</body>
+</html>
