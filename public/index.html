@@ -120,6 +120,7 @@
   /* ---- intro: el nombre como hueco dentro de un campo de texto ---- */
   #intro{position:fixed;inset:0;z-index:300;background:#f7f6f4;cursor:pointer}
   #intro canvas{display:block;width:100%;height:100%}
+  #intro{touch-action:none}   /* en el teléfono el dedo deforma el nombre en vez de mover la página */
   /* al salir, cada palabra es tragada por el punto donde queda el logo */
   #intro.fuera{background:transparent;pointer-events:none}
   /* mientras la intro vive, el logo de partículas está oculto */
@@ -923,6 +924,22 @@ new p5(function(p){
     setTimeout(()=>document.body.classList.add('menu-on'), 1450);
   }
   cont.addEventListener('click', entrar);
+  // en el teléfono no hace falta tocar: basta deslizar el dedo una vez.
+  // Mientras se desliza, el nombre se deforma (las ondas); al soltar, entra al sitio.
+  let toque = null;
+  cont.addEventListener('pointerdown', e=>{ if(e.pointerType==='touch') toque = { x:e.clientX, y:e.clientY, largo:0 }; });
+  cont.addEventListener('pointermove', e=>{
+    if(!toque || e.pointerType!=='touch') return;
+    toque.largo += Math.hypot(e.clientX-toque.x, e.clientY-toque.y);
+    toque.x = e.clientX; toque.y = e.clientY;
+  });
+  const soltar = e=>{
+    if(!toque) return;
+    const largo = toque.largo; toque = null;
+    if(largo > 40){ if(e && e.cancelable) e.preventDefault(); entrar(); }
+  };
+  cont.addEventListener('pointerup', soltar);
+  cont.addEventListener('pointercancel', soltar);
 
   window.addEventListener('resize', resize);
   window.addEventListener('orientationchange', ()=> setTimeout(resize,150));
