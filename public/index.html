@@ -50,8 +50,9 @@
   #logohit{position:fixed;top:26px;left:32px;width:300px;height:70px;z-index:130;display:none;cursor:pointer}
   body.parked #logohit{display:block}
   #hero{height:100vh;height:100svh;scroll-snap-align:start;position:relative;z-index:80}
-  /* en computador la primera obra asoma abajo, para que se note que hay más */
-  @media(min-width:701px){ #hero{height:55vh} }
+  /* en la primera pantalla el scroll es libre: se baja de a poco y la obra va apareciendo;
+     desde la primera obra en adelante vuelve el encaje por obra */
+  body.menu-on.libre{scroll-snap-type:none}
   #namehit{position:fixed;z-index:105;display:none;cursor:pointer}
   body.menu-on{overflow-y:auto;overflow-x:hidden}
   #gallery{position:relative;width:100%;z-index:80;pointer-events:none}
@@ -163,7 +164,7 @@
 <body>
 
   <h1 class="sr-only">Sofía Bernasconi Le Roy — artista visual y artes mediales</h1>
-  <script>document.body.classList.add('reveal','menu-on'); if(location.hash==='#open') document.body.classList.add('parked');</script>
+  <script>document.body.classList.add('reveal','menu-on','libre'); if(location.hash==='#open') document.body.classList.add('parked');</script>
   <div id="bg"></div>
   <div id="c"></div>
   <div id="topmask"></div>
@@ -438,6 +439,8 @@ new p5(function(p){
     const scroller=()=> (document.body.scrollTop || document.documentElement.scrollTop || 0);
     const alScroll=()=>{
       const y=scroller(), hh=window.innerHeight;
+      const hero=document.getElementById('hero');
+      document.body.classList.toggle('libre', !!hero && y < hero.offsetHeight*0.9);
       if(!parked && y > hh*0.06){ parked=true; document.body.classList.add('parked','llegando'); clearTimeout(window.__lleg); window.__lleg=setTimeout(()=>document.body.classList.remove('llegando'),2200); }
       else if(parked && y < hh*0.03){ parked=false; document.body.classList.remove('parked'); }
     };
