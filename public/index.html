@@ -50,6 +50,8 @@
   #logohit{position:fixed;top:26px;left:32px;width:300px;height:70px;z-index:130;display:none;cursor:pointer}
   body.parked #logohit{display:block}
   #hero{height:100vh;height:100svh;scroll-snap-align:start;position:relative;z-index:80}
+  /* en computador la primera obra asoma abajo, para que se note que hay más */
+  @media(min-width:701px){ #hero{height:55vh} }
   #namehit{position:fixed;z-index:105;display:none;cursor:pointer}
   body.menu-on{overflow-y:auto;overflow-x:hidden}
   #gallery{position:relative;width:100%;z-index:80;pointer-events:none}
