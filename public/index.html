@@ -577,9 +577,9 @@ new p5(function(p){
     g.fillStyle='#000'; g.textBaseline='alphabetic';
     // en el teléfono la palabra no sale a sangre: se deja aire alrededor
     // para que las letras cierren y el texto pueda rodearlas por los cuatro lados
-    // más chico y centrado (horizontal y vertical) en todas las pantallas
-    const M_ANCHO = mob() ? 0.78 : 0.70;         // del ancho de pantalla
-    const M_ALTO  = mob() ? 0.40 : 0.62;         // del alto disponible
+    // más chico y centrado; angosto y alto: la tipografía queda estirada verticalmente
+    const M_ANCHO = mob() ? 0.72 : 0.52;         // del ancho de pantalla
+    const M_ALTO  = mob() ? 0.62 : 0.80;         // del alto disponible
     const util = rows - BANDA*2.4;
     const ancho = cols*M_ANCHO;
     const y0 = BANDA*1.2 + (util - util*M_ALTO)/2;
@@ -714,17 +714,18 @@ new p5(function(p){
           nivel = nn;
         }
         const w = PALABRAS[wi % PALABRAS.length]; wi++;
-        const track = TR[nivel];
+        // al entrar, las palabras se vuelven texto corrido: enteras y sin espaciado extra
+        const track = 0;
         const x0 = c*cw;
         const ancho = anchoPalabra(w, track);
         let o = 0;
         for(let q=0;q<w.length;q++){
           const car = w[q], ac = anchoDe(car);
-          // sólo las letras que caen dentro del nombre: el vacío entre letras queda vacío
-          if(dentroDe(MDAT, x0+o+ac/2, rr)){ wsx.push(x0); off.push(o); ww.push(ancho); rs.push(r); gs.push(idx.get(car)); }
+          wsx.push(x0); off.push(o); ww.push(ancho); rs.push(r); gs.push(idx.get(car));
           o += ac + track;
         }
-        c += Math.max(1, Math.ceil(ancho/cw)) + (nivel===0 ? 1 : 2);
+        // avanza como en la imagen quieta, para que al hacer click las palabras arranquen donde estaban
+        c += Math.max(1, Math.ceil(anchoPalabra(w, TR[nivel])/cw)) + (nivel===0 ? 1 : 2);
       }
     }
     N = wsx.length;
@@ -741,13 +742,31 @@ new p5(function(p){
     ctx.setTransform(ESC,0,0,ESC,0,0);
     ctx.clearRect(0,0,W,H);
     const k = ESC/G;
+    // como en un procesador de texto: se teclean espacios delante de la primera palabra.
+    // El texto sólo se corre cuando el cursor lo alcanza (el aire al final de cada
+    // renglón lo absorbe), y la palabra que no cabe salta entera al renglón siguiente.
+    const SP = FS*0.9;                               // un espacio, como en un documento
+    let ultima = -1, R = 0, X = 0, cL = -1, cX = 0, fila = -1, finOrig = 0;
     for(let i=0;i<N;i++){
-      const xw = WSX[i] + D;
-      const vuelta = Math.floor((xw + WW[i]) / W);   // cuántas veces se pasó del borde
-      const R = PR[i] + vuelta;
+      const clave = PR[i]*65536 + WSX[i];
+      if(clave !== ultima){
+        ultima = clave;
+        const r = PR[i], x0 = WSX[i], w = WW[i];
+        if(cL < 0){                                  // primera palabra: el cursor está aquí
+          const pos = r*W + x0 + D;
+          cL = Math.floor(pos/W); cX = pos - cL*W; R = cL; X = cX;
+          if(X + w > W){ R++; X = 0; }
+        } else {
+          const gapOrig = (r === fila) ? Math.max(SP, x0 - finOrig) : SP;
+          if(cL < r || (cL === r && cX + gapOrig <= x0)){ R = r; X = x0; }   // todavía no la alcanza
+          // al alcanzarla se suma al texto corrido, con un espacio normal
+          else { R = cL; X = cX + SP; if(X + w > W){ R++; X = 0; } }
+        }
+        cL = R; cX = X + w; fila = r; finOrig = x0 + w;
+      }
       if(R > rows) continue;                          // ya se cayó por abajo
       const g = GLI[PG[i]];
-      const x = xw - vuelta*W + OFF[i];
+      const x = X + OFF[i];
       ctx.setTransform(k,0,0,k, ESC*x, ESC*((R+1)*ch));
       ctx.drawImage(g.im, -g.ox, -g.oy);
     }
@@ -794,7 +813,7 @@ new p5(function(p){
     if(prog >= 0){                       // ---- salida: la barra espaciadora ----
       // arranca golpe a golpe y acelera, como cuando se deja apretada la tecla
       const total = W*(rows+2);
-      const D = Math.floor(total*Math.pow(Math.min(1,prog), 2.3) / cw) * cw;
+      const D = Math.floor(total*Math.pow(Math.min(1,prog), 1.6) / cw) * cw;
       if(D !== ultimoPaso){ ultimoPaso = D; empuje(D); }
       return;
     }
@@ -866,7 +885,7 @@ new p5(function(p){
     if(entrando || !cols) return; entrando = true;
     if(e){ e.stopPropagation(); e.preventDefault(); }
 
-    salida = { t0: performance.now(), dur: 2400 };
+    salida = { t0: performance.now(), dur: 1500 };
 
     ondas = [];
     construirPartes();
@@ -881,8 +900,8 @@ new p5(function(p){
     setTimeout(()=>{
       if(window.__park) window.__park();
       document.body.classList.remove('intro-viva');   // el logo se enciende
-    }, 2100);
-    setTimeout(()=>document.body.classList.add('menu-on'), 2300);
+    }, 1300);
+    setTimeout(()=>document.body.classList.add('menu-on'), 1450);
   }
   cont.addEventListener('click', entrar);
 
