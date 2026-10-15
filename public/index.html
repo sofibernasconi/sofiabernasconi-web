@@ -34,9 +34,9 @@
   body{overflow:hidden}
   #bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:#0a0a0b;transition:background-color 1.2s ease}
   body.reveal #bg{background:#f7f6f4}
-  #c{position:fixed;inset:0;z-index:110;pointer-events:none}
+  #c{position:fixed;inset:0;z-index:110;pointer-events:none;mix-blend-mode:difference}   /* el logo se ve durante todo el viaje, también sobre las fotos */
   #c canvas{position:fixed;inset:0;pointer-events:none}
-  #blurlayer{position:fixed;inset:0;pointer-events:none;filter:blur(2.6px);z-index:110}
+  #blurlayer{position:fixed;inset:0;pointer-events:none;filter:blur(2.6px);z-index:110;mix-blend-mode:difference}
   #topmask{position:fixed;top:0;left:0;width:100%;height:8vh;background:#0a0a0b;transition:background-color 1.2s ease;z-index:100;pointer-events:none}
   body.reveal #topmask{background:#f7f6f4}
   #lang{position:fixed;top:36px;right:36px;z-index:120;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;color:#111116;opacity:0;transition:opacity .9s ease;pointer-events:none}
@@ -111,7 +111,7 @@
     .proj:nth-child(2) .comp img:nth-child(1),.proj:nth-child(3) .comp img:nth-child(4),.proj:nth-child(5) .comp img:nth-child(1),.proj:nth-child(5) .comp img:nth-child(2),.proj:nth-child(5) .comp img:nth-child(3),.proj:nth-child(5) .comp img:nth-child(4),.proj:nth-child(5) .comp img:nth-child(5){width:92% !important;max-width:92% !important;max-height:none !important}
     .proj .cap{top:27vh}
     #c,#blurlayer{transition:opacity .5s ease}
-    body.menu-on.ui-hide #c,body.menu-on.ui-hide #blurlayer{opacity:0}
+    body.menu-on.ui-hide:not(.llegando) #c,body.menu-on.ui-hide:not(.llegando) #blurlayer{opacity:0}   /* mientras se achica hacia la esquina, se ve */
     #topmask{transition:opacity .5s ease,background-color 1.2s ease}
     body.menu-on.ui-hide #topmask{opacity:0}
   }
@@ -436,7 +436,7 @@ new p5(function(p){
     const scroller=()=> (document.body.scrollTop || document.documentElement.scrollTop || 0);
     const alScroll=()=>{
       const y=scroller(), hh=window.innerHeight;
-      if(!parked && y > hh*0.06){ parked=true; document.body.classList.add('parked'); }
+      if(!parked && y > hh*0.06){ parked=true; document.body.classList.add('parked','llegando'); clearTimeout(window.__lleg); window.__lleg=setTimeout(()=>document.body.classList.remove('llegando'),2200); }
       else if(parked && y < hh*0.03){ parked=false; document.body.classList.remove('parked'); }
     };
     document.addEventListener('scroll', alScroll, true);
@@ -456,13 +456,13 @@ new p5(function(p){
   p.draw=function(){
     p.clear(); blur.clear();
     if(parked){
-      LS+=(MINI_S-LS)*0.1; LOX+=(MINI_X-LOX)*0.1; LOY+=(MINI_Y-LOY)*0.1;   // shrink to corner
+      LS+=(MINI_S-LS)*0.035; LOX+=(MINI_X-LOX)*0.035; LOY+=(MINI_Y-LOY)*0.035;   // viaja a la esquina, sin apuro (~1,5 s)
       themeLerp+=(1-themeLerp)*0.05;                                       // black -> white
       hoverAmt+=((inName(mx,my)?1:0)-hoverAmt)*0.11;                       // mini frozen unless hovered; ramps gently
-    } else { LS+=(1-LS)*0.1; LOX+=(nbx0-LOX)*0.1; LOY+=(nby0-LOY)*0.1; themeLerp=1; hoverAmt=1; }   // vuelve grande al centro
+    } else { LS+=(1-LS)*0.035; LOX+=(nbx0-LOX)*0.035; LOY+=(nby0-LOY)*0.035; themeLerp=1; hoverAmt=1; }   // vuelve grande al centro
     if(namehit){ if(parked){ namehit.style.display='none'; } else { namehit.style.display='block'; namehit.style.left=nbx0+'px'; namehit.style.top=nby0+'px'; namehit.style.width=(nbx1-nbx0)+'px'; namehit.style.height=(nby1-nby0)+'px'; } }
-    const act = parked ? hoverAmt : 1;                 // full life when large; hover-gated when mini
-    const col = 255*(1-themeLerp);                       // blanco puro en negro -> negro puro en blanco
+    const act = 1;                                     // el mismo logo, grande o chico: siempre con su movimiento
+    const col = 255;   // blanco + modo 'diferencia': se ve negro sobre el papel y blanco sobre las fotos oscuras
     const t=p.frameCount*0.003;
     const wt=p.frameCount*0.01;
     const cX=LOX+(nbx1-nbx0)*LS/2, cY=LOY+(nby1-nby0)*LS/2;
