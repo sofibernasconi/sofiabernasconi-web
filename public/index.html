@@ -537,6 +537,16 @@ new p5(function(p){
   let W,H,DPR,cols,rows,cw,ch,FS, vivo = true, MDAT=null, HDAT=null, primerDibujo=false, ESC=1;
 
   const mob = ()=> window.innerWidth < 760;
+  // ¿la palabra entera cae dentro de la letra? (así no se cuela al vacío entre letras)
+  function cabe(MD, c, rr, n){
+    if(c+n > cols) return false;
+    for(let k=0;k<n;k++){ if(MD[(c+k+rr*cols)*4] >= 128) return false; }
+    return true;
+  }
+  function dentroDe(MD, x, rr){
+    const c = Math.floor(x/cw);
+    return c >= 0 && c < cols && MD[(c+rr*cols)*4] < 128;
+  }
   function azar(a,b){ const s=Math.sin(a*12.9898+b*78.233)*43758.5453; return s-Math.floor(s); }
 
   function resize(){
@@ -567,24 +577,27 @@ new p5(function(p){
     g.fillStyle='#000'; g.textBaseline='alphabetic';
     // en el teléfono la palabra no sale a sangre: se deja aire alrededor
     // para que las letras cierren y el texto pueda rodearlas por los cuatro lados
-    const M_ANCHO = mob() ? 0.92 : 1.0;          // del ancho de pantalla
-    const M_ALTO  = mob() ? 0.58 : 0.92;         // del alto disponible
+    // más chico y centrado (horizontal y vertical) en todas las pantallas
+    const M_ANCHO = mob() ? 0.78 : 0.70;         // del ancho de pantalla
+    const M_ALTO  = mob() ? 0.40 : 0.62;         // del alto disponible
     const util = rows - BANDA*2.4;
-    const alto = util/HUECO.length;
-    const ancho = cols*M_ANCHO, ox = (cols-ancho)/2;
-    const y0 = mob() ? BANDA*1.2 + (util - util*M_ALTO)/2 : BANDA*1.2;
-    const altoLinea = mob() ? (util*M_ALTO)/HUECO.length : alto;
+    const ancho = cols*M_ANCHO;
+    const y0 = BANDA*1.2 + (util - util*M_ALTO)/2;
+    const altoLinea = (util*M_ALTO)/HUECO.length;
 
     HUECO.forEach((txt,i)=>{
       let fs = 40;
       g.font = `italic 800 ${fs}px Inter, Syne, sans-serif`;
-      const w = g.measureText(txt).width || 1;
-      fs = fs*ancho/w;
+      let m = g.measureText(txt);
+      let tinta = ((m.actualBoundingBoxLeft||0)+(m.actualBoundingBoxRight||m.width)) || 1;
+      fs = fs*ancho/tinta;                       // ajusta por el ancho real de la tinta (incluye la cursiva)
       g.save();
       g.font = `italic 800 ${fs}px Inter, Syne, sans-serif`;
-      const m = g.measureText(txt);
+      m = g.measureText(txt);
+      const izq = (m.actualBoundingBoxLeft||0);
+      tinta = izq+(m.actualBoundingBoxRight||m.width);
       const inkH = (m.actualBoundingBoxAscent || fs*0.72);
-      g.translate(ox, y0 + altoLinea*(i+1) - altoLinea*0.10);
+      g.translate((cols-tinta)/2 + izq, y0 + altoLinea*(i+1) - altoLinea*0.10);
       g.scale(1, (altoLinea*0.88)/inkH);
       g.fillText(txt, 0, 0);
       g.restore();
@@ -600,6 +613,16 @@ new p5(function(p){
     if(HAY_TRACK){ ctx.letterSpacing = track+'px'; a = ctx.measureText(w).width; }
     else { a=0; for(const c of w) a += ctx.measureText(c).width + track; }
     medidas.set(k,a); return a;
+  }
+  // palabra que se sale de la letra: se escriben sólo los caracteres que caen dentro
+  function escribeRecortada(w,x,y,track,MD,rr){
+    if(HAY_TRACK) ctx.letterSpacing = '0px';
+    let px=x;
+    for(const c of w){
+      const a = ctx.measureText(c).width;
+      if(dentroDe(MD, px+a/2, rr)) ctx.fillText(c,px,y);
+      px += a + track;
+    }
   }
   function escribe(w,x,y,track){
     if(HAY_TRACK){ ctx.letterSpacing = track+'px'; ctx.fillText(w,x,y); return; }
@@ -696,9 +719,10 @@ new p5(function(p){
         const ancho = anchoPalabra(w, track);
         let o = 0;
         for(let q=0;q<w.length;q++){
-          const car = w[q];
-          wsx.push(x0); off.push(o); ww.push(ancho); rs.push(r); gs.push(idx.get(car));
-          o += anchoDe(car) + track;
+          const car = w[q], ac = anchoDe(car);
+          // sólo las letras que caen dentro del nombre: el vacío entre letras queda vacío
+          if(dentroDe(MDAT, x0+o+ac/2, rr)){ wsx.push(x0); off.push(o); ww.push(ancho); rs.push(r); gs.push(idx.get(car)); }
+          o += ac + track;
         }
         c += Math.max(1, Math.ceil(ancho/cw)) + (nivel===0 ? 1 : 2);
       }
@@ -827,7 +851,9 @@ new p5(function(p){
 
         const w = PALABRAS[wi % PALABRAS.length]; wi++;
         const track = TR[nivel];
-        escribe(w, c*cw, y, track);
+        const n = Math.ceil(anchoPalabra(w,track)/cw);
+        if(anillo >= 0.25 || cabe(M, c, rr, n)) escribe(w, c*cw, y, track);
+        else escribeRecortada(w, c*cw, y, track, M, rr);
         c += Math.max(1, Math.ceil(anchoPalabra(w,track)/cw)) + (nivel===0 ? 1 : 2);
       }
     }
