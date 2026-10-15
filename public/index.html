@@ -165,7 +165,10 @@
 <body>
 
   <h1 class="sr-only">Sofía Bernasconi Le Roy — artista visual y artes mediales</h1>
-  <script>document.body.classList.add('reveal','menu-on','libre'); if(location.hash==='#open') document.body.classList.add('parked');</script>
+  <script>document.body.classList.add('reveal','menu-on','libre'); if(location.hash==='#open') document.body.classList.add('parked');
+  // al recargar, la portada siempre parte arriba (el navegador por defecto vuelve a donde uno estaba)
+  if('scrollRestoration' in history) history.scrollRestoration='manual';
+  if(location.hash!=='#open') window.scrollTo(0,0);</script>
   <div id="bg"></div>
   <div id="c"></div>
   <div id="topmask"></div>
