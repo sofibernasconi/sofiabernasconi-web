@@ -749,46 +749,27 @@ new p5(function(p){
     ctx.setTransform(ESC,0,0,ESC,0,0);
     ctx.clearRect(0,0,W,H);
     const k = ESC/G;
-    // Como en un procesador de texto, pero en cada renglón a la vez: cada renglón es
-    // un párrafo y se le teclean espacios al comienzo. Las palabras se corren, la que no
-    // cabe salta entera al renglón de abajo y eso empuja hacia abajo todo lo que sigue.
-    // Así el texto se mueve y cae en todo el nombre al mismo tiempo (no es un barrido).
-    // Todo dentro del rectángulo del nombre y visible sólo a través de las letras.
+    // Como en un procesador de texto: todas las palabras se corren a la derecha a la vez,
+    // de a un espacio; la que llega al final del renglón salta entera al renglón de abajo
+    // (y empuja a las que vienen detrás). Todo ocurre dentro del rectángulo del nombre.
     const SP = FS*0.9;                               // un espacio, como en un documento
     const BX0 = CAJA.x0, BX1 = CAJA.x1, LW = CAJA.ancho;
-    let i = 0, linea = CAJA.r0;
-    while(i < N && PR[i] < CAJA.r0) i++;
-    for(let r = CAJA.r0; r <= CAJA.r1 && linea <= CAJA.r1; r++){
-      const L0 = linea;
-      let L = 0, X = 0, cL = -1, cX = 0, finOrig = 0, ultima = -1;
-      while(i < N && PR[i] === r){
-        const clave = WSX[i];
-        if(clave !== ultima){
-          ultima = clave;
-          const x0 = WSX[i], w = WW[i];
-          if(cL < 0){                                // primera palabra del renglón: el cursor
-            const pos = (x0 - BX0) + D;
-            L = Math.floor(pos/LW); X = BX0 + (pos % LW);
-            if(X + w > BX1){ L++; X = BX0; }
-          } else {
-            const gapOrig = Math.max(SP, x0 - finOrig);
-            if(cL === 0 && cX + gapOrig <= x0){ L = 0; X = x0; }      // todavía no la alcanza
-            else { L = cL; X = cX + SP; if(X + w > BX1){ L++; X = BX0; } }
-          }
-          cL = L; cX = X + w; finOrig = x0 + w;
-        }
-        const R = L0 + L;
-        if(R <= CAJA.r1){
-          const x = X + OFF[i];
-          if(dentroDe(MDAT, x + FS*0.3, R)){        // sólo se ve dentro de las letras
-            const g = GLI[PG[i]];
-            ctx.setTransform(k,0,0,k, ESC*x, ESC*((R+1)*ch));
-            ctx.drawImage(g.im, -g.ox, -g.oy);
-          }
-        }
-        i++;
+    let ultima = -1, R = 0, X = 0, cur = -1e9;       // cur: fin de la palabra anterior (en el flujo)
+    for(let i=0;i<N;i++){
+      const clave = PR[i]*65536 + WSX[i];
+      if(clave !== ultima){
+        ultima = clave;
+        const w = WW[i];
+        let pos = Math.max((PR[i]-CAJA.r0)*LW + (WSX[i]-BX0) + D, cur + SP);
+        R = Math.floor(pos/LW); X = pos - R*LW;
+        if(X + w > LW){ R++; X = 0; pos = R*LW; }    // no cabe: salta entera al renglón siguiente
+        cur = pos + w;
+        R += CAJA.r0; X += BX0;
       }
-      linea = L0 + Math.max(1, (cL < 0 ? 0 : cL) + 1);
+      if(R > CAJA.r1) continue;                       // salió por abajo del nombre
+      const g = GLI[PG[i]];
+      ctx.setTransform(k,0,0,k, ESC*(X + OFF[i]), ESC*((R+1)*ch));
+      ctx.drawImage(g.im, -g.ox, -g.oy);
     }
   }
 
@@ -832,8 +813,11 @@ new p5(function(p){
 
     if(prog >= 0){                       // ---- salida: la barra espaciadora ----
       // arranca golpe a golpe y acelera, como cuando se deja apretada la tecla
-      const total = CAJA ? CAJA.ancho*(CAJA.r1 - CAJA.r0 + 2)*0.5 : W*(rows+2);
-      const D = Math.floor(total*Math.pow(Math.min(1,prog), 2.0) / cw) * cw;
+      // se corre de a un espacio (como dejar apretada la barra) y al final se desvanece
+      const total = CAJA ? CAJA.ancho*2.6 : W*2;
+      const paso = FS*0.9;
+      const D = Math.floor(total*Math.pow(Math.min(1,prog), 1.25) / paso) * paso;
+      cv.style.opacity = prog < 0.7 ? 1 : Math.max(0, 1 - (prog-0.7)/0.3);
       if(D !== ultimoPaso){ ultimoPaso = D; empuje(D); }
       return;
     }
@@ -905,7 +889,7 @@ new p5(function(p){
     if(entrando || !cols) return; entrando = true;
     if(e){ e.stopPropagation(); e.preventDefault(); }
 
-    salida = { t0: performance.now(), dur: 1500 };
+    salida = { t0: performance.now(), dur: 2000 };
 
     ondas = [];
     construirPartes();
@@ -920,8 +904,8 @@ new p5(function(p){
     setTimeout(()=>{
       if(window.__park) window.__park();
       document.body.classList.remove('intro-viva');   // el logo se enciende
-    }, 1300);
-    setTimeout(()=>document.body.classList.add('menu-on'), 1450);
+    }, 1600);
+    setTimeout(()=>document.body.classList.add('menu-on'), 1800);
   }
   cont.addEventListener('click', entrar);
   // en el teléfono no hace falta tocar: basta deslizar el dedo una vez.
