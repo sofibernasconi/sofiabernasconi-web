@@ -48,7 +48,8 @@
   #menu a{color:#111116;text-decoration:none;opacity:.7;transition:opacity .3s}
   #menu a:hover{opacity:1}
   #logohit{position:fixed;top:26px;left:32px;width:300px;height:70px;z-index:130;display:none;cursor:pointer}
-  body.menu-on #logohit{display:block}
+  body.parked #logohit{display:block}
+  #hero{height:100vh;height:100svh;scroll-snap-align:start;position:relative;z-index:80}
   #namehit{position:fixed;z-index:105;display:none;cursor:pointer}
   body.menu-on{overflow-y:auto;overflow-x:hidden}
   #gallery{position:relative;width:100%;z-index:80;pointer-events:none}
@@ -160,7 +161,7 @@
 <body>
 
   <h1 class="sr-only">Sofía Bernasconi Le Roy — artista visual y artes mediales</h1>
-  <script>if(location.hash==='#open')document.body.classList.add('reveal','menu-on');</script>
+  <script>document.body.classList.add('reveal','menu-on'); if(location.hash==='#open') document.body.classList.add('parked');</script>
   <div id="bg"></div>
   <div id="c"></div>
   <div id="topmask"></div>
@@ -173,6 +174,7 @@
   </nav>
   <a id="logohit" href="bio.html" aria-label="Bio"></a>
   <div id="namehit"></div>
+  <div id="hero" aria-hidden="true"></div>
   <div id="gallery">
     <section class="proj" data-id="convey">
       <div class="cap">Convey me · 2025–2026</div>
@@ -396,8 +398,8 @@ new p5(function(p){
   const INTRO=510;             // frames for the timed intro assembly (~8.5s + delay)
 
   const VSTRETCH=1.55;         // stretch the name vertically (opción 04)
-  // la intro es el logo: chico y al centro
-  function targetW(){ return (window.innerWidth<700 ? window.innerWidth*0.58 : Math.min(window.innerWidth*0.30,420)); }
+  // sin intro: el logo grande al centro de la primera pantalla; al bajar se va a la esquina
+  function targetW(){ return (window.innerWidth<700 ? window.innerWidth*0.92 : Math.min(window.innerWidth*0.72,900)); }
   function setHomes(){
     const tw=targetW(), s=tw/img.width;
     const h=img.height*s*VSTRETCH;
@@ -422,32 +424,34 @@ new p5(function(p){
     blur=p.createGraphics(W,H); blur.pixelDensity(1); blur.elt.id='blurlayer'; document.body.appendChild(blur.elt);
     namehit=document.getElementById('namehit');
     startOpen = location.hash==='#open';
-    const boot=()=>{ img=makeText(); build(); if(startOpen){ parked=true; LS=MINI_S; LOX=MINI_X; LOY=MINI_Y; themeLerp=1; } };
+    const boot=()=>{ img=makeText(); build(); themeLerp=1; LS=1; LOX=nbx0; LOY=nby0; if(startOpen){ parked=true; LS=MINI_S; LOX=MINI_X; LOY=MINI_Y; const g=document.getElementById('gallery'); if(g) g.scrollIntoView(); } };
     // la intro nueva lo llama al entrar: el logo aparece ya reducido en la esquina
     window.__park=function(){ parked=true; LS=MINI_S; LOX=MINI_X; LOY=MINI_Y; themeLerp=1; startOpen=true; p.loop(); };
     // mientras la intro esté encima, este sketch no dibuja: se lo comía todo
     if(document.getElementById('intro')) p.noLoop();
     if(document.fonts&&document.fonts.load){ document.fonts.load('700 120px \"'+FONT+'\"').then(boot).catch(boot); } else boot();
     window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;
-      document.body.style.cursor=(!parked||inName(mx,my))?'pointer':'default';});
-    // entrar al sitio: el logo se va a la esquina y aparece todo
-    const abrir=()=>{ if(parked) return; parked=true; document.body.classList.add('reveal'); setTimeout(()=>document.body.classList.add('menu-on'),650); document.body.style.cursor='default'; };
+      document.body.style.cursor=inName(mx,my)?'pointer':'default';});
+    // al bajar, el logo se va a la esquina (con su efecto); al volver arriba, regresa grande
+    const scroller=()=> (document.body.scrollTop || document.documentElement.scrollTop || 0);
+    const alScroll=()=>{
+      const y=scroller(), hh=window.innerHeight;
+      if(!parked && y > hh*0.06){ parked=true; document.body.classList.add('parked'); }
+      else if(parked && y < hh*0.03){ parked=false; document.body.classList.remove('parked'); }
+    };
+    document.addEventListener('scroll', alScroll, true);
+    window.__irGaleria=()=>{ const g=document.getElementById('gallery'); if(g) g.scrollIntoView({behavior:'smooth'}); };
     window.addEventListener('click',e=>{
-      if(!parked){ abrir(); return; }                 // con el logo al centro, cualquier click entra
       if(!inName(e.clientX,e.clientY)) return;
-      window.location.href='bio.html';
+      if(!parked){ window.__irGaleria(); }            // click en el nombre grande: baja a las obras
+      else { window.location.href='bio.html'; }
       document.body.style.cursor='default';});
     window.addEventListener('mouseout',()=>{mx=-999;my=-999});
     // touch support for phones (no hover -> drag a finger to open the name)
     const touch=e=>{ const c=e.touches&&e.touches[0]; if(c){mx=c.clientX;my=c.clientY;} };
     window.addEventListener('touchstart',touch,{passive:true});
     window.addEventListener('touchmove',touch,{passive:true});
-    // en el teléfono basta deslizar el dedo una vez: mientras se desliza el logo se deforma,
-    // y al soltar se entra al sitio
-    let tq=null;
-    window.addEventListener('touchstart',e=>{ const c=e.touches&&e.touches[0]; if(c&&!parked) tq={x:c.clientX,y:c.clientY,l:0}; },{passive:true});
-    window.addEventListener('touchmove',e=>{ const c=e.touches&&e.touches[0]; if(c&&tq){ tq.l+=Math.hypot(c.clientX-tq.x,c.clientY-tq.y); tq.x=c.clientX; tq.y=c.clientY; } },{passive:true});
-    window.addEventListener('touchend',()=>{mx=-999;my=-999; if(tq&&tq.l>40) abrir(); tq=null;});
+    window.addEventListener('touchend',()=>{mx=-999;my=-999});
   };
   p.draw=function(){
     p.clear(); blur.clear();
@@ -455,7 +459,7 @@ new p5(function(p){
       LS+=(MINI_S-LS)*0.1; LOX+=(MINI_X-LOX)*0.1; LOY+=(MINI_Y-LOY)*0.1;   // shrink to corner
       themeLerp+=(1-themeLerp)*0.05;                                       // black -> white
       hoverAmt+=((inName(mx,my)?1:0)-hoverAmt)*0.11;                       // mini frozen unless hovered; ramps gently
-    } else { LS=1; LOX=nbx0; LOY=nby0; hoverAmt=1; }
+    } else { LS+=(1-LS)*0.1; LOX+=(nbx0-LOX)*0.1; LOY+=(nby0-LOY)*0.1; themeLerp=1; hoverAmt=1; }   // vuelve grande al centro
     if(namehit){ if(parked){ namehit.style.display='none'; } else { namehit.style.display='block'; namehit.style.left=nbx0+'px'; namehit.style.top=nby0+'px'; namehit.style.width=(nbx1-nbx0)+'px'; namehit.style.height=(nby1-nby0)+'px'; } }
     const act = parked ? hoverAmt : 1;                 // full life when large; hover-gated when mini
     const col = 255*(1-themeLerp);                       // blanco puro en negro -> negro puro en blanco
