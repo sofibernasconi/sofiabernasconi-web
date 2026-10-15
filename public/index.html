@@ -579,10 +579,10 @@ new p5(function(p){
     // para que las letras cierren y el texto pueda rodearlas por los cuatro lados
     // más chico y centrado; angosto y alto: la tipografía queda estirada verticalmente
     const M_ANCHO = mob() ? 0.72 : 0.52;         // del ancho de pantalla
-    const M_ALTO  = mob() ? 0.62 : 0.80;         // del alto disponible
-    const util = rows - BANDA*2.4;
+    const M_ALTO  = 1.0;                         // de tope a tope, arriba y abajo
+    const util = H/ch;                           // alto real de la pantalla, en renglones
     const ancho = cols*M_ANCHO;
-    const y0 = BANDA*1.2 + (util - util*M_ALTO)/2;
+    const y0 = (util - util*M_ALTO)/2;
     const altoLinea = (util*M_ALTO)/HUECO.length;
 
     HUECO.forEach((txt,i)=>{
@@ -597,8 +597,8 @@ new p5(function(p){
       const izq = (m.actualBoundingBoxLeft||0);
       tinta = izq+(m.actualBoundingBoxRight||m.width);
       const inkH = (m.actualBoundingBoxAscent || fs*0.72);
-      g.translate((cols-tinta)/2 + izq, y0 + altoLinea*(i+1) - altoLinea*0.10);
-      g.scale(1, (altoLinea*0.88)/inkH);
+      g.translate((cols-tinta)/2 + izq, y0 + altoLinea*(i+1));
+      g.scale(1, altoLinea/inkH);
       g.fillText(txt, 0, 0);
       g.restore();
     });
@@ -685,7 +685,7 @@ new p5(function(p){
      de la pantalla, saltan enteras al renglón de abajo. Así una y otra vez,
      bajando un renglón por cada vuelta, hasta que se caen todas por abajo.
      Nada baja en bloque: lo único que hace bajar es pasarse del borde. */
-  let N = 0, WSX, OFF, WW, PR, PG, GLI = [];
+  let N = 0, WSX, OFF, WW, PR, PG, GLI = [], CAJA = null;   // CAJA: rectángulo que ocupa el nombre
 
   function construirPartes(){
     ctx.font = `400 ${FS}px ${TIPO}`;
@@ -728,6 +728,12 @@ new p5(function(p){
         c += Math.max(1, Math.ceil(anchoPalabra(w, TR[nivel])/cw)) + (nivel===0 ? 1 : 2);
       }
     }
+    // el rectángulo del nombre: el texto corre y baja sólo dentro de él
+    let c0=cols, c1=-1, r0=rows, r1=-1;
+    for(let r=0;r<rows;r++) for(let c=0;c<cols;c++) if(MDAT[(c+r*cols)*4] < 128){
+      if(c<c0)c0=c; if(c>c1)c1=c; if(r<r0)r0=r; if(r>r1)r1=r;
+    }
+    CAJA = { x0:c0*cw, x1:(c1+1)*cw, r0, r1, ancho:(c1+1-c0)*cw };
     N = wsx.length;
     WSX = Float32Array.from(wsx);
     OFF = Float32Array.from(off);
@@ -743,9 +749,11 @@ new p5(function(p){
     ctx.clearRect(0,0,W,H);
     const k = ESC/G;
     // como en un procesador de texto: se teclean espacios delante de la primera palabra.
-    // El texto sólo se corre cuando el cursor lo alcanza (el aire al final de cada
-    // renglón lo absorbe), y la palabra que no cabe salta entera al renglón siguiente.
+    // El texto sólo se corre cuando el cursor lo alcanza, y la palabra que no cabe salta
+    // entera al renglón siguiente. Todo ocurre dentro del rectángulo del nombre y sólo
+    // se ve a través de las letras: el texto no se expande, baja por la misma superficie.
     const SP = FS*0.9;                               // un espacio, como en un documento
+    const BX0 = CAJA.x0, BX1 = CAJA.x1, LW = CAJA.ancho;
     let ultima = -1, R = 0, X = 0, cL = -1, cX = 0, fila = -1, finOrig = 0;
     for(let i=0;i<N;i++){
       const clave = PR[i]*65536 + WSX[i];
@@ -753,20 +761,20 @@ new p5(function(p){
         ultima = clave;
         const r = PR[i], x0 = WSX[i], w = WW[i];
         if(cL < 0){                                  // primera palabra: el cursor está aquí
-          const pos = r*W + x0 + D;
-          cL = Math.floor(pos/W); cX = pos - cL*W; R = cL; X = cX;
-          if(X + w > W){ R++; X = 0; }
+          const pos = (r - CAJA.r0)*LW + (x0 - BX0) + D;
+          cL = CAJA.r0 + Math.floor(pos/LW); cX = BX0 + (pos % LW); R = cL; X = cX;
+          if(X + w > BX1){ R++; X = BX0; }
         } else {
           const gapOrig = (r === fila) ? Math.max(SP, x0 - finOrig) : SP;
           if(cL < r || (cL === r && cX + gapOrig <= x0)){ R = r; X = x0; }   // todavía no la alcanza
-          // al alcanzarla se suma al texto corrido, con un espacio normal
-          else { R = cL; X = cX + SP; if(X + w > W){ R++; X = 0; } }
+          else { R = cL; X = cX + SP; if(X + w > BX1){ R++; X = BX0; } }   // se suma al texto corrido
         }
         cL = R; cX = X + w; fila = r; finOrig = x0 + w;
       }
-      if(R > rows) continue;                          // ya se cayó por abajo
-      const g = GLI[PG[i]];
+      if(R > CAJA.r1) continue;                       // salió por abajo del nombre
       const x = X + OFF[i];
+      if(!dentroDe(MDAT, x + FS*0.3, R)) continue;    // sólo se ve dentro de las letras
+      const g = GLI[PG[i]];
       ctx.setTransform(k,0,0,k, ESC*x, ESC*((R+1)*ch));
       ctx.drawImage(g.im, -g.ox, -g.oy);
     }
@@ -812,7 +820,7 @@ new p5(function(p){
 
     if(prog >= 0){                       // ---- salida: la barra espaciadora ----
       // arranca golpe a golpe y acelera, como cuando se deja apretada la tecla
-      const total = W*(rows+2);
+      const total = CAJA ? CAJA.ancho*(CAJA.r1 - CAJA.r0 + 2) : W*(rows+2);
       const D = Math.floor(total*Math.pow(Math.min(1,prog), 1.6) / cw) * cw;
       if(D !== ultimoPaso){ ultimoPaso = D; empuje(D); }
       return;
