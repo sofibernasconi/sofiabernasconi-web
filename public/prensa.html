@@ -61,6 +61,15 @@
   a.row:hover .ttl{font-weight:500}
   a.row .ttl::after{content:" ↗";color:#b9b9b3;font-size:.85em;white-space:nowrap}
   .row.nolink .ttl{color:#5a5a56}
+  /* filas con link propio para el medio (p.ej. Instagram de la revista) */
+  .row.multi a{color:inherit;text-decoration:none}
+  .row.multi > a{display:block;flex:0 0 auto;line-height:0}
+  .row.multi:hover{padding-left:.5rem}
+  .row.multi:hover .th{filter:grayscale(0)}
+  .row.multi .meta a.src:hover,.row.multi .ttl a.handle:hover{color:#111116}
+  .row.multi .ttl a.art:hover{font-weight:500}
+  .row.multi .ttl a.art::after{content:" ↗";color:#b9b9b3;font-size:.85em;white-space:nowrap}
+  .row.multi .ttl a.handle{color:#8f8f8a;margin-left:.4rem}
   .row.nolink .meta::after{content:"· prensa impresa";color:#c3c2bd}
   body.en .row.nolink .meta::after{content:"· print press"}
   nav,#lang,#c,#blurlayer{transition:opacity .5s ease}
@@ -96,7 +105,7 @@
 
 <script>
 const PRESS = [
-  {year:"2026", src:"CanvasRebel", title:"Meet Sofia", url:"https://canvasrebel.com/meet-sofia-2/", tag:"entrevista", thumb:"canvasrebel2026.jpg"},
+  {year:"2026", src:"CanvasRebel", title:"Meet Sofia", url:"https://canvasrebel.com/meet-sofia-2/", tag:"entrevista", thumb:"canvasrebel2026.jpg", srcUrl:"https://www.instagram.com/canvasrebel/", handle:"@canvasrebel"},
   {year:"2026", src:"Alumni UdeC", title:"Sofía Bernasconi es seleccionada para el magíster en New York University con beca ANID", url:"https://alumni.udec.cl/noticias/alumni-udec-sofia-bernasconi-es-seleccionada-para-magister-en-new-york-university-con-beca-anid/3370", thumb:"alumni2026.jpg"},
   {year:"2025", src:"El Sur", title:"Sofía Bernasconi llega a BAJ Biobío con su videoinstalación performática", url:"assets/prensa/elsur_baj_2025.jpg", tag:"impreso", thumb:"elsur_baj2025.jpg"},
   {year:"2025", src:"El Sur", title:"Exposición en BAJ Biobío cruza el cuerpo y la tecnología", url:"assets/prensa/elsur_hibrida_2025.jpg", tag:"impreso", thumb:"elsur2025.jpg"},
@@ -164,6 +173,12 @@ document.getElementById('list').innerHTML = PRESS.map((p,i)=>{
   const meta='<div class="meta"><span class="src">'+esc(p.src)+'</span><span class="yr">'+esc(p.year)+'</span>'+tag+'</div>';
   const ttl='<div class="ttl">'+(PRESS_EN[i]?'<span class="tes">'+esc(p.title)+'</span><span class="ten">'+esc(PRESS_EN[i])+'<span class="orig"> ('+esc(p.title)+')</span></span>':esc(p.title))+'</div>';
   const thumb = p.thumb ? '<img class="th" src="assets/prensa/thumbs/'+esc(p.thumb)+'" alt="'+esc(p.src+': '+p.title)+'" loading="lazy">' : '<span class="th th-empty"></span>';
+  if (p.srcUrl) {
+    const ext=' target="_blank" rel="noopener"';
+    const metaL='<div class="meta"><a class="src" href="'+esc(p.srcUrl)+'"'+ext+'>'+esc(p.src)+'</a><span class="yr">'+esc(p.year)+'</span>'+tag+'</div>';
+    const ttlL='<div class="ttl"><a class="art" href="'+esc(p.url)+'"'+ext+'>'+esc(p.title)+'</a>'+(p.handle?'<a class="handle" href="'+esc(p.srcUrl)+'"'+ext+'>'+esc(p.handle)+'</a>':'')+'</div>';
+    return '<div class="row multi"><a href="'+esc(p.url)+'"'+ext+' tabindex="-1">'+thumb+'</a><span class="txt">'+metaL+ttlL+'</span></div>';
+  }
   const inner = thumb+'<span class="txt">'+meta+ttl+'</span>';
   return p.url
     ? '<a class="row" href="'+esc(p.url)+'" target="_blank" rel="noopener">'+inner+'</a>'
