@@ -161,7 +161,6 @@
 
   <h1 class="sr-only">Sofía Bernasconi Le Roy — artista visual y artes mediales</h1>
   <script>if(location.hash==='#open')document.body.classList.add('reveal','menu-on');</script>
-  <div id="intro"><canvas id="icv"></canvas></div>
   <div id="bg"></div>
   <div id="c"></div>
   <div id="topmask"></div>
@@ -397,11 +396,12 @@ new p5(function(p){
   const INTRO=510;             // frames for the timed intro assembly (~8.5s + delay)
 
   const VSTRETCH=1.55;         // stretch the name vertically (opción 04)
-  function targetW(){ return (window.innerWidth<700 ? window.innerWidth*0.99 : Math.min(window.innerWidth*0.72,900)); }
+  // la intro es el logo: chico y al centro
+  function targetW(){ return (window.innerWidth<700 ? window.innerWidth*0.58 : Math.min(window.innerWidth*0.30,420)); }
   function setHomes(){
     const tw=targetW(), s=tw/img.width;
     const h=img.height*s*VSTRETCH;
-    const ox=(W-tw)/2, oy=(W<700 ? Math.max(H*0.05,(H-h)/2) : (H-h)/2);   // móvil: nombre a pantalla completa
+    const ox=(W-tw)/2, oy=(H-h)/2;   // centrado
     nameCY=oy+h/2; nameH=h; nbx0=ox; nby0=oy; nbx1=ox+tw; nby1=oy+h;
     for(const q of parts){ q.hx=ox+q.ix*s; q.hy=oy+q.iy*s*VSTRETCH; q.hyL=oy+(q.iy % (img.height/nLines))*s*VSTRETCH; }
   }
@@ -429,18 +429,25 @@ new p5(function(p){
     if(document.getElementById('intro')) p.noLoop();
     if(document.fonts&&document.fonts.load){ document.fonts.load('700 120px \"'+FONT+'\"').then(boot).catch(boot); } else boot();
     window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;
-      document.body.style.cursor=inName(mx,my)?'pointer':'default';});
+      document.body.style.cursor=(!parked||inName(mx,my))?'pointer':'default';});
+    // entrar al sitio: el logo se va a la esquina y aparece todo
+    const abrir=()=>{ if(parked) return; parked=true; document.body.classList.add('reveal'); setTimeout(()=>document.body.classList.add('menu-on'),650); document.body.style.cursor='default'; };
     window.addEventListener('click',e=>{
+      if(!parked){ abrir(); return; }                 // con el logo al centro, cualquier click entra
       if(!inName(e.clientX,e.clientY)) return;
-      if(!parked){ parked=true; document.body.classList.add('reveal'); setTimeout(()=>document.body.classList.add('menu-on'),650); }
-      else { window.location.href='bio.html'; }
+      window.location.href='bio.html';
       document.body.style.cursor='default';});
     window.addEventListener('mouseout',()=>{mx=-999;my=-999});
     // touch support for phones (no hover -> drag a finger to open the name)
     const touch=e=>{ const c=e.touches&&e.touches[0]; if(c){mx=c.clientX;my=c.clientY;} };
     window.addEventListener('touchstart',touch,{passive:true});
     window.addEventListener('touchmove',touch,{passive:true});
-    window.addEventListener('touchend',()=>{mx=-999;my=-999});
+    // en el teléfono basta deslizar el dedo una vez: mientras se desliza el logo se deforma,
+    // y al soltar se entra al sitio
+    let tq=null;
+    window.addEventListener('touchstart',e=>{ const c=e.touches&&e.touches[0]; if(c&&!parked) tq={x:c.clientX,y:c.clientY,l:0}; },{passive:true});
+    window.addEventListener('touchmove',e=>{ const c=e.touches&&e.touches[0]; if(c&&tq){ tq.l+=Math.hypot(c.clientX-tq.x,c.clientY-tq.y); tq.x=c.clientX; tq.y=c.clientY; } },{passive:true});
+    window.addEventListener('touchend',()=>{mx=-999;my=-999; if(tq&&tq.l>40) abrir(); tq=null;});
   };
   p.draw=function(){
     p.clear(); blur.clear();
