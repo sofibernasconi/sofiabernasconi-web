@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en" data-alt="proyectos.html">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sofía Bernasconi — Projects</title>
+<meta name="description" content="Video installation, performance and art and technology works by Sofía Bernasconi, Chilean visual and media artist based in New York.">
+<meta name="author" content="Sofía Bernasconi Le Roy">
+<link rel="canonical" href="https://sofiabernasconi.com/en-proyectos">
+<link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/proyectos">
+<link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/en-proyectos">
+<link rel="alternate" hreflang="x-default" href="https://sofiabernasconi.com/proyectos">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="assets/favicon-512.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#f7f6f4">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sofía Bernasconi">
+<meta property="og:title" content="Sofía Bernasconi — Projects">
+<meta property="og:description" content="Video installation, performance and art and technology works by Sofía Bernasconi, Chilean visual and media artist based in New York.">
+<meta property="og:url" content="https://sofiabernasconi.com/en-proyectos">
+<meta property="og:image" content="https://sofiabernasconi.com/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="es_CL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sofía Bernasconi — Projects">
+<meta name="twitter:description" content="Video installation, performance and art and technology works by Sofía Bernasconi, Chilean visual and media artist based in New York.">
+<meta name="twitter:image" content="https://sofiabernasconi.com/assets/og.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@300;400;500&family=EB+Garamond:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#f7f6f4;color:#111116;font-family:'Space Grotesk',sans-serif;font-weight:300;-webkit-font-smoothing:antialiased}
+  #c{position:fixed;inset:0;z-index:110;pointer-events:none;mix-blend-mode:difference}
+  #c canvas{position:fixed;inset:0;pointer-events:none}
+  #blurlayer{position:fixed;inset:0;pointer-events:none;filter:blur(2.6px);z-index:110;mix-blend-mode:difference}
+  #lang{position:fixed;top:36px;right:36px;z-index:120;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;color:#fff;mix-blend-mode:difference}
+  #lang span{cursor:pointer;opacity:.4;transition:opacity .3s}
+  #lang span.on{opacity:1}
+  nav{position:fixed;top:70px;right:36px;z-index:120;display:flex;flex-direction:column;align-items:flex-end;gap:.75rem;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;mix-blend-mode:difference}
+  nav a{color:#fff;text-decoration:none;opacity:.7;transition:opacity .3s}
+  nav a:hover{opacity:1}
+  nav a.cur{opacity:1;font-weight:700}
+  main{max-width:none;margin:0;width:100%;padding:22vh 0 8vh}
+  @media(min-width:860px){ main{padding-top:16vh} }
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#8f8f8a;margin:0 0 3vh;padding:0 5vw}
+    .strip{position:relative;display:block;width:100%;height:16vh;min-height:118px;overflow:hidden;text-decoration:none;background:#e9e8e4}
+  .strip + .strip{margin-top:1.1vh}
+  .strip img{width:100%;height:100%;object-fit:cover;filter:blur(12px) grayscale(1);transform:scale(1.08);transition:filter .8s ease;display:block}
+  .strip:hover img{filter:blur(0) grayscale(1)}
+  .strip .cap{position:absolute;left:5vw;top:50%;transform:translateY(-50%);z-index:2;color:#fff;mix-blend-mode:difference;display:flex;align-items:baseline;gap:1rem;pointer-events:none}
+  .strip .n{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:clamp(.74rem,1.15vw,.98rem);line-height:1.1;letter-spacing:.02em;text-transform:lowercase}
+  .strip:hover .n{font-weight:700}
+  .strip.wcap .cap{mix-blend-mode:normal;color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.45)}
+  .strip.midtone .cap{mix-blend-mode:normal;color:#fff}
+  .strip.lighttone .cap{mix-blend-mode:normal;color:#14141a}
+  .strip .y{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.06em}
+  .orig{font-style:italic;font-size:.66em;opacity:.85}
+  .strip .orig::before{content:" ("}
+  .strip .orig::after{content:")"}
+  .ten{display:none}
+  body.en .ten{display:inline}
+  body.en .tes{display:none}
+  @media(hover:none){ .strip img{filter:grayscale(1)} }
+  @media(max-width:760px){
+    main{padding-top:26vh}
+    .strip{height:18vh}
+    .strip .cap,.strip.midtone .cap,.strip.lighttone .cap,.strip.wcap .cap{
+      flex-direction:column;align-items:flex-start;gap:.22rem;
+      mix-blend-mode:normal;color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.5)}
+    .strip .n{font-size:clamp(.82rem,3.6vw,1.1rem)}
+    .strip .orig{display:block;font-size:.72em;margin-top:.18rem}
+    .strip .orig::before,.strip .orig::after{content:""}
+    .strip .y{font-size:.58rem;opacity:.85}
+  }
+  nav,#lang,#c,#blurlayer{transition:opacity .5s ease}
+  body.ui-hide nav,body.ui-hide #lang{opacity:0;pointer-events:none}
+  body.ui-hide #c,body.ui-hide #blurlayer{opacity:0}
+
+  /* ---- pie de pagina ---- */
+  .foot-site{box-sizing:border-box;width:100%;max-width:100%;padding:7vh 5vw 5vh;display:flex;justify-content:flex-end;position:relative;z-index:85;pointer-events:auto}
+  .foot-site .in{box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-end;gap:.55rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.08em;color:#8f8f8a;text-align:right}
+  .foot-site a{color:inherit;text-decoration:none;transition:color .3s}
+  .foot-site a:hover{color:#111116}
+  .foot-site .ig{display:inline-flex;align-items:center;gap:.45rem;margin-top:.15rem}
+  .foot-site .ig svg{width:17px;height:17px;display:block}
+  @media(max-width:700px){ .foot-site{padding:6vh 5vw 6vh} .foot-site .in{font-size:.72rem} }
+
+</style>
+<script>/*idioma-fijo*/(function(){var d=document.documentElement,f=d.getAttribute('data-lang'),alt=d.getAttribute('data-alt');if(!f)return;var q=new URLSearchParams(location.search).get('lang');if(q&&q!==f&&alt){location.replace(alt+location.hash);return;}try{localStorage.setItem('lang',f)}catch(e){}document.addEventListener('click',function(e){var s=e.target.closest&&e.target.closest('#lang span');if(s&&alt&&s.getAttribute('data-l')!==f){e.preventDefault();e.stopImmediatePropagation();location.href=alt+(location.hash||'');}},true);})();</script>
+</head>
+<body class="en">
+
+  <div id="c"></div>
+  <div id="lang"><span data-l="es" class="on">ES</span> / <span data-l="en">EN</span></div>
+  <nav>
+    <a href="en-bio.html" data-es="Bio" data-en="Bio">Bio</a>
+    <a href="en-proyectos.html" class="cur" data-es="Proyectos" data-en="Projects">Projects</a>
+    <a href="en-prensa.html" data-es="Prensa" data-en="Press">Press</a>
+    <a href="en-contacto.html" data-es="Contacto" data-en="Contact">Contact</a>
+  </nav>
+
+  <main>
+    <div class="eyebrow" data-es="Proyectos" data-en="Projects">Projects</div>
+    <div class="strips" id="list"></div>
+  </main>
+
+<script>
+const PROJ = [
+  {id:"convey", name:"Convey me", en:"", year:"2025–2026"},
+  {id:"reflejo", name:"Reflejo Abierto", en:"Open Reflection", year:"2025"},
+  {id:"orilla", name:"Orilla", en:"Shore", year:"2025"},
+  {id:"mecanica", name:"Mecánica del Tacto", en:"Mechanics of Touch", year:"2025"},
+  {id:"tensiones", name:"Tensiones", en:"Tensions", year:"2022–2024"},
+  {id:"cuerpoaguas", name:"Mi cuerpo toca tus aguas", en:"My Body Touches Your Waters", year:"2024–2025"},
+  {id:"cordeles", name:"También somos una cortina de cordeles", en:"We Are Also a Curtain of Cords", year:"2020"},
+  {id:"sumersiones", name:"Sumersiones", en:"Submersions", year:"2019"},
+  {id:"residente", name:"Resid(ente)", en:"Resid(ent)", year:"2021"},
+  {id:"deshilacha", name:"Deshilacha", en:"Fraying", year:"2019"},
+  {id:"sumersiones0", name:"Bajo el agua", en:"Under Water", year:"2018"},
+  {id:"artwork", name:"Artwork para álbumes de música", en:"Artwork for music albums", year:"2020"}
+];
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+const PREV={convey:"convey_1.jpg",reflejo:"reflejo_1.jpg",orilla:"orilla_1.jpg",mecanica:"mecanica_3.jpg",tensiones:"tensiones_1.jpg",cuerpoaguas:"cuerpoaguas_1.jpg",cordeles:"cordeles_2.jpg",sumersiones:"sumersiones_1.jpg",residente:"residente_1.jpg",deshilacha:"deshilacha_1.jpg",sumersiones0:"sumersiones0_2.jpg",artwork:"artwork_1.jpg"};
+const WHITECAP=['cordeles'];
+const POS={convey:"50% 44%",orilla:"50% 80%",mecanica:"50% 45%",tensiones:"50% 60%",cordeles:"50% 45%",deshilacha:"50% 80%"};
+document.getElementById('list').innerHTML = PROJ.map(function(p){
+  var img = PREV[p.id] ? '<img src="assets/'+PREV[p.id]+'" alt="'+esc(p.name)+' ('+esc(p.year)+'), obra de Sofía Bernasconi"'+(POS[p.id]?' style="object-position:'+POS[p.id]+'"':'')+' loading="lazy">' : '';
+  var wc=WHITECAP.indexOf(p.id)>=0?' wcap':'';
+  return '<a class="strip'+wc+'" href="obra-'+p.id+'.html">'+img+'<span class="cap"><span class="n">'+(p.en?'<span class="tes">'+esc(p.name)+'</span><span class="ten">'+esc(p.en)+'<span class="orig"> ('+esc(p.name)+')</span></span>':esc(p.name))+'</span><span class="y">'+esc(p.year)+'</span></span></a>';
+}).join('');
+
+
+// ---- contraste automatico de los titulos ----
+// CSS no sabe que hay detras del texto: medimos la zona de la imagen bajo el titulo
+// y elegimos blanco solido, negro solido o el efecto de inversion.
+(function(){
+  function analiza(img){
+    var strip = img.closest('.strip');
+    if(!strip || strip.classList.contains('wcap')) return;
+    try{
+      var c=document.createElement('canvas'), w=32, h=16;
+      c.width=w; c.height=h;
+      var ctx=c.getContext('2d',{willReadFrequently:true});
+      // zona izquierda de la foto: es donde va el titulo
+      var sw=img.naturalWidth*0.42, sh=img.naturalHeight;
+      ctx.drawImage(img, 0, 0, sw, sh, 0, 0, w, h);
+      var d=ctx.getImageData(0,0,w,h).data, sum=0, n=0;
+      for(var i=0;i<d.length;i+=4){
+        sum += (0.2126*d[i] + 0.7152*d[i+1] + 0.0722*d[i+2])/255;
+        n++;
+      }
+      var L = sum/n;
+      // con inversion, el texto se pierde cuando el fondo es tono medio
+      if(L>0.38 && L<0.62) strip.classList.add("midtone");
+      else if(L>=0.62) strip.classList.add("lighttone");
+    }catch(e){ /* si el navegador bloquea la lectura, se queda con la inversion */ }
+  }
+  document.querySelectorAll('.strip img').forEach(function(img){
+    if(img.complete && img.naturalWidth) analiza(img);
+    else img.addEventListener('load', function(){ analiza(img); });
+  });
+})();
+
+// idioma (persistente entre páginas)
+(function(){
+  function withLang(href,l){ if(!href||/^(https?:|mailto:|tel:|#)/i.test(href))return href; var hash='';var h=href.indexOf('#');if(h>=0){hash=href.slice(h);href=href.slice(0,h);} var base=href,qs='';var q=href.indexOf('?');if(q>=0){base=href.slice(0,q);qs=href.slice(q+1);} var pr=new URLSearchParams(qs);pr.set('lang',l);return base+'?'+pr.toString()+hash; }
+  const set=l=>{
+    document.body.classList.toggle('en',l==='en');
+    document.querySelectorAll('nav a[data-'+l+'],.eyebrow[data-'+l+']').forEach(el=>el.textContent=el.getAttribute('data-'+l));
+    document.querySelectorAll('#lang span').forEach(s=>s.classList.toggle('on',s.getAttribute('data-l')===l));
+    try{localStorage.setItem('lang',l);}catch(e){}
+    document.querySelectorAll('a[href]').forEach(a=>a.setAttribute('href',withLang(a.getAttribute('href'),l)));
+  };
+  document.querySelectorAll('#lang span').forEach(s=>s.addEventListener('click',()=>set(s.getAttribute('data-l'))));
+  var u=new URLSearchParams(location.search).get('lang'),st=null;try{st=localStorage.getItem('lang');}catch(e){}
+  set(st||u||'es');
+})();
+</script>
+
+<script>
+// ==== MINI LOGO ANIMADO (igual que bio / obra) ====
+new p5(function(p){
+  let img, parts=[], W, H, blur, mx=-999, my=-999, hoverAmt=0;
+  let nbx0=0,nby0=0,nbx1=0,nby1=0;
+  const FONT='Syne', R=160, VSTRETCH=1.55, LS=(window.innerWidth<700?0.30:0.30), LOX=34, LOY=30;
+  function makeText(){
+    const fs=200, mob=window.innerWidth<700;
+    const m=p.createGraphics(10,10); m.textFont(FONT); m.textStyle(p.BOLD); m.textSize(fs);
+    let g;
+    if(mob){
+      const lines=['SOFIA','BERNASCONI']; let tw=0;
+      for(const l of lines) tw=Math.max(tw, Math.ceil(m.textWidth(l)));
+      m.remove();
+      const lead=fs*1.04;
+      g=p.createGraphics(tw+40, Math.ceil(lead*(lines.length-1)+fs*1.25)); g.pixelDensity(1);
+      g.background(255); g.fill(0); g.noStroke();
+      g.textFont(FONT); g.textStyle(p.BOLD); g.textSize(fs); g.textAlign(p.LEFT,p.CENTER);
+      const cy=g.height/2 - lead*(lines.length-1)/2;
+      lines.forEach((l,i)=>g.text(l, 20, cy+i*lead));
+    } else {
+      m.drawingContext.wordSpacing='75px';
+      const txt='SOFIA BERNASCONI', tw=Math.ceil(m.textWidth(txt)); m.remove();
+      g=p.createGraphics(tw+40, Math.ceil(fs*1.35)); g.pixelDensity(1);
+      g.background(255); g.fill(0); g.noStroke();
+      g.textFont(FONT); g.textStyle(p.BOLD); g.textSize(fs); g.textAlign(p.CENTER,p.CENTER); g.drawingContext.wordSpacing='75px';
+      g.text(txt, g.width/2, g.height/2);
+    }
+    g.loadPixels();
+    return g;
+  }
+  function setHomes(){
+    const tw=(W<700? W*0.92 : Math.min(W*0.72,900)), s=tw/img.width, h=img.height*s*VSTRETCH;
+    const ox=(W-tw)/2, oy=(H-h)/2; nbx0=ox; nby0=oy; nbx1=ox+tw; nby1=oy+h;
+    for(const q of parts){ q.hx=ox+q.ix*s; q.hy=oy+q.iy*s*VSTRETCH; q.hyL=(q.iy % (img.height/2))*s*VSTRETCH;   /* fase de la onda sin depender de la posición en pantalla: no salta cuando el teléfono cambia de alto al scrollear */ }
+  }
+  function build(){
+    parts=[]; W=window.innerWidth; H=window.innerHeight; img.loadPixels();
+    const s=(W<700? W*0.92 : Math.min(W*0.72,900))/img.width, step=Math.max(2,Math.round((W<700?1.8:2.4)/s));
+    for(let y=0;y<img.height;y+=step) for(let x=0;x<img.width;x+=step)
+      if(img.pixels[4*(x+y*img.width)]<115) parts.push({ix:x,iy:y,ox:0,oy:0,ovx:0,ovy:0,ev:0,seed:p.random(1000),sz:p.random(0.5,1.15)});
+    setHomes();
+  }
+  function inName(x,y){ const w=(nbx1-nbx0)*LS, hh=(nby1-nby0)*LS; return x>=LOX&&x<=LOX+w&&y>=LOY&&y<=LOY+hh; }
+  p.setup=function(){
+    W=window.innerWidth; H=window.innerHeight;
+    let c=p.createCanvas(W,H); c.parent('c'); p.pixelDensity(Math.min(2, window.devicePixelRatio||1));
+    blur=p.createGraphics(W,H); blur.pixelDensity(1); blur.elt.id='blurlayer'; document.body.appendChild(blur.elt);
+    const boot=()=>{ img=makeText(); build(); };
+    if(document.fonts&&document.fonts.load){ document.fonts.load('700 120px \"'+FONT+'\"').then(boot).catch(boot); } else boot();
+    window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY; document.body.style.cursor=inName(mx,my)?'pointer':'default';});
+    window.addEventListener('click',e=>{ if(inName(e.clientX,e.clientY)){ var u=new URLSearchParams(location.search).get('lang'),s=null;try{s=localStorage.getItem('lang')}catch(x){} window.location.href='index.html?lang='+(s||u||'es')+'#open'; } });
+    window.addEventListener('mouseout',()=>{mx=-999;my=-999;});
+  };
+  p.draw=function(){
+    p.clear(); blur.clear();
+    hoverAmt+=((inName(mx,my)?1:0)-hoverAmt)*0.11;
+    const act=1, t=p.frameCount*0.003, wt=p.frameCount*0.01;   // igual que el logo chico de la portada: siempre con su movimiento
+    const cX=LOX+(nbx1-nbx0)*LS/2, cY=LOY+(nby1-nby0)*LS/2;
+    for(const q of parts){
+      const hx=LOX+(q.hx-nbx0)*LS, hy=LOY+(q.hy-nby0)*LS;
+      const wv=(W<700?q.hyL:q.hy);   // móvil: y relativa a cada línea -> SOFIA y BERNASCONI en fase (misma dirección), misma onda de antes
+      const waveX=( Math.sin(wv*0.07 - wt*1.2)*20 + Math.sin(wv*0.15 + wt*0.8)*8 )*(1-q.ev)*LS*act;
+      const baseX=hx+waveX, baseY=hy;
+      const px=baseX+q.ox, py=baseY+q.oy;
+      const k=0.016*(1-0.99*q.ev);
+      let ax=-q.ox*k, ay=-q.oy*k;
+      ax += (p.noise(q.seed,t)-0.5)*0.05*LS*act;
+      const Reff=R*LS, dx=px-mx, dy=py-my, d=Math.hypot(dx,dy);
+      if(d<Reff){ q.ev=Math.min(1, q.ev+(1-d/Reff)*0.09); }
+      if(q.ev>0.02){
+        const a=p.noise(px*0.0016, py*0.0016, t*0.4)*p.TWO_PI*2.0, drift=0.5*q.ev*LS*act;
+        ax+=Math.cos(a)*drift; ay+=Math.sin(a)*drift;
+        ax+=(px-cX)*0.00075*q.ev*LS*act; ay+=(py-cY)*0.00075*q.ev*LS*act;
+      }
+      q.ev*=0.991; const fr=0.92+0.05*q.ev;
+      q.ovx=(q.ovx+ax)*fr; q.ovy=(q.ovy+ay)*fr;
+      const cap=3.2*Math.max(LS,0.5), sp=Math.hypot(q.ovx,q.ovy); if(sp>cap){ q.ovx*=cap/sp; q.ovy*=cap/sp; }
+      q.ox+=q.ovx; q.oy+=q.ovy;
+      const dpx=baseX+q.ox, dpy=baseY+q.oy, dot=q.sz*1.5*Math.max(LS,0.62)*(window.innerWidth<700?0.7:1);
+      p.noStroke(); blur.noStroke();
+      const aC=255*(1-q.ev);
+      if(aC>4){ p.fill(255,255,255,aC); p.circle(dpx,dpy, dot); }
+      const bA=150*q.ev;
+      if(q.ev>0.03){ blur.fill(255,255,255,bA); blur.circle(dpx,dpy, dot+q.ev*3*LS); }
+    }
+  };
+  let to; p.windowResized=function(){ W=window.innerWidth; H=window.innerHeight; p.resizeCanvas(W,H); blur.resizeCanvas(W,H); clearTimeout(to); to=setTimeout(()=>{ if(img) setHomes(); },120); };
+});
+</script>
+<!--IDIOMA-CLICK-GUARD-->
+<script>(function(){
+  function L(){var u=null,s=null;try{u=new URLSearchParams(location.search).get('lang');}catch(e){}try{s=localStorage.getItem('lang');}catch(e){}return s||u||'es';}
+  document.addEventListener('click',function(e){
+    var a=e.target&&e.target.closest?e.target.closest('a[href]'):null; if(!a)return;
+    var h=a.getAttribute('href'); if(!h||/^(https?:|mailto:|tel:)/i.test(h)||h.charAt(0)==='#')return;
+    var l=L(),hash='',hi=h.indexOf('#'); if(hi>=0){hash=h.slice(hi);h=h.slice(0,hi);}
+    var base=h,qs='',qi=h.indexOf('?'); if(qi>=0){base=h.slice(0,qi);qs=h.slice(qi+1);}
+    var pr; try{pr=new URLSearchParams(qs);}catch(e){pr=new URLSearchParams();}
+    pr.set('lang',l); a.setAttribute('href', base+'?'+pr.toString()+hash);
+  }, true);
+})();</script>
+<!--UI-HIDE-ON-SCROLL-->
+<script>(function(){
+  function getST(){return window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0;}
+  var last=0;
+  function on(){
+    var s=getST();
+    if(s<40) document.body.classList.remove('ui-hide');
+    else if(s>last) document.body.classList.add("ui-hide");
+    else if(s<last) document.body.classList.remove("ui-hide");
+    last=s;
+  }
+  window.addEventListener('scroll', on, {passive:true, capture:true});
+  document.addEventListener('scroll', on, {passive:true, capture:true});
+})();</script>
+  <footer class="foot-site">
+    <div class="in">
+      <a href="mailto:contacto@sofiabernasconi.com">contacto@sofiabernasconi.com</a>
+      <span>Concepción, Chile · New York, USA</span>
+      <a class="ig" href="https://www.instagram.com/sofibernasconi/" target="_blank" rel="noopener" aria-label="Instagram: @sofibernasconi">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.5" cy="6.5" r="1.15" fill="currentColor" stroke="none"/></svg>@sofibernasconi</a>
+    </div>
+  </footer>
+</body>
+</html>

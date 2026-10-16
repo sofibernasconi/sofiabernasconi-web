@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en" data-alt="bio.html">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sofía Bernasconi — Bio</title>
+<meta name="description" content="Biography of Sofía Bernasconi Le Roy, Chilean visual and media artist working in video installation, performance and media arts. Currently at ITP, New York University.">
+<meta name="author" content="Sofía Bernasconi Le Roy">
+<link rel="canonical" href="https://sofiabernasconi.com/en-bio">
+<link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/bio">
+<link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/en-bio">
+<link rel="alternate" hreflang="x-default" href="https://sofiabernasconi.com/bio">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="assets/favicon-512.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#f7f6f4">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sofía Bernasconi">
+<meta property="og:title" content="Sofía Bernasconi — Bio">
+<meta property="og:description" content="Biography of Sofía Bernasconi Le Roy, Chilean visual and media artist working in video installation, performance and media arts. Currently at ITP, New York University.">
+<meta property="og:url" content="https://sofiabernasconi.com/en-bio">
+<meta property="og:image" content="https://sofiabernasconi.com/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="es_CL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sofía Bernasconi — Bio">
+<meta name="twitter:description" content="Biography of Sofía Bernasconi Le Roy, Chilean visual and media artist working in video installation, performance and media arts. Currently at ITP, New York University.">
+<meta name="twitter:image" content="https://sofiabernasconi.com/assets/og.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=JetBrains+Mono:wght@500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#f7f6f4;color:#111116;font-family:'Space Grotesk',sans-serif;font-weight:300;line-height:1.7;-webkit-font-smoothing:antialiased}
+  #c{position:fixed;inset:0;z-index:110;pointer-events:none;mix-blend-mode:difference}
+  #c canvas{position:fixed;inset:0;pointer-events:none}
+  #blurlayer{position:fixed;inset:0;pointer-events:none;filter:blur(2.6px);z-index:110;mix-blend-mode:difference}
+  #lang{position:fixed;top:36px;right:36px;z-index:120;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;color:#fff;mix-blend-mode:difference}
+  #lang span{cursor:pointer;opacity:.4;transition:opacity .3s}
+  #lang span.on{opacity:1}
+  nav{position:fixed;top:70px;right:36px;z-index:120;display:flex;flex-direction:column;align-items:flex-end;gap:.75rem;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;mix-blend-mode:difference}
+  nav a{color:#fff;text-decoration:none;opacity:.7;transition:opacity .3s}
+  nav a:hover{opacity:1}
+  main{max-width:680px;margin:0 auto;padding:22vh 2rem 14rem}
+  @media(min-width:860px){main{margin-left:300px;margin-right:auto;padding-top:18vh}}
+  .biofoto{width:100%;display:block;margin:0 0 3.5rem}
+  /* computador: texto a la izquierda, foto a la derecha (más chica) */
+  @media(min-width:860px){
+    main{margin-left:max(120px,10vw);max-width:min(1000px, calc(100vw - max(120px,10vw) - 230px))}   /* deja libre el menú de la derecha */
+    .biotop{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:4.5rem;align-items:center}   /* retrato centrado verticalmente con el texto */
+    .biotop .biofoto{grid-column:2;grid-row:1;margin:0}
+    .biotop .biotxt{grid-column:1;grid-row:1;max-width:620px}
+    .meta{max-width:620px}
+  }
+  .biofoto2{width:38%;max-width:240px;display:block;margin:9rem 0 0}   /* a la izquierda, con aire antes; justo sobre el contacto */
+  @media(max-width:700px){ .biofoto2{width:52%;margin:6rem 0 0} }
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#8f8f8a;margin-bottom:2rem}
+  main p{font-size:clamp(.9rem,1.25vw,1.05rem);margin-bottom:1.5rem;color:#26262a}
+  main p.en{color:#8a8a86;font-size:.86rem}
+  .meta{margin-top:3rem;padding-top:2rem;border-top:1px solid #e3e2de;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:#5f5e5a;line-height:2}
+  main [data-en]{display:none}
+  body.en main [data-es]{display:none}
+  body.en main [data-en]{display:block}
+  nav,#lang,#c,#blurlayer{transition:opacity .5s ease}
+  body.ui-hide nav,body.ui-hide #lang{opacity:0;pointer-events:none}
+  body.ui-hide #c,body.ui-hide #blurlayer{opacity:0}
+  @media(max-width:700px){ main{padding-top:30vh} } /*AIR-MOBILE-TOP*/
+
+  /* ---- pie de pagina ---- */
+  .foot-site{box-sizing:border-box;width:100%;max-width:100%;padding:7vh 5vw 5vh;display:flex;justify-content:flex-end;position:relative;z-index:85;pointer-events:auto}
+  .foot-site .in{box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-end;gap:.55rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.08em;color:#8f8f8a;text-align:right}
+  .foot-site a{color:inherit;text-decoration:none;transition:color .3s}
+  .foot-site a:hover{color:#111116}
+  .foot-site .ig{display:inline-flex;align-items:center;gap:.45rem;margin-top:.15rem}
+  .foot-site .ig svg{width:17px;height:17px;display:block}
+  @media(max-width:700px){ .foot-site{padding:6vh 5vw 6vh} .foot-site .in{font-size:.72rem} }
+
+</style>
+<script>/*idioma-fijo*/(function(){var d=document.documentElement,f=d.getAttribute('data-lang'),alt=d.getAttribute('data-alt');if(!f)return;var q=new URLSearchParams(location.search).get('lang');if(q&&q!==f&&alt){location.replace(alt+location.hash);return;}try{localStorage.setItem('lang',f)}catch(e){}document.addEventListener('click',function(e){var s=e.target.closest&&e.target.closest('#lang span');if(s&&alt&&s.getAttribute('data-l')!==f){e.preventDefault();e.stopImmediatePropagation();location.href=alt+(location.hash||'');}},true);})();</script>
+</head>
+<body class="en">
+
+  <div id="c"></div>
+  <div id="lang"><span data-l="es" class="on">ES</span> / <span data-l="en">EN</span></div>
+  <nav>
+    <a href="en-bio.html" class="cur" data-es="Bio" data-en="Bio">Bio</a>
+    <a href="en-proyectos.html" data-es="Proyectos" data-en="Projects">Projects</a>
+    <a href="en-prensa.html" data-es="Prensa" data-en="Press">Press</a>
+    <a href="en-contacto.html" data-es="Contacto" data-en="Contact">Contact</a>
+  </nav>
+
+  <main>
+    <div class="biotop">
+    <img class="biofoto" src="assets/bio_retrato.jpg" alt="Retrato de Sofía Bernasconi Le Roy, artista visual y de artes mediales">
+    <div class="biotxt">
+    <div class="eyebrow">Bio</div>
+    <p data-es>Sofía Bernasconi Le Roy (Concepción, Chile, 1994) es artista visual, realizadora audiovisual y curadora. Trabaja principalmente en la video instalación y las artes mediales, donde investiga el cuerpo híbrido y sus umbrales con la tecnología: la piel como membrana, el organismo que se filtra en la máquina y en el territorio.</p>
+    <p data-en>Sofía Bernasconi Le Roy (Concepción, Chile, 1994) is a visual artist, filmmaker and curator. She works primarily in video installation and media arts, investigating the hybrid body and its thresholds with technology: skin as membrane, the organism seeping into the machine and the territory.</p>
+    <p data-es>Actualmente cursa el máster en ITP (Interactive Telecommunications Program) de New York University, con beca ANID (Agencia Nacional de Investigación y Desarrollo de Chile). Es Licenciada en Artes Visuales y titulada en Producción Visual por la Universidad de Concepción, con postítulos en Gestión Cultural (2024) y en Prácticas Curatoriales (2025, beca Fondart) por la Universidad de Chile, y un diplomado en Dirección de Cine (Academia de Cine La Toma, beca Fondart). Se ha adjudicado en varias oportunidades el Fondart de Creación, entre ellos el que financió el desarrollo del proyecto HÍBRIDA durante 2024 y 2025.</p>
+    <p data-en>She is currently pursuing an MPS at ITP (Interactive Telecommunications Program), New York University, with a scholarship from ANID (National Agency for Research and Development of Chile). She holds a BA in Visual Arts and a degree in Visual Production from the University of Concepción, with postgraduate diplomas in Cultural Management (2024) and Curatorial Practices (2025, Fondart grant) from the University of Chile, and a diploma in Film Directing (La Toma Film Academy, Fondart grant). She has been awarded the Creation Fondart grant on several occasions, including the one that funded the development of the HÍBRIDA project during 2024 and 2025.</p>
+    <p data-es>Su trabajo dialoga críticamente con el pensamiento de Donna Haraway, Jean-Luc Nancy, Paul B. Preciado, Flavia Costa y Valeria Radrigán, cuestionando las definiciones tradicionales del cuerpo. Ganó el Premio Ceres 2020 (Ficción Audiovisual) con el cortometraje-documental «Deshilacha» y fue seleccionada en el Premio MAVI UC Arte Joven 2023 con la videoinstalación «También somos una cortina de cordeles».</p>
+    <p data-en>Her work engages critically with the thought of Donna Haraway, Jean-Luc Nancy, Paul B. Preciado, Flavia Costa and Valeria Radrigán, questioning traditional definitions of the body. She won the 2020 Ceres Award (Audiovisual Fiction) with the short-documentary "Deshilacha" and was selected for the 2023 MAVI UC Young Art Award with the video installation "We are also a curtain of cords".</p>
+    </div>
+    </div>
+    <img class="biofoto2" src="assets/bio_autorretrato.jpg" alt="Autorretrato de Sofía Bernasconi con el rostro cubierto de plástico" loading="lazy">
+    <div class="meta">Concepción · New York<br>contacto@sofiabernasconi.com</div>
+  </main>
+
+<script>
+new p5(function(p){
+  let img, parts=[], W, H, blur, mx=-999, my=-999, hoverAmt=0;
+  let nbx0=0,nby0=0,nbx1=0,nby1=0;
+  const FONT='Syne', R=160, VSTRETCH=1.55, LS=(window.innerWidth<700?0.30:0.30), LOX=34, LOY=30;
+  function makeText(){
+    const fs=200, mob=window.innerWidth<700;
+    const m=p.createGraphics(10,10); m.textFont(FONT); m.textStyle(p.BOLD); m.textSize(fs);
+    let g;
+    if(mob){
+      const lines=['SOFIA','BERNASCONI']; let tw=0;
+      for(const l of lines) tw=Math.max(tw, Math.ceil(m.textWidth(l)));
+      m.remove();
+      const lead=fs*1.04;
+      g=p.createGraphics(tw+40, Math.ceil(lead*(lines.length-1)+fs*1.25)); g.pixelDensity(1);
+      g.background(255); g.fill(0); g.noStroke();
+      g.textFont(FONT); g.textStyle(p.BOLD); g.textSize(fs); g.textAlign(p.LEFT,p.CENTER);
+      const cy=g.height/2 - lead*(lines.length-1)/2;
+      lines.forEach((l,i)=>g.text(l, 20, cy+i*lead));
+    } else {
+      m.drawingContext.wordSpacing='75px';
+      const txt='SOFIA BERNASCONI', tw=Math.ceil(m.textWidth(txt)); m.remove();
+      g=p.createGraphics(tw+40, Math.ceil(fs*1.35)); g.pixelDensity(1);
+      g.background(255); g.fill(0); g.noStroke();
+      g.textFont(FONT); g.textStyle(p.BOLD); g.textSize(fs); g.textAlign(p.CENTER,p.CENTER); g.drawingContext.wordSpacing='75px';
+      g.text(txt, g.width/2, g.height/2);
+    }
+    g.loadPixels();
+    return g;
+  }
+  function setHomes(){
+    const tw=(W<700? W*0.92 : Math.min(W*0.72,900)), s=tw/img.width, h=img.height*s*VSTRETCH;
+    const ox=(W-tw)/2, oy=(H-h)/2; nbx0=ox; nby0=oy; nbx1=ox+tw; nby1=oy+h;
+    for(const q of parts){ q.hx=ox+q.ix*s; q.hy=oy+q.iy*s*VSTRETCH; q.hyL=(q.iy % (img.height/2))*s*VSTRETCH;   /* fase de la onda sin depender de la posición en pantalla: no salta cuando el teléfono cambia de alto al scrollear */ }
+  }
+  function build(){
+    parts=[]; W=window.innerWidth; H=window.innerHeight; img.loadPixels();
+    const s=(W<700? W*0.92 : Math.min(W*0.72,900))/img.width, step=Math.max(2,Math.round((W<700?1.8:2.4)/s));
+    for(let y=0;y<img.height;y+=step) for(let x=0;x<img.width;x+=step)
+      if(img.pixels[4*(x+y*img.width)]<115) parts.push({ix:x,iy:y,ox:0,oy:0,ovx:0,ovy:0,ev:0,seed:p.random(1000),sz:p.random(0.5,1.15)});
+    setHomes();
+  }
+  function inName(x,y){ const w=(nbx1-nbx0)*LS, hh=(nby1-nby0)*LS; return x>=LOX&&x<=LOX+w&&y>=LOY&&y<=LOY+hh; }
+  p.setup=function(){
+    W=window.innerWidth; H=window.innerHeight;
+    let c=p.createCanvas(W,H); c.parent('c'); p.pixelDensity(Math.min(2, window.devicePixelRatio||1));
+    blur=p.createGraphics(W,H); blur.pixelDensity(1); blur.elt.id='blurlayer'; document.body.appendChild(blur.elt);
+    const boot=()=>{ img=makeText(); build(); };
+    if(document.fonts&&document.fonts.load){ document.fonts.load('700 120px \"'+FONT+'\"').then(boot).catch(boot); } else boot();
+    window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY; document.body.style.cursor=inName(mx,my)?'pointer':'default';});
+    window.addEventListener('click',e=>{ if(inName(e.clientX,e.clientY)){ var u=new URLSearchParams(location.search).get('lang'),s=null;try{s=localStorage.getItem('lang')}catch(x){} window.location.href='index.html?lang='+(s||u||'es')+'#open'; } });
+    window.addEventListener('mouseout',()=>{mx=-999;my=-999;});
+  };
+  p.draw=function(){
+    p.clear(); blur.clear();
+    hoverAmt+=((inName(mx,my)?1:0)-hoverAmt)*0.11;
+    const act=1, t=p.frameCount*0.003, wt=p.frameCount*0.01;   // igual que el logo chico de la portada: siempre con su movimiento
+    const cX=LOX+(nbx1-nbx0)*LS/2, cY=LOY+(nby1-nby0)*LS/2;
+    for(const q of parts){
+      const hx=LOX+(q.hx-nbx0)*LS, hy=LOY+(q.hy-nby0)*LS;
+      const wv=(W<700?q.hyL:q.hy);   // móvil: y relativa a cada línea -> SOFIA y BERNASCONI en fase (misma dirección), misma onda de antes
+      const waveX=( Math.sin(wv*0.07 - wt*1.2)*20 + Math.sin(wv*0.15 + wt*0.8)*8 )*(1-q.ev)*LS*act;
+      const baseX=hx+waveX, baseY=hy;
+      const px=baseX+q.ox, py=baseY+q.oy;
+      const k=0.016*(1-0.99*q.ev);
+      let ax=-q.ox*k, ay=-q.oy*k;
+      ax += (p.noise(q.seed,t)-0.5)*0.05*LS*act;
+      const Reff=R*LS, dx=px-mx, dy=py-my, d=Math.hypot(dx,dy);
+      if(d<Reff){ q.ev=Math.min(1, q.ev+(1-d/Reff)*0.09); }
+      if(q.ev>0.02){
+        const a=p.noise(px*0.0016, py*0.0016, t*0.4)*p.TWO_PI*2.0, drift=0.5*q.ev*LS*act;
+        ax+=Math.cos(a)*drift; ay+=Math.sin(a)*drift;
+        ax+=(px-cX)*0.00075*q.ev*LS*act; ay+=(py-cY)*0.00075*q.ev*LS*act;
+      }
+      q.ev*=0.991; const fr=0.92+0.05*q.ev;
+      q.ovx=(q.ovx+ax)*fr; q.ovy=(q.ovy+ay)*fr;
+      const cap=3.2*Math.max(LS,0.5), sp=Math.hypot(q.ovx,q.ovy); if(sp>cap){ q.ovx*=cap/sp; q.ovy*=cap/sp; }
+      q.ox+=q.ovx; q.oy+=q.ovy;
+      const dpx=baseX+q.ox, dpy=baseY+q.oy, dot=q.sz*1.5*Math.max(LS,0.62)*(window.innerWidth<700?0.7:1);
+      p.noStroke(); blur.noStroke();
+      const aC=255*(1-q.ev);
+      if(aC>4){ p.fill(255,255,255,aC); p.circle(dpx,dpy, dot); }
+      const bA=150*q.ev;
+      if(q.ev>0.03){ blur.fill(255,255,255,bA); blur.circle(dpx,dpy, dot+q.ev*3*LS); }
+    }
+  };
+  let to; p.windowResized=function(){ W=window.innerWidth; H=window.innerHeight; p.resizeCanvas(W,H); blur.resizeCanvas(W,H); clearTimeout(to); to=setTimeout(()=>{ if(img) setHomes(); },120); };
+});
+</script>
+<script>(function(){
+  function withLang(href,l){ if(!href||/^(https?:|mailto:|tel:|#)/i.test(href))return href; var hash='';var h=href.indexOf('#');if(h>=0){hash=href.slice(h);href=href.slice(0,h);} var base=href,qs='';var q=href.indexOf('?');if(q>=0){base=href.slice(0,q);qs=href.slice(q+1);} var pr=new URLSearchParams(qs);pr.set('lang',l);return base+'?'+pr.toString()+hash; }
+  const set=l=>{
+    document.body.classList.toggle('en',l==='en');
+    document.querySelectorAll('nav a[data-'+l+']').forEach(a=>a.textContent=a.getAttribute('data-'+l));
+    document.querySelectorAll('#lang span').forEach(s=>s.classList.toggle('on',s.getAttribute('data-l')===l));
+    try{localStorage.setItem('lang',l);}catch(e){}
+    document.querySelectorAll('a[href]').forEach(a=>a.setAttribute('href',withLang(a.getAttribute('href'),l)));
+  };
+  document.querySelectorAll('#lang span').forEach(s=>s.addEventListener('click',()=>set(s.getAttribute('data-l'))));
+  var u=new URLSearchParams(location.search).get('lang'),st=null;try{st=localStorage.getItem('lang');}catch(e){}
+  set(st||u||'es');
+})();</script>
+<!--IDIOMA-CLICK-GUARD-->
+<script>(function(){
+  function L(){var u=null,s=null;try{u=new URLSearchParams(location.search).get('lang');}catch(e){}try{s=localStorage.getItem('lang');}catch(e){}return s||u||'es';}
+  document.addEventListener('click',function(e){
+    var a=e.target&&e.target.closest?e.target.closest('a[href]'):null; if(!a)return;
+    var h=a.getAttribute('href'); if(!h||/^(https?:|mailto:|tel:)/i.test(h)||h.charAt(0)==='#')return;
+    var l=L(),hash='',hi=h.indexOf('#'); if(hi>=0){hash=h.slice(hi);h=h.slice(0,hi);}
+    var base=h,qs='',qi=h.indexOf('?'); if(qi>=0){base=h.slice(0,qi);qs=h.slice(qi+1);}
+    var pr; try{pr=new URLSearchParams(qs);}catch(e){pr=new URLSearchParams();}
+    pr.set('lang',l); a.setAttribute('href', base+'?'+pr.toString()+hash);
+  }, true);
+})();</script>
+<!--UI-HIDE-ON-SCROLL-->
+<script>(function(){
+  function getST(){return window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0;}
+  var last=0;
+  function on(){
+    var s=getST();
+    if(s<40) document.body.classList.remove('ui-hide');
+    else if(s>last) document.body.classList.add("ui-hide");
+    else if(s<last) document.body.classList.remove("ui-hide");
+    last=s;
+  }
+  window.addEventListener('scroll', on, {passive:true, capture:true});
+  document.addEventListener('scroll', on, {passive:true, capture:true});
+})();</script>
+  <footer class="foot-site">
+    <div class="in">
+      <a href="mailto:contacto@sofiabernasconi.com">contacto@sofiabernasconi.com</a>
+      <span>Concepción, Chile · New York, USA</span>
+      <a class="ig" href="https://www.instagram.com/sofibernasconi/" target="_blank" rel="noopener" aria-label="Instagram: @sofibernasconi">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.5" cy="6.5" r="1.15" fill="currentColor" stroke="none"/></svg>@sofibernasconi</a>
+    </div>
+  </footer>
+</body>
+</html>

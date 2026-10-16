@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en" data-alt="prensa.html">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sofía Bernasconi — Press</title>
+<meta name="description" content="Press, interviews and publications about Sofía Bernasconi Le Roy, Chilean visual and media artist.">
+<meta name="author" content="Sofía Bernasconi Le Roy">
+<link rel="canonical" href="https://sofiabernasconi.com/en-prensa">
+<link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/prensa">
+<link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/en-prensa">
+<link rel="alternate" hreflang="x-default" href="https://sofiabernasconi.com/prensa">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="assets/favicon-512.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#f7f6f4">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sofía Bernasconi">
+<meta property="og:title" content="Sofía Bernasconi — Press">
+<meta property="og:description" content="Press, interviews and publications about Sofía Bernasconi Le Roy, Chilean visual and media artist.">
+<meta property="og:url" content="https://sofiabernasconi.com/en-prensa">
+<meta property="og:image" content="https://sofiabernasconi.com/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="es_CL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sofía Bernasconi — Press">
+<meta name="twitter:description" content="Press, interviews and publications about Sofía Bernasconi Le Roy, Chilean visual and media artist.">
+<meta name="twitter:image" content="https://sofiabernasconi.com/assets/og.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#f7f6f4;color:#111116;font-family:'Space Grotesk',sans-serif;font-weight:300;-webkit-font-smoothing:antialiased}
+  #c{position:fixed;inset:0;z-index:110;pointer-events:none;mix-blend-mode:difference}
+  #c canvas{position:fixed;inset:0;pointer-events:none}
+  #blurlayer{position:fixed;inset:0;pointer-events:none;filter:blur(2.6px);z-index:110;mix-blend-mode:difference}
+  #lang{position:fixed;top:36px;right:36px;z-index:120;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;color:#fff;mix-blend-mode:difference}
+  #lang span{cursor:pointer;opacity:.4;transition:opacity .3s}
+  #lang span.on{opacity:1}
+  nav{position:fixed;top:70px;right:36px;z-index:120;display:flex;flex-direction:column;align-items:flex-end;gap:.75rem;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;mix-blend-mode:difference}
+  nav a{color:#fff;text-decoration:none;opacity:.7;transition:opacity .3s}
+  nav a:hover{opacity:1}
+  nav a.cur{opacity:1;font-weight:700}
+  main{max-width:640px;margin:0 auto;padding:22vh 2rem 14rem}
+  @media(min-width:860px){ main{margin-left:300px;margin-right:auto;padding-top:18vh} }
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#8f8f8a;margin-bottom:2.4rem}
+  .list .row{display:flex;align-items:flex-start;gap:1.1rem;max-width:640px;padding:1.15rem 0;border-bottom:1px solid #e7e6e2;text-decoration:none;color:#111116;transition:padding-left .3s ease}
+  a.row:hover{padding-left:.5rem}
+  .list .th{flex:0 0 auto;width:86px;height:62px;object-fit:cover;border:1px solid #e7e6e2;background:#efeeea;filter:grayscale(.15)}
+  .list .th-empty{background:#efeeea}
+  .list .txt{flex:1 1 auto;min-width:0}
+  a.row:hover .th{filter:grayscale(0)}
+  @media(max-width:520px){ .list .th{width:64px;height:48px} }
+  .list .meta{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:#8f8f8a;margin-bottom:.45rem;display:flex;gap:.6rem}
+  .list .meta .yr{color:#111116}
+  .list .meta .tag{color:#c3c2bd}
+  .ten{display:none}
+  body.en .ten{display:inline}
+  body.en .tes{display:none}
+  .list .ttl .orig{color:#b4b4af;font-weight:400;font-style:italic;font-size:.92em}
+  .list .ttl{font-family:'Space Grotesk',sans-serif;font-weight:400;font-size:clamp(.9rem,1.25vw,1.05rem);line-height:1.35;transition:font-weight .2s ease}
+  a.row:hover .ttl{font-weight:500}
+  a.row .ttl::after{content:" ↗";color:#b9b9b3;font-size:.85em;white-space:nowrap}
+  .row.nolink .ttl{color:#5a5a56}
+  /* filas con link propio para el medio (p.ej. Instagram de la revista) */
+  .row.multi a{color:inherit;text-decoration:none}
+  .row.multi > a{display:block;flex:0 0 auto;line-height:0}
+  .row.multi:hover{padding-left:.5rem}
+  .row.multi:hover .th{filter:grayscale(0)}
+  .row.multi .meta a.src:hover,.row.multi .ttl a.handle:hover{color:#111116}
+  .row.multi .ttl a.art:hover{font-weight:500}
+  .row.multi .ttl a.art::after{content:" ↗";color:#b9b9b3;font-size:.85em;white-space:nowrap}
+  .row.multi .ttl a.handle{color:#8f8f8a;margin-left:.4rem}
+  .row.nolink .meta::after{content:"· prensa impresa";color:#c3c2bd}
+  body.en .row.nolink .meta::after{content:"· print press"}
+  nav,#lang,#c,#blurlayer{transition:opacity .5s ease}
+  body.ui-hide nav,body.ui-hide #lang{opacity:0;pointer-events:none}
+  body.ui-hide #c,body.ui-hide #blurlayer{opacity:0}
+
+  /* ---- pie de pagina ---- */
+  .foot-site{box-sizing:border-box;width:100%;max-width:100%;padding:7vh 5vw 5vh;display:flex;justify-content:flex-end;position:relative;z-index:85;pointer-events:auto}
+  .foot-site .in{box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-end;gap:.55rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.08em;color:#8f8f8a;text-align:right}
+  .foot-site a{color:inherit;text-decoration:none;transition:color .3s}
+  .foot-site a:hover{color:#111116}
+  .foot-site .ig{display:inline-flex;align-items:center;gap:.45rem;margin-top:.15rem}
+  .foot-site .ig svg{width:17px;height:17px;display:block}
+  @media(max-width:700px){ .foot-site{padding:6vh 5vw 6vh} .foot-site .in{font-size:.72rem} }
+
+</style>
+<script>/*idioma-fijo*/(function(){var d=document.documentElement,f=d.getAttribute('data-lang'),alt=d.getAttribute('data-alt');if(!f)return;var q=new URLSearchParams(location.search).get('lang');if(q&&q!==f&&alt){location.replace(alt+location.hash);return;}try{localStorage.setItem('lang',f)}catch(e){}document.addEventListener('click',function(e){var s=e.target.closest&&e.target.closest('#lang span');if(s&&alt&&s.getAttribute('data-l')!==f){e.preventDefault();e.stopImmediatePropagation();location.href=alt+(location.hash||'');}},true);})();</script>
+</head>
+<body class="en">
+
+  <div id="c"></div>
+  <div id="lang"><span data-l="es" class="on">ES</span> / <span data-l="en">EN</span></div>
+  <nav>
+    <a href="en-bio.html" data-es="Bio" data-en="Bio">Bio</a>
+    <a href="en-proyectos.html" data-es="Proyectos" data-en="Projects">Projects</a>
+    <a href="en-prensa.html" class="cur" data-es="Prensa" data-en="Press">Press</a>
+    <a href="en-contacto.html" data-es="Contacto" data-en="Contact">Contact</a>
+  </nav>
+
+  <main>
+    <div class="eyebrow" data-es="Prensa" data-en="Press">Press</div>
+    <div class="list" id="list"></div>
+  </main>
+
+<script>
+const PRESS = [
+  {year:"2026", src:"CanvasRebel", title:"Meet Sofia", url:"https://canvasrebel.com/meet-sofia-2/", tag:"entrevista", thumb:"canvasrebel2026.jpg", srcUrl:"https://www.instagram.com/canvasrebel/", handle:"@canvasrebel"},
+  {year:"2026", src:"Alumni UdeC", title:"Sofía Bernasconi es seleccionada para el magíster en New York University con beca ANID", url:"https://alumni.udec.cl/noticias/alumni-udec-sofia-bernasconi-es-seleccionada-para-magister-en-new-york-university-con-beca-anid/3370", thumb:"alumni2026.jpg"},
+  {year:"2025", src:"El Sur", title:"Sofía Bernasconi llega a BAJ Biobío con su videoinstalación performática", url:"assets/prensa/elsur_baj_2025.jpg", tag:"impreso", thumb:"elsur_baj2025.jpg"},
+  {year:"2025", src:"El Sur", title:"Exposición en BAJ Biobío cruza el cuerpo y la tecnología", url:"assets/prensa/elsur_hibrida_2025.jpg", tag:"impreso", thumb:"elsur2025.jpg"},
+  {year:"2025", src:"Sabes.cl", title:"«HÍBRIDA»: una experiencia inmersiva única en Concepción que mezcla cuerpo, paisaje y tecnología", url:"https://sabes.cl/2025/06/25/hibrida-una-experiencia-inmersiva-unica-en-concepcion-que-mezcla-cuerpo-paisaje-y-tecnologia/", thumb:"sabes2025.jpg"},
+  {year:"2025", src:"La Estrella de Concepción", title:"Artista visual penquista presenta «Híbrida» en Balmaceda Arte Joven", url:"assets/prensa/laestrella_hibrida_2025.jpg", tag:"impreso", thumb:"laestrella2025.jpg"},
+  {year:"2025", src:"Diario Concepción", title:"«Hacen falta más espacios para este tipo de arte»: Sofía Bernasconi por exposición de HÍBRIDA", url:"https://www.diarioconcepcion.cl/cultura/2025/06/23/hacen-falta-mas-espacios-para-este-tipo-de-arte-sofia-bernasconi-por-exposicion-de-hibrida.html", tag:"video", thumb:"diariovideo2025.jpg"},
+  {year:"2025", src:"Diario Concepción", title:"«HÍBRIDA» de Sofía Bernasconi Le Roy: una muestra interactiva que mezcla cuerpo, paisaje y máquina", url:"assets/prensa/diarioconcepcion_hibrida_2025.jpg", tag:"impreso", thumb:"diarioprint2025.jpg"},
+  {year:"2024", src:"Canal 9 Bío Bío TV", title:"«Desbordes»: artista visual penquista explora en exhibición el diálogo entre el cuerpo y la tecnología", url:"assets/prensa/canal9_desbordes.png", tag:"TV · recorte", thumb:"canal9_2024.jpg"},
+  {year:"2024", src:"Hora 12", title:"Sofía Bernasconi inaugura la exposición «Desbordes», una invitación a explorar un diálogo entre cuerpo y tecnología", url:"https://hora12.cl/2024/06/05/sofia-bernasconi-inaugura-exposicion-desbordes-una-invitacion-a-explorar-un-dialogo-entre-cuerpo-y-tecnologia/", thumb:"hora12_2024.jpg"},
+  {year:"2024", src:"Diario Concepción", title:"Exposición «Desbordes» de Sofía Bernasconi", url:"assets/prensa/diario_desbordes_2024.pdf", tag:"impreso", thumb:"diariodesb2024.jpg"},
+  {year:"2024", src:"Radio UdeC 95.1", title:"Panorama Musical y Cultural: Sofía Bernasconi presenta «Desbordes» en la Sala Federico Ramírez", url:"assets/prensa/radioudec_desbordes.jpeg", tag:"radio · recorte", thumb:"radioudec2024.jpg"},
+  {year:"2024", src:"SOS Guitar", title:"Sofía Bernasconi inaugura «Desbordes», una invitación a explorar el diálogo entre cuerpo y tecnología", url:"assets/prensa/sosguitar_desbordes.png", tag:"recorte", thumb:"sosguitar2024.jpg"},
+  {year:"2024", src:"Arte UdeC", title:"Invitación a la inauguración de la exposición «Desbordes»", url:"assets/prensa/arteudec_desbordes.png", tag:"recorte", thumb:"arteudec2024.jpg"},
+  {year:"2023", src:"Diario El Sur", title:"Video-instalación invita a explorar los límites de Sofía Bernasconi", url:"assets/prensa/diarioelsur_mavi_2023.jpg", tag:"impreso", thumb:"diarioelsur2023.jpg"},
+  {year:"2023", src:"Premio MAVI UC", title:"Sofía Bernasconi, una de las 46 finalistas del XVI Premio MAVI UC Arte Joven", url:"https://www.instagram.com/p/Cuo8MYgvY2p/", thumb:"mavi2023.jpg"},
+  {year:"2023", src:"Depto. Artes Plásticas UdeC", title:"Seleccionada para exhibir «También somos una cortina de cordeles» en el Premio MAVI UC Larraín Vial Arte Joven, Santiago", url:"https://www.instagram.com/p/CuaX748t-Ae/", thumb:"deptoartes2023.jpg"},
+  {year:"2022", src:"Pinacoteca UdeC", title:"Nuevas generaciones de artistas visuales", url:"https://www.instagram.com/p/CjYT37Qrj27/", thumb:"pinacoteca2022.jpg"},
+  {year:"2022", src:"Noticias UdeC", title:"Exposición «Desfase: Experiencias liminales» llega a la Casa del Arte", url:"https://noticias.udec.cl/exposicion-desfase-experiencias-liminales-llega-a-la-casa-del-arte/", thumb:"desfase2022.jpg"},
+  {year:"2022", src:"Diario Concepción · Cablerío", title:"Galería Aura se sumerge en el cyberpunk: una exposición sobre cuerpos periféricos", url:"assets/prensa/cablerio_2019.jpg", tag:"impreso", thumb:"cablerio2019.jpg"},
+  {year:"2021", src:"La Medicina · Premios Ceres", title:"«Deshilacha» de Sofía Bernasconi — Entrevista", url:"https://www.youtube.com/watch?v=ZzC5wlxY2qw", tag:"video", thumb:"lamedicina2021.jpg"},
+  {year:"2021", src:"Resumen.cl", title:"«Y el Cuerpo se Convirtió en Control Remoto»: 3ª versión reúne creaciones que reflexionan sobre construcciones espaciales a partir de las diversidades corporales", url:"https://resumen.cl/articulos/y-el-cuerpo-se-convirtio-en-control-remoto-3-version-reune-creaciones-que-reflexionan-sobre-construcciones-espaciales-a-partir-de-las-diversidades-corporales", thumb:"resumen2021.jpg"},
+  {year:"2021", src:"Primera Hora", title:"«Y el Cuerpo se Convirtió en Control Remoto» se presentará esta semana a través del canal de YouTube", url:"https://primerahora.cl/2021/12/13/y-el-cuerpo-se-convirtio-en-control-remoto-se-presentara-esta-semana-a-traves-del-canal-youtube/", thumb:"primerahora2021.jpg"},
+  {year:"2020", src:"Diario Concepción", title:"Premios Ceres dio a conocer ganadores de especial versión 2020", url:"https://www.diarioconcepcion.cl/cultura/2020/09/04/premios-ceres-dio-a-conocer-ganadores-de-especial-version-2020.html", thumb:"ceresdiario2020.jpg"},
+  {year:"2020", src:"Alumni UdeC", title:"Académicos, alumna y ex alumna de Humanidades y Arte reciben Premio Ceres 2020", url:"https://alumni.udec.cl/?q=node/312", thumb:"ceresalumni2020.jpg"},
+  {year:"2019", src:"Diario Concepción", title:"Estudiante de arte UdeC expone trabajos en bar Galería Aura", url:"https://www.diarioconcepcion.cl/cultura-y-espectaculos/2019/04/20/estudiante-de-arte-udec-expone-trabajos-en-bar-galeria-aura.html", thumb:"aura2019.jpg"}
+];
+// Traducción de los titulares (se muestra entre paréntesis sólo en inglés). Mismo orden que PRESS.
+const PRESS_EN = [
+  "",
+  "Sofía Bernasconi is selected for the master's programme at New York University with an ANID scholarship",
+  "Sofía Bernasconi arrives at BAJ Biobío with her performative video installation",
+  "Exhibition at BAJ Biobío bridges body and technology",
+  "«HÍBRIDA»: a unique immersive experience in Concepción blending body, landscape and technology",
+  "Penquista visual artist presents «Híbrida» at Balmaceda Arte Joven",
+  "«We need more spaces for this kind of art»: Sofía Bernasconi on the HÍBRIDA exhibition",
+  "«HÍBRIDA» by Sofía Bernasconi Le Roy: an interactive show blending body, landscape and machine",
+  "«Desbordes»: penquista visual artist explores in exhibition the dialogue between body and technology",
+  "Sofía Bernasconi opens the «Desbordes» exhibition, an invitation to explore a dialogue between body and technology",
+  "Sofía Bernasconi's «Desbordes» exhibition",
+  "Panorama Musical y Cultural: Sofía Bernasconi presents «Desbordes» at Sala Federico Ramírez",
+  "Sofía Bernasconi opens «Desbordes», an invitation to explore the dialogue between body and technology",
+  "Invitation to the opening of the «Desbordes» exhibition",
+  "Video installation invites viewers to explore the limits of Sofía Bernasconi",
+  "Sofía Bernasconi, one of the 46 finalists of the 16th MAVI UC Young Art Award",
+  "Selected to exhibit «We Are Also a Curtain of Cords» at the MAVI UC Larraín Vial Young Art Award, Santiago",
+  "New generations of visual artists",
+  "«Desfase: Liminal Experiences» exhibition arrives at the Casa del Arte",
+  "Galería Aura dives into cyberpunk: an exhibition on peripheral bodies",
+  "«Deshilacha» by Sofía Bernasconi — Interview",
+  "«And the Body Became a Remote Control»: 3rd edition gathers works reflecting on spatial constructions from bodily diversities",
+  "«And the Body Became a Remote Control» will be presented this week on the YouTube channel",
+  "Ceres Awards announce the winners of the special 2020 edition",
+  "Faculty, a student and an alumna of Humanities and Art receive the 2020 Ceres Award",
+  "UdeC art student exhibits works at the Galería Aura bar"
+];
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+// etiquetas de formato, en los dos idiomas
+const TAG_EN = {"impreso":"print","entrevista":"interview","video":"video","recorte":"clipping",
+                "TV · recorte":"TV · clip","radio · recorte":"radio · clip"};
+document.getElementById('list').innerHTML = PRESS.map((p,i)=>{
+  const tag = p.tag
+    ? '<span class="tag"><span class="tes">'+esc(p.tag)+'</span><span class="ten">'
+      + esc(TAG_EN[p.tag] || p.tag) + '</span></span>'
+    : '';
+  const meta='<div class="meta"><span class="src">'+esc(p.src)+'</span><span class="yr">'+esc(p.year)+'</span>'+tag+'</div>';
+  const ttl='<div class="ttl">'+(PRESS_EN[i]?'<span class="tes">'+esc(p.title)+'</span><span class="ten">'+esc(PRESS_EN[i])+'<span class="orig"> ('+esc(p.title)+')</span></span>':esc(p.title))+'</div>';
+  const thumb = p.thumb ? '<img class="th" src="assets/prensa/thumbs/'+esc(p.thumb)+'" alt="'+esc(p.src+': '+p.title)+'" loading="lazy">' : '<span class="th th-empty"></span>';
+  if (p.srcUrl) {
+    const ext=' target="_blank" rel="noopener"';
+    const metaL='<div class="meta"><a class="src" href="'+esc(p.srcUrl)+'"'+ext+'>'+esc(p.src)+'</a><span class="yr">'+esc(p.year)+'</span>'+tag+'</div>';
+    const ttlL='<div class="ttl"><a class="art" href="'+esc(p.url)+'"'+ext+'>'+esc(p.title)+'</a>'+(p.handle?'<a class="handle" href="'+esc(p.srcUrl)+'"'+ext+'>'+esc(p.handle)+'</a>':'')+'</div>';
+    return '<div class="row multi"><a href="'+esc(p.url)+'"'+ext+' tabindex="-1">'+thumb+'</a><span class="txt">'+metaL+ttlL+'</span></div>';
+  }
+  const inner = thumb+'<span class="txt">'+meta+ttl+'</span>';
+  return p.url
+    ? '<a class="row" href="'+esc(p.url)+'" target="_blank" rel="noopener">'+inner+'</a>'
+    : '<div class="row nolink">'+inner+'</div>';
+}).join('');
+
+// idioma (persistente entre páginas)
+(function(){
+  function withLang(href,l){ if(!href||/^(https?:|mailto:|tel:|#)/i.test(href))return href; var hash='';var h=href.indexOf('#');if(h>=0){hash=href.slice(h);href=href.slice(0,h);} var base=href,qs='';var q=href.indexOf('?');if(q>=0){base=href.slice(0,q);qs=href.slice(q+1);} var pr=new URLSearchParams(qs);pr.set('lang',l);return base+'?'+pr.toString()+hash; }
+  const set=l=>{
+    document.body.classList.toggle('en',l==='en');
+    document.querySelectorAll('nav a[data-'+l+'],.eyebrow[data-'+l+']').forEach(el=>el.textContent=el.getAttribute('data-'+l));
+    document.querySelectorAll('#lang span').forEach(s=>s.classList.toggle('on',s.getAttribute('data-l')===l));
+    try{localStorage.setItem('lang',l);}catch(e){}
+    document.querySelectorAll('a[href]:not(.row)').forEach(a=>a.setAttribute('href',withLang(a.getAttribute('href'),l)));
+  };
+  document.querySelectorAll('#lang span').forEach(s=>s.addEventListener('click',()=>set(s.getAttribute('data-l'))));
+  var u=new URLSearchParams(location.search).get('lang'),st=null;try{st=localStorage.getItem('lang');}catch(e){}
+  set(st||u||'es');
+})();
+</script>
+
+<script>
+// ==== MINI LOGO ANIMADO ====
+new p5(function(p){
+  let img, parts=[], W, H, blur, mx=-999, my=-999, hoverAmt=0;
+  let nbx0=0,nby0=0,nbx1=0,nby1=0;
+  const FONT='Syne', R=160, VSTRETCH=1.55, LS=(window.innerWidth<700?0.30:0.30), LOX=34, LOY=30;
+  function makeText(){
+    const fs=200, mob=window.innerWidth<700;
+    const m=p.createGraphics(10,10); m.textFont(FONT); m.textStyle(p.BOLD); m.textSize(fs);
+    let g;
+    if(mob){
+      const lines=['SOFIA','BERNASCONI']; let tw=0;
+      for(const l of lines) tw=Math.max(tw, Math.ceil(m.textWidth(l)));
+      m.remove();
+      const lead=fs*1.04;
+      g=p.createGraphics(tw+40, Math.ceil(lead*(lines.length-1)+fs*1.25)); g.pixelDensity(1);
+      g.background(255); g.fill(0); g.noStroke();
+      g.textFont(FONT); g.textStyle(p.BOLD); g.textSize(fs); g.textAlign(p.LEFT,p.CENTER);
+      const cy=g.height/2 - lead*(lines.length-1)/2;
+      lines.forEach((l,i)=>g.text(l, 20, cy+i*lead));
+    } else {
+      m.drawingContext.wordSpacing='75px';
+      const txt='SOFIA BERNASCONI', tw=Math.ceil(m.textWidth(txt)); m.remove();
+      g=p.createGraphics(tw+40, Math.ceil(fs*1.35)); g.pixelDensity(1);
+      g.background(255); g.fill(0); g.noStroke();
+      g.textFont(FONT); g.textStyle(p.BOLD); g.textSize(fs); g.textAlign(p.CENTER,p.CENTER); g.drawingContext.wordSpacing='75px';
+      g.text(txt, g.width/2, g.height/2);
+    }
+    g.loadPixels();
+    return g;
+  }
+  function setHomes(){
+    const tw=(W<700? W*0.92 : Math.min(W*0.72,900)), s=tw/img.width, h=img.height*s*VSTRETCH;
+    const ox=(W-tw)/2, oy=(H-h)/2; nbx0=ox; nby0=oy; nbx1=ox+tw; nby1=oy+h;
+    for(const q of parts){ q.hx=ox+q.ix*s; q.hy=oy+q.iy*s*VSTRETCH; q.hyL=(q.iy % (img.height/2))*s*VSTRETCH;   /* fase de la onda sin depender de la posición en pantalla: no salta cuando el teléfono cambia de alto al scrollear */ }
+  }
+  function build(){
+    parts=[]; W=window.innerWidth; H=window.innerHeight; img.loadPixels();
+    const s=(W<700? W*0.92 : Math.min(W*0.72,900))/img.width, step=Math.max(2,Math.round((W<700?1.8:2.4)/s));
+    for(let y=0;y<img.height;y+=step) for(let x=0;x<img.width;x+=step)
+      if(img.pixels[4*(x+y*img.width)]<115) parts.push({ix:x,iy:y,ox:0,oy:0,ovx:0,ovy:0,ev:0,seed:p.random(1000),sz:p.random(0.5,1.15)});
+    setHomes();
+  }
+  function inName(x,y){ const w=(nbx1-nbx0)*LS, hh=(nby1-nby0)*LS; return x>=LOX&&x<=LOX+w&&y>=LOY&&y<=LOY+hh; }
+  p.setup=function(){
+    W=window.innerWidth; H=window.innerHeight;
+    let c=p.createCanvas(W,H); c.parent('c'); p.pixelDensity(Math.min(2, window.devicePixelRatio||1));
+    blur=p.createGraphics(W,H); blur.pixelDensity(1); blur.elt.id='blurlayer'; document.body.appendChild(blur.elt);
+    const boot=()=>{ img=makeText(); build(); };
+    if(document.fonts&&document.fonts.load){ document.fonts.load('700 120px \"'+FONT+'\"').then(boot).catch(boot); } else boot();
+    window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY; document.body.style.cursor=inName(mx,my)?'pointer':'default';});
+    window.addEventListener('click',e=>{ if(inName(e.clientX,e.clientY)){ var u=new URLSearchParams(location.search).get('lang'),s=null;try{s=localStorage.getItem('lang')}catch(x){} window.location.href='index.html?lang='+(s||u||'es')+'#open'; } });
+    window.addEventListener('mouseout',()=>{mx=-999;my=-999;});
+  };
+  p.draw=function(){
+    p.clear(); blur.clear();
+    hoverAmt+=((inName(mx,my)?1:0)-hoverAmt)*0.11;
+    const act=1, t=p.frameCount*0.003, wt=p.frameCount*0.01;   // igual que el logo chico de la portada: siempre con su movimiento
+    const cX=LOX+(nbx1-nbx0)*LS/2, cY=LOY+(nby1-nby0)*LS/2;
+    for(const q of parts){
+      const hx=LOX+(q.hx-nbx0)*LS, hy=LOY+(q.hy-nby0)*LS;
+      const wv=(W<700?q.hyL:q.hy);   // móvil: y relativa a cada línea -> SOFIA y BERNASCONI en fase (misma dirección), misma onda de antes
+      const waveX=( Math.sin(wv*0.07 - wt*1.2)*20 + Math.sin(wv*0.15 + wt*0.8)*8 )*(1-q.ev)*LS*act;
+      const baseX=hx+waveX, baseY=hy;
+      const px=baseX+q.ox, py=baseY+q.oy;
+      const k=0.016*(1-0.99*q.ev);
+      let ax=-q.ox*k, ay=-q.oy*k;
+      ax += (p.noise(q.seed,t)-0.5)*0.05*LS*act;
+      const Reff=R*LS, dx=px-mx, dy=py-my, d=Math.hypot(dx,dy);
+      if(d<Reff){ q.ev=Math.min(1, q.ev+(1-d/Reff)*0.09); }
+      if(q.ev>0.02){
+        const a=p.noise(px*0.0016, py*0.0016, t*0.4)*p.TWO_PI*2.0, drift=0.5*q.ev*LS*act;
+        ax+=Math.cos(a)*drift; ay+=Math.sin(a)*drift;
+        ax+=(px-cX)*0.00075*q.ev*LS*act; ay+=(py-cY)*0.00075*q.ev*LS*act;
+      }
+      q.ev*=0.991; const fr=0.92+0.05*q.ev;
+      q.ovx=(q.ovx+ax)*fr; q.ovy=(q.ovy+ay)*fr;
+      const cap=3.2*Math.max(LS,0.5), sp=Math.hypot(q.ovx,q.ovy); if(sp>cap){ q.ovx*=cap/sp; q.ovy*=cap/sp; }
+      q.ox+=q.ovx; q.oy+=q.ovy;
+      const dpx=baseX+q.ox, dpy=baseY+q.oy, dot=q.sz*1.5*Math.max(LS,0.62)*(window.innerWidth<700?0.7:1);
+      p.noStroke(); blur.noStroke();
+      const aC=255*(1-q.ev);
+      if(aC>4){ p.fill(255,255,255,aC); p.circle(dpx,dpy, dot); }
+      const bA=150*q.ev;
+      if(q.ev>0.03){ blur.fill(255,255,255,bA); blur.circle(dpx,dpy, dot+q.ev*3*LS); }
+    }
+  };
+  let to; p.windowResized=function(){ W=window.innerWidth; H=window.innerHeight; p.resizeCanvas(W,H); blur.resizeCanvas(W,H); clearTimeout(to); to=setTimeout(()=>{ if(img) setHomes(); },120); };
+});
+</script>
+<!--IDIOMA-CLICK-GUARD-->
+<script>(function(){
+  function L(){var u=null,s=null;try{u=new URLSearchParams(location.search).get('lang');}catch(e){}try{s=localStorage.getItem('lang');}catch(e){}return s||u||'es';}
+  document.addEventListener('click',function(e){
+    var a=e.target&&e.target.closest?e.target.closest('a[href]'):null; if(!a)return;
+    var h=a.getAttribute('href'); if(!h||/^(https?:|mailto:|tel:)/i.test(h)||h.charAt(0)==='#')return;
+    var l=L(),hash='',hi=h.indexOf('#'); if(hi>=0){hash=h.slice(hi);h=h.slice(0,hi);}
+    var base=h,qs='',qi=h.indexOf('?'); if(qi>=0){base=h.slice(0,qi);qs=h.slice(qi+1);}
+    var pr; try{pr=new URLSearchParams(qs);}catch(e){pr=new URLSearchParams();}
+    pr.set('lang',l); a.setAttribute('href', base+'?'+pr.toString()+hash);
+  }, true);
+})();</script>
+<!--UI-HIDE-ON-SCROLL-->
+<script>(function(){
+  function getST(){return window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0;}
+  var last=0;
+  function on(){
+    var s=getST();
+    if(s<40) document.body.classList.remove('ui-hide');
+    else if(s>last) document.body.classList.add("ui-hide");
+    else if(s<last) document.body.classList.remove("ui-hide");
+    last=s;
+  }
+  window.addEventListener('scroll', on, {passive:true, capture:true});
+  document.addEventListener('scroll', on, {passive:true, capture:true});
+})();</script>
+  <footer class="foot-site">
+    <div class="in">
+      <a href="mailto:contacto@sofiabernasconi.com">contacto@sofiabernasconi.com</a>
+      <span>Concepción, Chile · New York, USA</span>
+      <a class="ig" href="https://www.instagram.com/sofibernasconi/" target="_blank" rel="noopener" aria-label="Instagram: @sofibernasconi">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.5" cy="6.5" r="1.15" fill="currentColor" stroke="none"/></svg>@sofibernasconi</a>
+    </div>
+  </footer>
+</body>
+</html>

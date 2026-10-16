@@ -466,7 +466,7 @@ function render(){
   const o=OBRAS[id];
   if(!o){ location.replace('index.html#open'); return; }
   if(!fija){ const l=new URLSearchParams(location.search).get('lang'); location.replace('obra-'+id+'.html'+(l?'?lang='+l:'')); return; }
-  document.title=o.title+' ('+o.year+') — Sofía Bernasconi';
+  document.title=((currentLang==='en'&&TITLE_EN[id])||o.title)+' ('+o.year+') — Sofía Bernasconi';
   let h='';
   h+='<div class="eyebrow" data-es="Proyecto" data-en="Project">Proyecto</div>';
   h+='<h1>'+(TITLE_EN[id]?'<span class="tes">'+esc(o.title)+'</span><span class="ten">'+esc(TITLE_EN[id])+'<span class="orig"> ('+esc(o.title)+')</span></span>':esc(o.title))+'</h1>';

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-lang="es" data-alt="en.html">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,7 @@
 <meta name="author" content="Sofía Bernasconi Le Roy">
 <link rel="canonical" href="https://sofiabernasconi.com/">
 <link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/">
-<link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/?lang=en">
+<link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/en">
 <link rel="alternate" hreflang="x-default" href="https://sofiabernasconi.com/">
 <link rel="icon" href="assets/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="assets/favicon-512.png">
@@ -203,7 +203,7 @@
              {"@type":"CollegeOrUniversity","name":"Universidad de Concepción"}],
  "knowsAbout":["Videoinstalación","Performance","Artes mediales","Nuevos medios","Arte y tecnología","Videoarte","Instalación interactiva"]}
 </script>
-<script>(function(){var l=new URLSearchParams(location.search).get('lang');if(!l){try{l=localStorage.getItem('lang')}catch(e){}}if(l==='en')document.documentElement.lang='en';})();</script>
+<script>/*idioma-fijo*/(function(){var d=document.documentElement,f=d.getAttribute('data-lang'),alt=d.getAttribute('data-alt');if(!f)return;var q=new URLSearchParams(location.search).get('lang');if(q&&q!==f&&alt){location.replace(alt+location.hash);return;}try{localStorage.setItem('lang',f)}catch(e){}document.addEventListener('click',function(e){var s=e.target.closest&&e.target.closest('#lang span');if(s&&alt&&s.getAttribute('data-l')!==f){e.preventDefault();e.stopImmediatePropagation();location.href=alt+(location.hash||'');}},true);})();</script>
 </head>
 <body>
 
