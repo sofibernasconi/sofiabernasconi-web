@@ -962,9 +962,13 @@ new p5(function(p){
 <!--UI-HIDE-ON-SCROLL-->
 <script>(function(){
   function getST(){return window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0;}
-  var last=0;
+  var last=0, usuario=false;
+  // sólo se esconden cuando la persona empieza a scrollear (no con el salto automático
+  // al volver desde otra página con el logo: ahí el logo chico y el menú quedan visibles)
+  ['touchstart','wheel','keydown','pointerdown'].forEach(function(ev){ window.addEventListener(ev,function(){usuario=true;},{passive:true,capture:true}); });
   function on(){
     var s=getST();
+    if(!usuario){ last=s; return; }
     if(s<40) document.body.classList.remove('ui-hide');
     else if(s>last) document.body.classList.add("ui-hide");
     else if(s<last) document.body.classList.remove("ui-hide");
