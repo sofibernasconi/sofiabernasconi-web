@@ -99,6 +99,11 @@
   .proj:nth-child(5) .comp img:nth-child(5){max-height:26vh;max-width:20%;margin-top:10vh}
   /* Convey me (1ª) — foto principal la más grande de todas (obra protagonista) */
   .proj:nth-child(1) .comp img:nth-child(1){max-height:72vh;max-width:74%}
+  /* computador: más aire entre las fotos en todos los proyectos (como en Convey me) */
+  @media(min-width:701px){
+    .proj .comp,.proj:nth-child(5) .comp{row-gap:7vh;column-gap:5%}
+    .proj{padding-bottom:16vh}
+  }
   /* Convey me (1ª) en computador: composición en retícula de 12 columnas.
      Todas las fotos son 16:9, así que se juega con tamaños y desfases verticales:
      foto principal grande, dos en diagonal, dos más chicas y cierra la vista completa de la instalación. */
