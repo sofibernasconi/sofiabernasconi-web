@@ -389,8 +389,9 @@
                   const r = Math.max(0, cr.right     - mejor.right);
                   capw.style.clipPath = 'inset('+t.toFixed(1)+'px '+r.toFixed(1)+'px '
                                               +b.toFixed(1)+'px '+l.toFixed(1)+'px)';
-                } else capw.style.clipPath = 'inset(50% 0)';
-              } else capw.style.clipPath = 'inset(50% 0)';
+                  capw.style.visibility = 'visible';
+                } else capw.style.visibility = 'hidden';   // sin foto detrás: la copia blanca no se ve
+              } else capw.style.visibility = 'hidden';     // (Safari dibujaba media copia con inset(50% 0))
             }
           }
         }
