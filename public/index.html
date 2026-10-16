@@ -336,10 +336,12 @@
         for(const s of secs){
           const cap=s.__cap||s.querySelector('.cap'); if(!cap) continue;
           const r=s.getBoundingClientRect(), p=r.top/vh;
+          // el título aparece según dónde va la PRIMERA FOTO (no el borde de la sección): así no se adelanta ni se cruza con el logo
+          const f1=s.querySelector('.comp img'), pi=f1 ? f1.getBoundingClientRect().top/vh : p;
           let op, ty, dis, tf;
           if(window.innerWidth<700){
             const bot=r.bottom/vh;                    // móvil: el título acompaña TODA la obra
-            if(p>0.15) op=(0.55-p)/0.4;               // aparece de a poco: empieza en p=0.55 y llega a full en p=0.15
+            if(pi>0.45) op=(0.85-pi)/0.4;             // aparece de a poco cuando sube la primera foto
             else if(bot<0.7) op=(bot-0.5)/0.2;        // desaparece: se va justo en el cruce (bot=0.5 = p=0.5 de la siguiente) -> sin solape ni hueco
             else op=1;
             if(op<0)op=0; if(op>1)op=1;
@@ -349,7 +351,7 @@
             const DRIFT=46;                            // desktop: como estaba antes
             ty=(p<0?Math.min(1,-p):0)*DRIFT;
             const bot=r.bottom/vh;                     // el título acompaña la obra hasta casi el final
-            if(p>0.12) op=(0.5-p)/0.38;
+            if(pi>0.4) op=(0.8-pi)/0.4;                 // aparece cuando sube la primera foto
             else if(bot<0.6) op=(bot-0.35)/0.25;       // se desvanece cuando el final de la obra sube
             else op=1;
             if(op<0)op=0; if(op>1)op=1;
