@@ -147,6 +147,10 @@
     .proj:nth-child(2) .comp img,.proj:nth-child(3) .comp img,.proj:nth-child(5) .comp img{width:92% !important;max-width:92% !important;max-height:none !important}
     .proj:nth-child(2) .comp img:nth-child(1),.proj:nth-child(3) .comp img:nth-child(4),.proj:nth-child(5) .comp img:nth-child(1),.proj:nth-child(5) .comp img:nth-child(2),.proj:nth-child(5) .comp img:nth-child(3),.proj:nth-child(5) .comp img:nth-child(4),.proj:nth-child(5) .comp img:nth-child(5){width:92% !important;max-width:92% !important;max-height:none !important}
     .cap{top:30vh;top:30svh}   /* bien debajo de la franja superior: que nunca la corte */
+    /* Safari en iPhone no mezcla bien el modo 'diferencia' mientras el título se desvanece
+       (se veía blanco y cortado). En el teléfono el título es negro normal, y la copia blanca
+       recortada a la foto se encarga de que se lea encima de las imágenes */
+    .cap:not(.capw){mix-blend-mode:normal;color:#14141a;will-change:auto}
     #c,#blurlayer{transition:opacity .5s ease}
     body.menu-on.ui-hide:not(.llegando) #c,body.menu-on.ui-hide:not(.llegando) #blurlayer{opacity:0}   /* mientras se achica hacia la esquina, se ve */
     #topmask{transition:opacity .5s ease,background-color 1.2s ease}
@@ -360,7 +364,7 @@
              letras por la mitad. Encima del título va una copia blanca,
              recortada exactamente a la franja que pisa la foto, así sólo esa
              porción se ve blanca y el resto sigue negro sobre el papel. */
-          if(s.classList.contains('midtone')){
+          if(s.classList.contains('midtone') || window.innerWidth<700){
             let capw = s.__capw;
             if(!capw){
               capw = cap.cloneNode(true);
