@@ -61,6 +61,8 @@
   body.menu-on{scroll-snap-type:y mandatory}
   .proj{min-height:100vh;scroll-snap-align:start;position:relative;padding:26vh 6% 8vh;display:flex;align-items:center}
   .proj .cap{position:fixed;left:6%;top:24vh;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.1em;color:#fff;mix-blend-mode:difference;opacity:0;transition:font-weight .2s ease;z-index:90;pointer-events:auto;cursor:pointer;will-change:transform,opacity,filter;max-width:88vw}
+  /* el título siempre entra y sale desvaneciéndose, aunque el scroll dé un salto (p. ej. la primera obra) */
+  .proj .cap{transition:font-weight .2s ease,opacity .7s ease,filter .7s ease}
   .proj .cap .orig{font-style:italic;font-size:.9em;opacity:.62}
   .proj .cap .ten{display:none}
   body.en .proj .cap .ten{display:inline}
@@ -336,8 +338,9 @@
           } else {
             const DRIFT=46;                            // desktop: como estaba antes
             ty=(p<0?Math.min(1,-p):0)*DRIFT;
+            const bot=r.bottom/vh;                     // el título acompaña la obra hasta casi el final
             if(p>0.12) op=(0.5-p)/0.38;
-            else if(p<-0.8) op=(p+1)/0.2;
+            else if(bot<0.6) op=(bot-0.35)/0.25;       // se desvanece cuando el final de la obra sube
             else op=1;
             if(op<0)op=0; if(op>1)op=1;
             dis=1-op;
