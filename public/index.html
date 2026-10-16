@@ -63,6 +63,7 @@
   .proj .cap{position:fixed;left:6%;top:24vh;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.1em;color:#fff;mix-blend-mode:difference;opacity:0;transition:font-weight .2s ease;z-index:90;pointer-events:auto;cursor:pointer;will-change:transform,opacity,filter;max-width:88vw}
   /* el título siempre entra y sale desvaneciéndose, aunque el scroll dé un salto (p. ej. la primera obra) */
   .proj .cap{transition:font-weight .2s ease,opacity .7s ease,filter .7s ease}
+  @media(max-width:700px){ .proj .cap{transition:opacity 1.1s ease,filter 1.1s ease} }   /* en el teléfono el dedo scrollea rápido: fundido más largo */
   .proj .cap .orig{font-style:italic;font-size:.9em;opacity:.62}
   .proj .cap .ten{display:none}
   body.en .proj .cap .ten{display:inline}
@@ -329,7 +330,7 @@
           let op, ty, dis, tf;
           if(window.innerWidth<700){
             const bot=r.bottom/vh;                    // móvil: el título acompaña TODA la obra
-            if(p>0.3) op=(0.5-p)/0.2;                 // aparece: llega a full en p=0.3, empieza en p=0.5
+            if(p>0.15) op=(0.55-p)/0.4;               // aparece de a poco: empieza en p=0.55 y llega a full en p=0.15
             else if(bot<0.7) op=(bot-0.5)/0.2;        // desaparece: se va justo en el cruce (bot=0.5 = p=0.5 de la siguiente) -> sin solape ni hueco
             else op=1;
             if(op<0)op=0; if(op>1)op=1;
