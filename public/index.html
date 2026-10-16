@@ -458,7 +458,7 @@ new p5(function(p){
     const h=img.height*s*VSTRETCH;
     const ox=(W-tw)/2, oy=(H-h)/2;   // centrado
     nameCY=oy+h/2; nameH=h; nbx0=ox; nby0=oy; nbx1=ox+tw; nby1=oy+h;
-    for(const q of parts){ q.hx=ox+q.ix*s; q.hy=oy+q.iy*s*VSTRETCH; q.hyL=oy+(q.iy % (img.height/nLines))*s*VSTRETCH; }
+    for(const q of parts){ q.hx=ox+q.ix*s; q.hy=oy+q.iy*s*VSTRETCH; q.hyL=(q.iy % (img.height/nLines))*s*VSTRETCH;   /* fase de la onda sin depender de la posición en pantalla: no salta cuando el teléfono cambia de alto al scrollear */ }
   }
   function build(){
     parts=[]; W=window.innerWidth; H=window.innerHeight;

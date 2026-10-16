@@ -649,7 +649,7 @@ new p5(function(p){
   function setHomes(){
     const tw=(W<700? W*0.92 : Math.min(W*0.72,900)), s=tw/img.width, h=img.height*s*VSTRETCH;
     const ox=(W-tw)/2, oy=(H-h)/2; nbx0=ox; nby0=oy; nbx1=ox+tw; nby1=oy+h;
-    for(const q of parts){ q.hx=ox+q.ix*s; q.hy=oy+q.iy*s*VSTRETCH; q.hyL=oy+(q.iy % (img.height/2))*s*VSTRETCH; }
+    for(const q of parts){ q.hx=ox+q.ix*s; q.hy=oy+q.iy*s*VSTRETCH; q.hyL=(q.iy % (img.height/2))*s*VSTRETCH;   /* fase de la onda sin depender de la posición en pantalla: no salta cuando el teléfono cambia de alto al scrollear */ }
   }
   function build(){
     parts=[]; W=window.innerWidth; H=window.innerHeight; img.loadPixels();
