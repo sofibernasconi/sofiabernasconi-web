@@ -119,13 +119,13 @@ new p5(function(p){
     return g;
   }
   function setHomes(){
-    const tw=(W<700? W*0.99 : Math.min(W*0.72,900)), s=tw/img.width, h=img.height*s*VSTRETCH;
+    const tw=(W<700? W*0.92 : Math.min(W*0.72,900)), s=tw/img.width, h=img.height*s*VSTRETCH;
     const ox=(W-tw)/2, oy=(H-h)/2; nbx0=ox; nby0=oy; nbx1=ox+tw; nby1=oy+h;
     for(const q of parts){ q.hx=ox+q.ix*s; q.hy=oy+q.iy*s*VSTRETCH; q.hyL=oy+(q.iy % (img.height/2))*s*VSTRETCH; }
   }
   function build(){
     parts=[]; W=window.innerWidth; H=window.innerHeight; img.loadPixels();
-    const s=(W<700? W*0.99 : Math.min(W*0.72,900))/img.width, step=Math.max(2,Math.round((W<700?1.8:2.4)/s));
+    const s=(W<700? W*0.92 : Math.min(W*0.72,900))/img.width, step=Math.max(2,Math.round((W<700?1.8:2.4)/s));
     for(let y=0;y<img.height;y+=step) for(let x=0;x<img.width;x+=step)
       if(img.pixels[4*(x+y*img.width)]<115) parts.push({ix:x,iy:y,ox:0,oy:0,ovx:0,ovy:0,ev:0,seed:p.random(1000),sz:p.random(0.5,1.15)});
     setHomes();
@@ -144,7 +144,7 @@ new p5(function(p){
   p.draw=function(){
     p.clear(); blur.clear();
     hoverAmt+=((inName(mx,my)?1:0)-hoverAmt)*0.11;
-    const act=hoverAmt, t=p.frameCount*0.003, wt=p.frameCount*0.02;
+    const act=1, t=p.frameCount*0.003, wt=p.frameCount*0.01;   // igual que el logo chico de la portada: siempre con su movimiento
     const cX=LOX+(nbx1-nbx0)*LS/2, cY=LOY+(nby1-nby0)*LS/2;
     for(const q of parts){
       const hx=LOX+(q.hx-nbx0)*LS, hy=LOY+(q.hy-nby0)*LS;
