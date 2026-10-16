@@ -99,6 +99,19 @@
   .proj:nth-child(5) .comp img:nth-child(5){max-height:26vh;max-width:20%;margin-top:10vh}
   /* Convey me (1ª) — foto principal la más grande de todas (obra protagonista) */
   .proj:nth-child(1) .comp img:nth-child(1){max-height:72vh;max-width:74%}
+  /* Convey me (1ª) en computador: composición en retícula de 12 columnas.
+     Todas las fotos son 16:9, así que se juega con tamaños y desfases verticales:
+     foto principal grande, dos en diagonal, dos más chicas y cierra la vista completa de la instalación. */
+  @media(min-width:701px){
+    .proj:nth-child(1) .comp{display:grid;grid-template-columns:repeat(12,1fr);column-gap:2.2vw;row-gap:7vh;align-items:start;transform:none}
+    .proj:nth-child(1) .comp img{width:100%;max-width:none;max-height:none;margin:0}
+    .proj:nth-child(1) .comp img:nth-child(1){grid-column:2 / 12;max-width:none;max-height:none}
+    .proj:nth-child(1) .comp img:nth-child(2){grid-column:1 / 7}
+    .proj:nth-child(1) .comp img:nth-child(3){grid-column:8 / 13;margin-top:14vh}
+    .proj:nth-child(1) .comp img:nth-child(4){grid-column:3 / 7;margin-top:-4vh}
+    .proj:nth-child(1) .comp img:nth-child(5){grid-column:8 / 12;margin-top:10vh}
+    .proj:nth-child(1) .comp img:nth-child(6){grid-column:4 / 12;margin-top:2vh}
+  }
   /* Orilla (3ª) — la 4ª foto (AL6A9590) pequeña */
   .proj:nth-child(3) .comp img:nth-child(4){max-height:30vh;max-width:21%}
   .proj .comp .ph{width:230px;height:32vh;background:#f6eeee;border:1px solid #e6cccc;display:flex;align-items:center;justify-content:center;color:#c99;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;text-align:center;opacity:0;transition:opacity 1s ease;padding:1rem;line-height:1.7}
