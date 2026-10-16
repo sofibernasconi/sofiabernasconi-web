@@ -345,7 +345,7 @@
             else if(bot<0.7) op=(bot-0.5)/0.2;        // desaparece: se va justo en el cruce (bot=0.5 = p=0.5 de la siguiente) -> sin solape ni hueco
             else op=1;
             if(op<0)op=0; if(op>1)op=1;
-            ty=(p<0?Math.min(1,-p):0)*8; dis=1-op;    // deriva leve, se mantiene arriba
+            ty=0; dis=1-op;                            // sin deriva: el título nuevo aparece en el mismo lugar que el anterior
             tf='translateY('+ty.toFixed(2)+'vh)';
           } else {
             const DRIFT=46;                            // desktop: como estaba antes
