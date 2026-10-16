@@ -127,7 +127,7 @@ const PREV={convey:"convey_1.jpg",reflejo:"reflejo_1.jpg",orilla:"orilla_1.jpg",
 const WHITECAP=['cordeles'];
 const POS={convey:"50% 44%",orilla:"50% 80%",mecanica:"50% 45%",tensiones:"50% 60%",cordeles:"50% 45%",deshilacha:"50% 80%"};
 document.getElementById('list').innerHTML = PROJ.map(function(p){
-  var img = PREV[p.id] ? '<img src="assets/'+PREV[p.id]+'" alt="'+esc(p.name)+' ('+esc(p.year)+'), obra de Sofía Bernasconi"'+(POS[p.id]?' style="object-position:'+POS[p.id]+'"':'')+' loading="lazy">' : '';
+  var img = PREV[p.id] ? '<img src="assets/'+PREV[p.id]+'" alt="'+esc((document.documentElement.lang==='en'&&p.en)||p.name)+' ('+esc(p.year)+'), '+(document.documentElement.lang==='en'?'work by Chilean artist Sofía Bernasconi':'obra de la artista chilena Sofía Bernasconi')+'"'+(POS[p.id]?' style="object-position:'+POS[p.id]+'"':'')+' loading="lazy">' : '';
   var wc=WHITECAP.indexOf(p.id)>=0?' wcap':'';
   return '<a class="strip'+wc+'" href="obra-'+p.id+'.html">'+img+'<span class="cap"><span class="n">'+(p.en?'<span class="tes">'+esc(p.name)+'</span><span class="ten">'+esc(p.en)+'<span class="orig"> ('+esc(p.name)+')</span></span>':esc(p.name))+'</span><span class="y">'+esc(p.year)+'</span></span></a>';
 }).join('');
