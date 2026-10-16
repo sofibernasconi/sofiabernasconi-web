@@ -6,11 +6,11 @@ os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'public'
 S = 'https://sofiabernasconi.com'
 PAG = {  # archivo ES: (archivo EN, url ES, url EN, título EN, descripción EN)
  'index.html': ('en.html', '/', '/en', 'Sofía Bernasconi — Visual and media artist, New York',
-   'Sofía Bernasconi, Chilean visual and media artist based in Brooklyn, New York (NYU ITP). Video installation, performance, art and technology: the body in dialogue with territory and machine.'),
+   'Sofía Bernasconi, Chilean visual and media artist in Brooklyn, New York (NYU ITP). Video installation, performance, art and technology: body, territory and machine.'),
  'bio.html': ('en-bio.html', '/bio', '/en-bio', 'Sofía Bernasconi — Bio · Chilean artist in New York',
-   'Biography of Sofía Bernasconi Le Roy, Chilean visual and media artist working in video installation, performance and media arts. Based in Brooklyn, New York; currently at ITP, Tisch School of the Arts, NYU.'),
+   'Sofía Bernasconi Le Roy, a Chilean, Latin American woman artist in media arts, based in Brooklyn, New York. Currently at NYU ITP (Tisch School of the Arts).'),
  'proyectos.html': ('en-proyectos.html', '/proyectos', '/en-proyectos', 'Sofía Bernasconi — Projects',
-   'Video installation, performance and art and technology works by Sofía Bernasconi, Chilean visual and media artist based in Brooklyn, New York.'),
+   'Video installation, performance and art and technology works by Sofía Bernasconi, a Chilean Latina media artist based in Brooklyn, New York.'),
  'prensa.html': ('en-prensa.html', '/prensa', '/en-prensa', 'Sofía Bernasconi — Press',
    'Press, interviews and publications about Sofía Bernasconi Le Roy, Chilean visual and media artist.'),
  'contacto.html': ('en-contacto.html', '/contacto', '/en-contacto', 'Sofía Bernasconi — Contact',
@@ -60,10 +60,11 @@ for es, (en, ues, uen, tit, desc) in PAG.items():
     e = re.sub(r'<meta property="og:url" content="[^"]*">', f'<meta property="og:url" content="{S}{uen}">', e, count=1)
     if es == 'index.html':
         e = e.replace('"jobTitle":"Artista visual y artes mediales"', '"jobTitle":"Visual and media artist"')
-        e = e.replace('"description":"Artista visual chilena de artes mediales y nuevos medios, radicada en Brooklyn, Nueva York, y estudiante de ITP en NYU. Trabaja en videoinstalación, performance y arte y tecnología."',
-                      '"description":"Chilean visual and media artist based in Brooklyn, New York, and a student at NYU ITP. Works in video installation, performance and art and technology."')
+        e = e.replace('"description":"Artista visual chilena y latinoamericana de artes mediales y nuevos medios, radicada en Brooklyn, Nueva York, y estudiante de ITP en NYU. Trabaja en videoinstalación, performance y arte y tecnología."',
+                      '"description":"Chilean, Latin American visual and media artist based in Brooklyn, New York, and a student at NYU ITP. Works in video installation, performance and art and technology."')
         e = e.replace('— artista visual y de artes mediales chilena en Brooklyn, Nueva York</h1>', '— Chilean visual and media artist in Brooklyn, New York</h1>')
         e = e.replace('"url":"https://sofiabernasconi.com"', '"url":"https://sofiabernasconi.com/en"')
+        assert '"description":"Artista' not in e and 'Trabaja en' not in e, 'ficha de en.html quedó en español: revisar reemplazos de JSON-LD'
     open(en, 'w', encoding='utf-8').write(a_ingles(e))
     print(es, '->', en)
 
