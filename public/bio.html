@@ -45,13 +45,13 @@
   /* computador: texto a la izquierda, foto a la derecha (más chica) */
   @media(min-width:860px){
     main{margin-left:max(120px,10vw);max-width:min(1000px, calc(100vw - max(120px,10vw) - 230px))}   /* deja libre el menú de la derecha */
-    .biotop{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:4.5rem;align-items:start}
+    .biotop{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:4.5rem;align-items:center}   /* retrato centrado verticalmente con el texto */
     .biotop .biofoto{grid-column:2;grid-row:1;margin:0}
     .biotop .biotxt{grid-column:1;grid-row:1;max-width:620px}
     .meta{max-width:620px}
   }
-  .biofoto2{width:38%;max-width:240px;display:block;margin:4rem auto 0}   /* centrada abajo */
-  @media(max-width:700px){ .biofoto2{width:52%} }
+  .biofoto2{width:38%;max-width:240px;display:block;margin:9rem auto 8rem}   /* centrada abajo, con aire antes y después */
+  @media(max-width:700px){ .biofoto2{width:52%;margin:6rem auto 5rem} }
   .eyebrow{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#8f8f8a;margin-bottom:2rem}
   main p{font-size:clamp(.9rem,1.25vw,1.05rem);margin-bottom:1.5rem;color:#26262a}
   main p.en{color:#8a8a86;font-size:.86rem}
