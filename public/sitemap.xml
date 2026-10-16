@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://sofiabernasconi.com/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://sofiabernasconi.com/proyectos.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://sofiabernasconi.com/bio.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://sofiabernasconi.com/prensa.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://sofiabernasconi.com/contacto.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://sofiabernasconi.com/obra.html?id=convey</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://sofiabernasconi.com/obra.html?id=reflejo</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://sofiabernasconi.com/obra.html?id=orilla</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://sofiabernasconi.com/obra.html?id=mecanica</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://sofiabernasconi.com/obra.html?id=tensiones</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://sofiabernasconi.com/obra.html?id=cuerpoaguas</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://sofiabernasconi.com/obra.html?id=cordeles</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://sofiabernasconi.com/obra.html?id=sumersiones</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://sofiabernasconi.com/obra.html?id=residente</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://sofiabernasconi.com/obra.html?id=deshilacha</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://sofiabernasconi.com/obra.html?id=sumersiones0</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://sofiabernasconi.com/obra.html?id=artwork</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url><loc>https://sofiabernasconi.com/</loc><lastmod>2026-10-16</lastmod><priority>1.0</priority><xhtml:link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/"/><xhtml:link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/?lang=en"/></url>
+  <url><loc>https://sofiabernasconi.com/proyectos</loc><lastmod>2026-10-16</lastmod><priority>0.9</priority><xhtml:link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/proyectos"/><xhtml:link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/proyectos?lang=en"/></url>
+  <url><loc>https://sofiabernasconi.com/bio</loc><lastmod>2026-10-16</lastmod><priority>0.8</priority><xhtml:link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/bio"/><xhtml:link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/bio?lang=en"/></url>
+  <url><loc>https://sofiabernasconi.com/prensa</loc><lastmod>2026-10-16</lastmod><priority>0.7</priority><xhtml:link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/prensa"/><xhtml:link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/prensa?lang=en"/></url>
+  <url><loc>https://sofiabernasconi.com/contacto</loc><lastmod>2026-10-16</lastmod><priority>0.6</priority><xhtml:link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/contacto"/><xhtml:link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/contacto?lang=en"/></url>
+  <url><loc>https://sofiabernasconi.com/obra-convey</loc><lastmod>2026-10-16</lastmod><priority>0.8</priority><xhtml:link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/obra-convey"/><xhtml:link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/obra-convey?lang=en"/></url>
+  <url><loc>https://sofiabernasconi.com/obra-reflejo</loc><lastmod>2026-10-16</lastmod><priority>0.8</priority><xhtml:link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/obra-reflejo"/><xhtml:link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/obra-reflejo?lang=en"/></url>
+  <url><loc>https://sofiabernasconi.com/obra-orilla</loc><lastmod>2026-10-16</lastmod><priority>0.8</priority><xhtml:link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/obra-orilla"/><xhtml:link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/obra-orilla?lang=en"/></url>
+  <url><loc>https://sofiabernasconi.com/obra-mecanica</loc><lastmod>2026-10-16</lastmod><priority>0.8</priority><xhtml:link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/obra-mecanica"/><xhtml:link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/obra-mecanica?lang=en"/></url>
+  <url><loc>https://sofiabernasconi.com/obra-tensiones</loc><lastmod>2026-10-16</lastmod><priority>0.8</priority><xhtml:link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/obra-tensiones"/><xhtml:link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/obra-tensiones?lang=en"/></url>
+  <url><loc>https://sofiabernasconi.com/obra-cuerpoaguas</loc><lastmod>2026-10-16</lastmod><priority>0.8</priority><xhtml:link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/obra-cuerpoaguas"/><xhtml:link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/obra-cuerpoaguas?lang=en"/></url>
+  <url><loc>https://sofiabernasconi.com/obra-cordeles</loc><lastmod>2026-10-16</lastmod><priority>0.8</priority><xhtml:link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/obra-cordeles"/><xhtml:link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/obra-cordeles?lang=en"/></url>
+  <url><loc>https://sofiabernasconi.com/obra-sumersiones</loc><lastmod>2026-10-16</lastmod><priority>0.8</priority><xhtml:link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/obra-sumersiones"/><xhtml:link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/obra-sumersiones?lang=en"/></url>
+  <url><loc>https://sofiabernasconi.com/obra-residente</loc><lastmod>2026-10-16</lastmod><priority>0.8</priority><xhtml:link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/obra-residente"/><xhtml:link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/obra-residente?lang=en"/></url>
+  <url><loc>https://sofiabernasconi.com/obra-deshilacha</loc><lastmod>2026-10-16</lastmod><priority>0.8</priority><xhtml:link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/obra-deshilacha"/><xhtml:link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/obra-deshilacha?lang=en"/></url>
+  <url><loc>https://sofiabernasconi.com/obra-sumersiones0</loc><lastmod>2026-10-16</lastmod><priority>0.8</priority><xhtml:link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/obra-sumersiones0"/><xhtml:link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/obra-sumersiones0?lang=en"/></url>
+  <url><loc>https://sofiabernasconi.com/obra-artwork</loc><lastmod>2026-10-16</lastmod><priority>0.8</priority><xhtml:link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/obra-artwork"/><xhtml:link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/obra-artwork?lang=en"/></url>
 </urlset>

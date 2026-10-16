@@ -6,6 +6,7 @@
 <title>Sofía Bernasconi — Proyecto</title>
 <meta name="description" content="Sofía Bernasconi Le Roy, artista visual chilena de artes mediales. Videoinstalación, performance, arte y tecnología: obras que exploran los límites del cuerpo en diálogo con el territorio y la máquina.">
 <meta name="author" content="Sofía Bernasconi Le Roy">
+<meta name="robots" content="noindex,follow">
 <link rel="canonical" href="https://sofiabernasconi.com/obra.html">
 <link rel="icon" href="assets/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="assets/favicon-512.png">
@@ -458,10 +459,14 @@ const FOTOCHICA = {"deshilacha_2.jpg":"50%","artwork_1.jpg":"52%","artwork_2.jpg
 function fRow(es,en,v){return '<div class="row"><div class="k" data-es="'+es+'" data-en="'+en+'">'+es+'</div><div>'+esc(v)+'</div></div>';}
 function fRowB(es,en,v){return '<div class="row"><div class="k" data-es="'+es+'" data-en="'+en+'">'+es+'</div><div><span data-es>'+esc(v.es)+'</span><span data-en>'+esc(v.en)+'</span></div></div>';}
 function render(){
-  const id=new URLSearchParams(location.search).get('id');
+  // cada obra tiene su propia página (obra-<id>.html, generada con tools/build_obras.mjs);
+  // obra.html?id=… queda sólo como plantilla y redirige a la página propia
+  const fija=document.documentElement.getAttribute('data-obra');
+  const id=fija||new URLSearchParams(location.search).get('id');
   const o=OBRAS[id];
   if(!o){ location.replace('index.html#open'); return; }
-  document.title='Sofía Bernasconi — '+o.title;
+  if(!fija){ const l=new URLSearchParams(location.search).get('lang'); location.replace('obra-'+id+'.html'+(l?'?lang='+l:'')); return; }
+  document.title=o.title+' ('+o.year+') — Sofía Bernasconi';
   let h='';
   h+='<div class="eyebrow" data-es="Proyecto" data-en="Project">Proyecto</div>';
   h+='<h1>'+(TITLE_EN[id]?'<span class="tes">'+esc(o.title)+'</span><span class="ten">'+esc(TITLE_EN[id])+'<span class="orig"> ('+esc(o.title)+')</span></span>':esc(o.title))+'</h1>';
@@ -564,8 +569,8 @@ function render(){
   // nav prev/next dentro de proyectos
   const i=ORDER.indexOf(id), prev=ORDER[(i-1+ORDER.length)%ORDER.length], next=ORDER[(i+1)%ORDER.length];
   h+='<div class="foot">';
-  h+='<a href="obra.html?id='+prev+'">← '+(TITLE_EN[prev]?'<span class="tes">'+esc(OBRAS[prev].title)+'</span><span class="ten">'+esc(TITLE_EN[prev])+'</span>':esc(OBRAS[prev].title))+'</a>';
-  h+='<a href="obra.html?id='+next+'">'+(TITLE_EN[next]?'<span class="tes">'+esc(OBRAS[next].title)+'</span><span class="ten">'+esc(TITLE_EN[next])+'</span>':esc(OBRAS[next].title))+' →</a>';
+  h+='<a href="obra-'+prev+'.html">← '+(TITLE_EN[prev]?'<span class="tes">'+esc(OBRAS[prev].title)+'</span><span class="ten">'+esc(TITLE_EN[prev])+'</span>':esc(OBRAS[prev].title))+'</a>';
+  h+='<a href="obra-'+next+'.html">'+(TITLE_EN[next]?'<span class="tes">'+esc(OBRAS[next].title)+'</span><span class="ten">'+esc(TITLE_EN[next])+'</span>':esc(OBRAS[next].title))+' →</a>';
   h+='</div>';
   document.getElementById('main').innerHTML=h;
   applyLang(currentLang);
@@ -604,6 +609,7 @@ function initialLang(){ var u=new URLSearchParams(location.search).get('lang'),s
 let currentLang=initialLang();
 function applyLang(l){
   currentLang=l;
+  document.documentElement.lang=l;
   try{localStorage.setItem('lang',l);}catch(e){}
   document.body.classList.toggle('en',l==='en');
   document.querySelectorAll('nav a[data-'+l+']').forEach(a=>a.textContent=a.getAttribute('data-'+l));

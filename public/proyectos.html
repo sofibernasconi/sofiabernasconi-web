@@ -6,7 +6,10 @@
 <title>Sofía Bernasconi — Proyectos</title>
 <meta name="description" content="Obras de videoinstalación, performance y arte y tecnología de Sofía Bernasconi, artista visual chilena de nuevos medios y artes mediales.">
 <meta name="author" content="Sofía Bernasconi Le Roy">
-<link rel="canonical" href="https://sofiabernasconi.com/proyectos.html">
+<link rel="canonical" href="https://sofiabernasconi.com/proyectos">
+<link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/proyectos">
+<link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/proyectos?lang=en">
+<link rel="alternate" hreflang="x-default" href="https://sofiabernasconi.com/proyectos">
 <link rel="icon" href="assets/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="assets/favicon-512.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -15,7 +18,7 @@
 <meta property="og:site_name" content="Sofía Bernasconi">
 <meta property="og:title" content="Proyectos — Sofía Bernasconi">
 <meta property="og:description" content="Obras de videoinstalación, performance y arte y tecnología de Sofía Bernasconi, artista visual chilena de nuevos medios y artes mediales.">
-<meta property="og:url" content="https://sofiabernasconi.com/proyectos.html">
+<meta property="og:url" content="https://sofiabernasconi.com/proyectos">
 <meta property="og:image" content="https://sofiabernasconi.com/assets/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -86,6 +89,7 @@
   @media(max-width:700px){ .foot-site{padding:6vh 5vw 6vh} .foot-site .in{font-size:.72rem} }
 
 </style>
+<script>(function(){var l=new URLSearchParams(location.search).get('lang');if(!l){try{l=localStorage.getItem('lang')}catch(e){}}if(l==='en')document.documentElement.lang='en';})();</script>
 </head>
 <body>
 
@@ -125,7 +129,7 @@ const POS={convey:"50% 44%",orilla:"50% 80%",mecanica:"50% 45%",tensiones:"50% 6
 document.getElementById('list').innerHTML = PROJ.map(function(p){
   var img = PREV[p.id] ? '<img src="assets/'+PREV[p.id]+'" alt="'+esc(p.name)+' ('+esc(p.year)+'), obra de Sofía Bernasconi"'+(POS[p.id]?' style="object-position:'+POS[p.id]+'"':'')+' loading="lazy">' : '';
   var wc=WHITECAP.indexOf(p.id)>=0?' wcap':'';
-  return '<a class="strip'+wc+'" href="obra.html?id='+p.id+'">'+img+'<span class="cap"><span class="n">'+(p.en?'<span class="tes">'+esc(p.name)+'</span><span class="ten">'+esc(p.en)+'<span class="orig"> ('+esc(p.name)+')</span></span>':esc(p.name))+'</span><span class="y">'+esc(p.year)+'</span></span></a>';
+  return '<a class="strip'+wc+'" href="obra-'+p.id+'.html">'+img+'<span class="cap"><span class="n">'+(p.en?'<span class="tes">'+esc(p.name)+'</span><span class="ten">'+esc(p.en)+'<span class="orig"> ('+esc(p.name)+')</span></span>':esc(p.name))+'</span><span class="y">'+esc(p.year)+'</span></span></a>';
 }).join('');
 
 

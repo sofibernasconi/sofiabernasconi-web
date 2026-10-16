@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="es" data-obra="convey">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Convey me (2025–2026) — Sofía Bernasconi</title>
+<meta name="description" content="Instalación cinética · videoproyección · software propio. Convey me es una instalación cinética donde un cuerpo desnudo —el mío— es transportado, estirado y…">
+<meta name="author" content="Sofía Bernasconi Le Roy">
+<link rel="canonical" href="https://sofiabernasconi.com/obra-convey">
+<link rel="alternate" hreflang="es" href="https://sofiabernasconi.com/obra-convey">
+<link rel="alternate" hreflang="en" href="https://sofiabernasconi.com/obra-convey?lang=en">
+<link rel="alternate" hreflang="x-default" href="https://sofiabernasconi.com/obra-convey">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="assets/favicon-512.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#f7f6f4">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sofía Bernasconi">
+<meta property="og:title" content="Convey me (2025–2026) — Sofía Bernasconi">
+<meta property="og:description" content="Instalación cinética · videoproyección · software propio. Convey me es una instalación cinética donde un cuerpo desnudo —el mío— es transportado, estirado y…">
+<meta property="og:url" content="https://sofiabernasconi.com/obra-convey">
+<meta property="og:image" content="https://sofiabernasconi.com/assets/convey_1.jpg">
+<meta property="og:locale" content="es_CL">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Convey me (2025–2026) — Sofía Bernasconi">
+<meta name="twitter:description" content="Instalación cinética · videoproyección · software propio. Convey me es una instalación cinética donde un cuerpo desnudo —el mío— es transportado, estirado y…">
+<meta name="twitter:image" content="https://sofiabernasconi.com/assets/convey_1.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#f7f6f4;color:#111116;font-family:'Space Grotesk',sans-serif;font-weight:300;line-height:1.7;-webkit-font-smoothing:antialiased}
+  #c{position:fixed;inset:0;z-index:110;pointer-events:none;mix-blend-mode:difference}
+  #c canvas{position:fixed;inset:0;pointer-events:none}
+  #blurlayer{position:fixed;inset:0;pointer-events:none;filter:blur(2.6px);z-index:110;mix-blend-mode:difference}
+  #lang{position:fixed;top:36px;right:36px;z-index:120;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;color:#fff;mix-blend-mode:difference}
+  #lang span{cursor:pointer;opacity:.4;transition:opacity .3s}
+  #lang span.on{opacity:1}
+  nav{position:fixed;top:70px;right:36px;z-index:120;display:flex;flex-direction:column;align-items:flex-end;gap:.75rem;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;mix-blend-mode:difference}
+  nav a{color:#fff;text-decoration:none;opacity:.7;transition:opacity .3s}
+  nav a:hover{opacity:1}
+  nav a.cur{opacity:1;font-weight:700}
+  main{max-width:none;margin:0;padding:22vh 2vw 12rem;text-align:left}
+  @media(min-width:860px){ main{margin:0;padding:18vh 2vw 12rem} }
+  .top{display:block}
+  .col-media{margin-top:2.5rem}
+  @media(min-width:860px){
+    .top.has-media{display:grid;grid-template-columns:minmax(0,460px) minmax(0,1fr);gap:5rem;align-items:center;margin-bottom:5rem}
+    .top.has-media .col-media{margin-top:0}
+  }
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#8f8f8a;margin-bottom:1.4rem}
+  h1{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:clamp(1.5rem,2.9vw,2.35rem);line-height:1.15;letter-spacing:-.01em;color:#111116;max-width:22ch}
+  h1 .orig{color:#b4b4af;font-weight:400;font-style:italic;font-size:.82em}
+  .ten{display:none}
+  body.en .ten{display:inline}
+  body.en .tes{display:none}
+  .subtitle{font-family:'JetBrains Mono',monospace;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:#8f8f8a;margin-top:1rem}
+  .partof{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.1em;color:#9a9a95;margin:1.4rem 0 3.4rem;max-width:380px}
+  .hiblogo{display:block;width:260px;max-width:70%;height:auto;margin:0 0 2rem}
+  .fund{max-width:660px;margin:6rem 0 0;padding-top:2.4rem;border-top:1px solid #e3e2de}
+  .fund .fk{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#8f8f8a;margin-bottom:2.2rem}
+  .fund .row{display:flex;flex-wrap:wrap;gap:2.6rem 3.4rem;align-items:flex-end}
+  .fund .item{display:flex;flex-direction:column;align-items:flex-start;gap:.7rem}
+  .fund .item .leg{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#9a9a95}
+  .fund .item img{width:auto;max-width:none;align-self:flex-start;object-fit:contain;filter:grayscale(1);opacity:.85}
+  .fund .fund-main{margin-bottom:3rem}
+  .fund .fund-main img{height:92px}
+  .fund .fund-sec{display:flex;flex-wrap:wrap;gap:2.4rem 3.4rem;align-items:flex-start}
+  .fund .fund-sec img{height:40px}
+  .year{font-family:'JetBrains Mono',monospace;font-size:.9rem;letter-spacing:.1em;color:#8f8f8a;margin:.7rem 0 3rem}
+  .statement{max-width:660px;margin-bottom:3.5rem}
+  .statement p{font-family:'JetBrains Mono',monospace;font-weight:400;font-size:clamp(.76rem,.92vw,.86rem);line-height:1.85;margin-bottom:1.5rem;color:#26262a}
+  .statement p.lead{font-weight:700;font-size:clamp(1rem,1.4vw,1.22rem);line-height:1.6;color:#111116;margin-bottom:1.9rem}
+  .statement.hib{margin-top:2rem;padding-top:2.4rem;border-top:1px solid #e3e2de}
+  .statement.hib .eyebrow{margin-bottom:1.6rem}
+  .teorico{margin-top:.6rem}
+  .teorico>summary{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#8f8f8a;cursor:pointer;list-style:none;padding:.6rem 0;border-top:1px solid #e9e8e4;transition:color .3s}
+  .teorico>summary::-webkit-details-marker{display:none}
+  .teorico>summary::before{content:"+ ";color:#b9b9b3}
+  .teorico[open]>summary::before{content:"– "}
+  .teorico>summary:hover{color:#111116}
+  .teorico p{font-size:.86rem;color:#5a5a56;margin-bottom:1.2rem}
+  .teorico>summary{margin-bottom:1.4rem}
+  .ficha{max-width:660px;margin-bottom:5rem;padding-top:1.8rem;border-top:1px solid #e3e2de;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:#5f5e5a;line-height:1.7}
+  @media(min-width:760px){
+    .ficha{max-width:960px;column-count:2;column-gap:4.5rem}
+    .ficha .row{break-inside:avoid;-webkit-column-break-inside:avoid;page-break-inside:avoid}
+  }
+  @media(min-width:1150px){
+    .ficha{max-width:1340px;column-count:3;column-gap:4vw}
+  }
+  .ficha .row{display:flex;gap:1.2rem;margin-bottom:1.6rem;align-items:baseline}
+  .ficha .row>div>div{margin-bottom:.6rem}
+  .ficha .row>div>div:last-child{margin-bottom:0}
+  .ficha .k{min-width:140px;max-width:140px;color:#8f8f8a;text-transform:uppercase;letter-spacing:.08em;font-size:.72rem;padding-top:.15rem}
+  .ficha a{color:#5f5e5a;text-decoration:underline;text-underline-offset:2px}
+  .ficha a:hover{color:#111116}
+  .video{position:relative;width:100%;aspect-ratio:16/9;margin:0 0 3vh;background:#ececea;overflow:hidden}
+  .photo{position:relative;width:100%;margin:0 0 3vh 0;background:transparent;overflow:visible;text-align:right}
+  .photo img{position:static;max-width:64%;height:auto;display:inline-block;object-fit:contain}
+  @media(max-width:859px){ .photo img{max-width:100%;width:100%;display:block} }
+  .video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .video .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:#9a9a95}
+  /* slider de obras */
+  .slider{margin:7vh auto 0;max-width:420px;position:relative;text-align:center}
+  .slider .sk{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#8f8f8a;margin-bottom:1.6rem}
+  .slider .frame{position:relative;display:flex;align-items:center;justify-content:center;gap:.6rem}
+  .slider .stage{position:relative;flex:1 1 auto;aspect-ratio:1000/1395;overflow:hidden;cursor:zoom-in}
+  .slider .stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .5s ease}
+  .slider .stage img.on{opacity:1}
+  .slider .nav{flex:0 0 auto;background:none;border:0;padding:.4rem .2rem;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:1rem;line-height:1;color:#c0bfba;transition:color .3s}
+  .slider .nav:hover{color:#111116}
+  .slider .bar{display:flex;align-items:center;justify-content:center;gap:.75rem;margin-top:1.1rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.12em;color:#a3a29d}
+  .slider .dot{width:6px;height:6px;border-radius:50%;background:#d5d4cf;border:0;padding:0;cursor:pointer;transition:background .3s}
+  .slider .dot.on{background:#111116}
+  @media(max-width:760px){ .slider{max-width:76%} }
+  /* lightbox */
+  #lightbox{position:fixed;inset:0;z-index:400;background:rgba(247,246,244,.97);display:none;align-items:center;justify-content:center;cursor:zoom-out;padding:5vh 5vw}
+  #lightbox.on{display:flex}
+  #lightbox img{max-width:100%;max-height:90vh;width:auto;height:auto;display:block}
+  #lightbox .lbx{position:absolute;top:28px;right:34px;font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.1em;color:#8f8f8a;background:none;border:0;cursor:pointer}
+  #lightbox .lbx:hover{color:#111116}
+  .video2{margin:6vh 0 0;max-width:64%}
+  @media(max-width:760px){ .video2{max-width:100%} }
+  .video2 .eyebrow{margin-bottom:1rem}
+  .shots{display:flex;flex-direction:column;align-items:stretch;gap:6vh}
+  .shots img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}
+  @media(max-width:760px){ .shots img{aspect-ratio:4/3} }
+  .pending{aspect-ratio:4/3;width:100%;display:flex;align-items:center;justify-content:center;background:#ececea;font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:#9a9a95}
+  .foot{max-width:660px;margin:8rem 0 0;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.08em}
+  .foot a{color:#111116;text-decoration:none;opacity:.7;transition:opacity .3s;text-transform:uppercase}
+  .foot a:hover{opacity:1}
+  /* i18n: sólo los elementos con UN solo idioma se muestran/ocultan por CSS.
+     Los que tienen data-es y data-en a la vez cambian por texto (applyLang). */
+  [data-en]:not([data-es]){display:none}
+  body.en [data-es]:not([data-en]){display:none}
+  body.en [data-en]:not([data-es]){display:block}
+  nav,#lang,#c,#blurlayer{transition:opacity .5s ease}
+  body.ui-hide nav,body.ui-hide #lang{opacity:0;pointer-events:none}
+  body.ui-hide #c,body.ui-hide #blurlayer{opacity:0}
+
+  /* ---- pie de pagina ---- */
+  .foot-site{box-sizing:border-box;width:100%;max-width:100%;padding:7vh 5vw 5vh;display:flex;justify-content:flex-end;position:relative;z-index:85;pointer-events:auto}
+  .foot-site .in{box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-end;gap:.55rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.08em;color:#8f8f8a;text-align:right}
+  .foot-site a{color:inherit;text-decoration:none;transition:color .3s}
+  .foot-site a:hover{color:#111116}
+  .foot-site .ig{display:inline-flex;align-items:center;gap:.45rem;margin-top:.15rem}
+  .foot-site .ig svg{width:17px;height:17px;display:block}
+  @media(max-width:700px){ .foot-site{padding:6vh 5vw 6vh} .foot-site .in{font-size:.72rem} }
+
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"VisualArtwork","name":"Convey me","dateCreated":"2025–2026","artMedium":"Instalación cinética · videoproyección · software propio","description":"Convey me es una instalación cinética donde un cuerpo desnudo —el mío— es transportado, estirado y reconfigurado sin descanso. La obra trata al cuerpo como materia en tránsito: algo que una máquina mueve, deforma y vuelve a poner en marcha.","image":"https://sofiabernasconi.com/assets/convey_1.jpg","url":"https://sofiabernasconi.com/obra-convey","inLanguage":["es","en"],"creator":{"@type":"Person","name":"Sofía Bernasconi Le Roy","url":"https://sofiabernasconi.com/"}}</script>
+</head>
+<body>
+
+  <div id="c"></div>
+  <div id="lang"><span data-l="es" class="on">ES</span> / <span data-l="en">EN</span></div>
+  <nav>
+    <a href="bio.html" data-es="Bio" data-en="Bio">Bio</a>
+    <a href="proyectos.html" class="cur" data-es="Proyectos" data-en="Projects">Proyectos</a>
+    <a href="prensa.html" data-es="Prensa" data-en="Press">Prensa</a>
+    <a href="contacto.html" data-es="Contacto" data-en="Contact">Contacto</a>
+  </nav>
+
+  <main id="main"><div class="eyebrow" data-es="Proyecto" data-en="Project">Proyecto</div><h1>Convey me</h1><div class="year">2025–2026</div><div class="top has-media"><div class="col-text"><div class="statement"><p data-es="" class="lead">Convey me es una instalación cinética donde un cuerpo desnudo —el mío— es transportado, estirado y reconfigurado sin descanso. La obra trata al cuerpo como materia en tránsito: algo que una máquina mueve, deforma y vuelve a poner en marcha.</p><p data-es="">Una estructura de madera tipo cercha desplaza un bucle continuo de tela sobre rodillos de cinta transportadora. Sobre esa tela en movimiento se proyecta el video de mi cuerpo, que se deforma dos veces: por la geometría misma de la estructura y por un sistema propio en p5.js que lo estira a medida que avanza.</p><p data-es="">Mecánica, proyección y código funcionan como un solo sistema: un loop infinito en el que el cuerpo se transporta, se transforma y se reconfigura sin fin. Aun deformado, el cuerpo depende de la estructura para existir: sin ella no hay imagen, ni movimiento, ni cuerpo que mostrar.</p><p data-en="" class="lead">Convey me is a kinetic installation in which a naked body —mine— is transported, stretched and reconfigured without rest. The work treats the body as matter in transit: something a machine moves, deforms and sets in motion again.</p><p data-en="">A wooden truss structure drives a continuous loop of fabric over conveyor-belt rollers. Onto that moving fabric the video of my body is projected, deformed twice over: by the geometry of the structure itself and by a custom p5.js system that stretches it as it advances.</p><p data-en="">Mechanics, projection and code work as a single system: an infinite loop in which the body is transported, transformed and reconfigured without end. Even when deformed, the body depends on the structure to exist: without it there is no image, no movement, no body to show.</p></div></div><div class="col-media"><div class="video"><iframe src="https://www.youtube-nocookie.com/embed/naS8u7d6TRU?rel=0&amp;modestbranding=1" title="Convey me" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen=""></iframe></div></div></div><div class="ficha"><div class="row"><div class="k" data-es="Año" data-en="Year">Año</div><div>2025–2026</div></div><div class="row"><div class="k" data-es="Técnica" data-en="Medium">Técnica</div><div><span data-es="">Instalación cinética · videoproyección · software propio</span><span data-en="">Kinetic installation · video projection · custom software</span></div></div><div class="row"><div class="k" data-es="Duración" data-en="Duration">Duración</div><div><span data-es="">Loop infinito</span><span data-en="">Infinite loop</span></div></div><div class="row"><div class="k" data-es="Dimensiones" data-en="Dimensions">Dimensiones</div><div><span data-es="">Aprox. 300 × 200 × 80 cm</span><span data-en="">Approx. 300 × 200 × 80 cm</span></div></div><div class="row"><div class="k" data-es="Materiales" data-en="Materials">Materiales</div><div><span data-es="">Listones de madera 1 × 2"; tela de lienzo crudo; rodillos de cinta transportadora; motor DC; controlador de motor; Arduino; dos proyectores; computador; software propio en p5.js.</span><span data-en="">Wooden battens 1 × 2"; raw canvas fabric; conveyor belt rollers; DC motor; motor controller; Arduino; two projectors; computer; custom p5.js software.</span></div></div><div class="row"><div class="k" data-es="Exposición" data-en="Exhibition">Exposición</div><div><span data-es="">Spring Show 2026 · ITP, New York University</span><span data-en="">Spring Show 2026 · ITP, New York University</span></div></div><div class="row"><div class="k" data-es="Agradecimientos" data-en="Acknowledgements">Agradecimientos</div><div><span data-es="">Sophia, Guy, Niko, Octavio, Devan, Ray, Tobi, Rich, Danny</span><span data-en="">Sophia, Guy, Niko, Octavio, Devan, Ray, Tobi, Rich, Danny</span></div></div></div><div class="shots"><img src="assets/convey_1.jpg" alt="Convey me, instalación cinética de la artista chilena Sofía Bernasconi: estructura de madera tipo cercha con proyección de video sobre un bucle de tela en movimiento (1 de 6)"><img src="assets/convey_2.jpg" alt="Convey me, instalación cinética de la artista chilena Sofía Bernasconi: estructura de madera tipo cercha con proyección de video sobre un bucle de tela en movimiento (2 de 6)"><img src="assets/convey_3.jpg" alt="Convey me, instalación cinética de la artista chilena Sofía Bernasconi: estructura de madera tipo cercha con proyección de video sobre un bucle de tela en movimiento (3 de 6)"><img src="assets/convey_4.jpg" alt="Convey me, instalación cinética de la artista chilena Sofía Bernasconi: estructura de madera tipo cercha con proyección de video sobre un bucle de tela en movimiento (4 de 6)"><img src="assets/convey_5.jpg" alt="Convey me, instalación cinética de la artista chilena Sofía Bernasconi: estructura de madera tipo cercha con proyección de video sobre un bucle de tela en movimiento (5 de 6)"><img src="assets/convey_6.jpg" alt="Convey me, instalación cinética de la artista chilena Sofía Bernasconi: estructura de madera tipo cercha con proyección de video sobre un bucle de tela en movimiento (6 de 6)"></div><div class="foot"><a href="obra-artwork.html?lang=es">← <span class="tes">Artwork para álbumes de música</span><span class="ten">Artwork for music albums</span></a><a href="obra-reflejo.html?lang=es"><span class="tes">Reflejo Abierto</span><span class="ten">Open Reflection</span> →</a></div></main>
+  <div id="lightbox"><button class="lbx" aria-label="cerrar">✕</button><img src="" alt="Obra ampliada"></div>
+
+<script>
+// ==== DATOS DE LAS OBRAS ==== (edita textos y ficha libremente)
+// Datos compartidos por la investigación/exhibición HÍBRIDA
+const HIB_EXPO={es:"HÍBRIDA: cuerpos y tecnologías en el Icosaedro · Exhibida en Balmaceda Arte Joven Biobío, 2025 · Financiada por el FONDART 2023 (Ministerio de las Culturas, las Artes y el Patrimonio) · Proyecto residente del Centro de Creación de Concepción (C3), Municipalidad de Concepción", en:"HÍBRIDA: bodies and technologies in the Icosahedron · Exhibited at Balmaceda Arte Joven Biobío, 2025 · Funded by FONDART 2023 (Ministry of Cultures, Arts and Heritage of Chile) · Resident project of the Centro de Creación de Concepción (C3), Municipality of Concepción"};
+const HIB_DESC={es:"Parte de HÍBRIDA: cuerpos y tecnologías en el Icosaedro, una experiencia inmersiva e interactiva que explora la fusión entre cuerpo, tecnología y territorio, vinculando la presencia humana con los paisajes urbanos y los cuerpos de agua del Gran Concepción.", en:"Part of HÍBRIDA: bodies and technologies in the Icosahedron, an immersive and interactive experience that explores the fusion between body, technology and territory, linking human presence with the urban landscapes and bodies of water of Greater Concepción."};
+const HIB_COLAB=[
+  {name:"Sofía Bernasconi Le Roy", es:"Dirección general, performer y postproducción audiovisual", en:"General direction, performer and audiovisual post-production"},
+  {name:"Rena Bugueiro", es:"Asistencia y asesoría escénica", en:"Stage assistance and advising"},
+  {name:"Mano Armada", es:"Desarrollo tecnológico", en:"Technological development"},
+  {name:"Viviana Milla · NYVA · Vainilla · Daniel Aguayo", es:"Registros audiovisuales", en:"Audiovisual recording"},
+  {name:"Gustavo Bustos Mendoza", es:"Diseño y registros sonoros", en:"Sound design and recording"},
+  {name:"Joan Soto", es:"Asesoría creativa", en:"Creative advising"},
+  {name:"Antonia Azócar", es:"Comunicaciones", en:"Communications"},
+  {name:"ConceptoEstudio", es:"Diseño gráfico", en:"Graphic design"},
+  {name:"NYVA · Vainilla", es:"Ilustraciones dossier", en:"Dossier illustrations"},
+  {name:"Joan Soto · Blanco Sur · Sofía Bernasconi Le Roy · Metalcraft Arauco", es:"Diseño y construcción", en:"Design and construction"}
+];
+const HIB_ABSTRACT={
+  es:[
+    "HÍBRIDA: Cuerpos y tecnologías en el icosaedro es una instalación interactiva y performática que inscribe el cuerpo en un territorio en transformación, donde las tecnologías median su presencia y, al mismo tiempo, son alteradas por su contacto. En este entorno poroso e inestable, las fronteras entre lo humano y lo artificial, lo orgánico y lo sintético, lo urbano y lo natural se diluyen, dando paso a un estado híbrido en constante mutación.",
+    "Los registros audiovisuales que dan forma a la instalación provienen del río Biobío, el humedal Vasco de Gama y la laguna Grande, paisajes liminales donde el agua es frontera y tránsito, memoria y resistencia. En estos lugares se realizaron performances que exploraron la fricción entre cuerpo y tecnología, desplegando movimientos en diálogo con el entorno y envolviendo la piel en film plástico como una membrana de contacto y tensión. Estas acciones son trasladadas al espacio expositivo a través de diversos dispositivos interactivos que dialogan con el público, fusionando su presencia con los registros del paisaje y la acción performática. De este modo, la obra exhibe la performance en continuo proceso de transformación, hibridizando los cuerpos presentes con las imágenes y los entornos activados.",
+    "La instalación se compone de tres obras interconectadas. Reflejo Abierto, un icosaedro interactivo suspendido en el espacio, captura la silueta de los visitantes y la fusiona con imágenes de los paisajes intervenidos y las performances, disolviendo la frontera entre cuerpo, naturaleza e imagen digital. Mecánica del Tacto, un conjunto de brazos mecánicos articulados, despliega fragmentos de video de las performances, evocando gestos que se repiten y se fragmentan en el tiempo. Orilla, cuencos de acrílico con agua que, al ser tocada por el público, activan sonidos provenientes de cada paisaje, permitiendo que la experiencia táctil revele la memoria sonora de estos lugares.",
+    "En este tránsito de imágenes y cuerpos, la obra se convierte en un organismo vivo, donde la ciudad y la naturaleza se filtran una en la otra. Aquí, la imagen se transforma en presencia expandida, el sonido despierta en el contacto y el espacio cambia con quienes lo habitan."
+  ],
+  en:[
+    "HÍBRIDA: Bodies and technologies in the icosahedron is an interactive, performative installation that inscribes the body within a territory in transformation, where technologies mediate its presence and, at the same time, are altered by its contact. In this porous, unstable environment, the borders between the human and the artificial, the organic and the synthetic, the urban and the natural dissolve, giving way to a hybrid state in constant mutation.",
+    "The audiovisual recordings that shape the installation come from the Biobío river, the Vasco de Gama wetland and the Laguna Grande, liminal landscapes where water is border and passage, memory and resistance. In these places, performances explored the friction between body and technology, unfolding movements in dialogue with the surroundings and wrapping the skin in plastic film as a membrane of contact and tension. These actions are carried into the exhibition space through various interactive devices that engage with the audience, merging their presence with the recordings of the landscape and the performative action. In this way, the work exhibits the performance in a continuous process of transformation, hybridizing the bodies present with the activated images and environments.",
+    "The installation is composed of three interconnected works. Reflejo Abierto, an interactive icosahedron suspended in space, captures the visitors' silhouette and merges it with images of the intervened landscapes and the performances, dissolving the border between body, nature and digital image. Mecánica del Tacto, a set of articulated mechanical arms, unfolds video fragments of the performances, evoking gestures that repeat and fragment over time. Orilla, acrylic bowls with water that, when touched by the audience, trigger sounds from each landscape, letting the tactile experience reveal the sonic memory of these places.",
+    "In this transit of images and bodies, the work becomes a living organism, where city and nature filter into one another. Here, the image turns into expanded presence, sound awakens in contact, and space changes with those who inhabit it."
+  ]
+};
+const HIB_TEORICO={
+  es:[
+    "HÍBRIDA se sitúa en la intersección entre las artes mediales y la performance, proponiendo un espacio donde lo humano, lo tecnológico y lo natural se entrelazan en un entramado visual y sonoro en constante transformación. El proyecto surge de la necesidad de investigar cómo las tecnologías digitales han alterado la percepción de los cuerpos y las identidades, generando nuevas formas de representación y presencia en los territorios, y propone una reflexión sobre la hibridación entre lo orgánico y lo artificial.",
+    "Desde una perspectiva teórica, HÍBRIDA toma como referencia los planteamientos de Jean-Luc Nancy, quien entiende los cuerpos como espacios abiertos a la alteridad y a la interacción con los otros; la teoría del cyborg de Donna Haraway, que desdibuja los límites entre lo humano y lo tecnológico, proponiendo la existencia de sujetos híbridos en constante redefinición; y el pensamiento de Flavia Costa, quien aborda las tecnologías como sistemas de mediación que transforman nuestras experiencias y relaciones con los territorios.",
+    "El enfoque territorial de la obra se sustenta en los registros audiovisuales capturados en tres locaciones del Gran Concepción: el río Biobío, el humedal Vasco de Gama y la laguna Grande, espacios de tránsito e hibridación donde lo natural y lo urbano conviven en una relación tensa y cambiante. Estos paisajes funcionan como umbrales de transformación, donde el agua, los sedimentos y la intervención humana definen un territorio fluctuante, análogo a las transformaciones que experimentan los cuerpos en su relación con las tecnologías.",
+    "El río Biobío, históricamente considerado un eje de conexión y fractura, es un flujo que divide y une, un territorio de memoria y transformación permanente. El humedal Vasco de Gama es un espacio donde la vida se articula en torno a la acumulación de agua y sedimentos, un ecosistema de resistencia amenazado por la urbanización. La laguna Grande, situada entre la ciudad y la naturaleza, es un espacio de transición en el que las dinámicas urbanas y ecológicas entran en diálogo.",
+    "La materialidad de estos lugares —agua, sedimentos, vegetación— se traslada al espacio expositivo a través de los tiestos de agua, que contienen fragmentos recolectados de cada locación. El sonido se activa a partir del contacto del público con el agua, reproduciendo registros tomados en cada paisaje: el flujo del agua, el roce del viento, la presencia de aves y sonidos de la ciudad. Así, el sonido no solo acompaña la imagen, sino que se experimenta de manera táctil. Al mismo tiempo, las imágenes en video se fusionan con los cuerpos de los visitantes dentro del icosaedro interactivo, borrando las distinciones entre presencia física y representación digital.",
+    "La relevancia del proyecto radica en su capacidad para expandir las prácticas de las artes mediales en la región del Biobío, proponiendo una experiencia donde los espectadores dejan de ser observadores pasivos y se convierten en agentes activos en la configuración de la obra. En un contexto donde las tecnologías digitales han intensificado la fragmentación de los cuerpos y la experiencia de lo real, HÍBRIDA propone un ejercicio de reconfiguración y exploración, donde la presencia, el movimiento y la interactividad permiten reconstruir nuevas formas de estar en el mundo."
+  ],
+  en:[
+    "HÍBRIDA sits at the intersection of media arts and performance, proposing a space where the human, the technological and the natural intertwine in a visual and sonic fabric in constant transformation. The project arises from the need to investigate how digital technologies have altered the perception of bodies and identities, generating new forms of representation and presence within territories, and it proposes a reflection on the hybridization between the organic and the artificial.",
+    "From a theoretical perspective, HÍBRIDA draws on the ideas of Jean-Luc Nancy, who understands bodies as spaces open to otherness and to interaction with others; Donna Haraway's cyborg theory, which blurs the limits between the human and the technological, proposing the existence of hybrid subjects in constant redefinition; and the thought of Flavia Costa, who approaches technologies as systems of mediation that transform our experiences and relationships with territories.",
+    "The work's territorial focus is grounded in audiovisual recordings captured in three locations of Greater Concepción: the Biobío river, the Vasco de Gama wetland and the Laguna Grande, spaces of transit and hybridization where the natural and the urban coexist in a tense, shifting relationship. These landscapes function as thresholds of transformation, where water, sediment and human intervention define a fluctuating territory, analogous to the transformations bodies undergo in their relationship with technologies.",
+    "The Biobío river, historically regarded as an axis of connection and fracture, is a flow that both divides and unites, a territory of memory and permanent transformation. The Vasco de Gama wetland is a space where life is articulated around the accumulation of water and sediment, an ecosystem of resistance threatened by urbanization. The Laguna Grande, situated between the city and nature, is a space of transition in which urban and ecological dynamics enter into dialogue.",
+    "The materiality of these places —water, sediment, vegetation— is carried into the exhibition space through the water vessels, which contain fragments collected from each location. Sound is activated by the audience's contact with the water, playing back recordings taken in each landscape: the flow of water, the brush of the wind, the presence of birds and the sounds of the city. Thus, sound not only accompanies the image but is experienced tactilely. At the same time, the video images merge with the visitors' bodies inside the interactive icosahedron, erasing the distinctions between physical presence and digital representation.",
+    "The project's relevance lies in its capacity to expand media arts practices in the Biobío region, proposing an experience where spectators cease to be passive observers and become active agents in the configuration of the work. In a context where digital technologies have intensified the fragmentation of bodies and the experience of the real, HÍBRIDA proposes an exercise of reconfiguration and exploration, where presence, movement and interactivity make it possible to reconstruct new ways of being in the world."
+  ]
+};
+const OBRAS = {
+  convey: {
+    title:"Convey me", year:"2025–2026",
+    tecnica:{es:"Instalación cinética · videoproyección · software propio", en:"Kinetic installation · video projection · custom software"},
+    dimensiones:{es:"Aprox. 300 × 200 × 80 cm", en:"Approx. 300 × 200 × 80 cm"},
+    duracion:{es:"Loop infinito", en:"Infinite loop"},
+    materiales:{es:'Listones de madera 1 × 2"; tela de lienzo crudo; rodillos de cinta transportadora; motor DC; controlador de motor; Arduino; dos proyectores; computador; software propio en p5.js.', en:'Wooden battens 1 × 2"; raw canvas fabric; conveyor belt rollers; DC motor; motor controller; Arduino; two projectors; computer; custom p5.js software.'},
+    expo:{es:"Spring Show 2026 · ITP, New York University", en:"Spring Show 2026 · ITP, New York University"},
+    gracias:{es:"Sophia, Guy, Niko, Octavio, Devan, Ray, Tobi, Rich, Danny", en:"Sophia, Guy, Niko, Octavio, Devan, Ray, Tobi, Rich, Danny"},
+    video:{yt:"naS8u7d6TRU"},
+    es:['Convey me es una instalación cinética donde un cuerpo desnudo —el mío— es transportado, estirado y reconfigurado sin descanso. La obra trata al cuerpo como materia en tránsito: algo que una máquina mueve, deforma y vuelve a poner en marcha.','Una estructura de madera tipo cercha desplaza un bucle continuo de tela sobre rodillos de cinta transportadora. Sobre esa tela en movimiento se proyecta el video de mi cuerpo, que se deforma dos veces: por la geometría misma de la estructura y por un sistema propio en p5.js que lo estira a medida que avanza.','Mecánica, proyección y código funcionan como un solo sistema: un loop infinito en el que el cuerpo se transporta, se transforma y se reconfigura sin fin. Aun deformado, el cuerpo depende de la estructura para existir: sin ella no hay imagen, ni movimiento, ni cuerpo que mostrar.'],
+    en:['Convey me is a kinetic installation in which a naked body —mine— is transported, stretched and reconfigured without rest. The work treats the body as matter in transit: something a machine moves, deforms and sets in motion again.','A wooden truss structure drives a continuous loop of fabric over conveyor-belt rollers. Onto that moving fabric the video of my body is projected, deformed twice over: by the geometry of the structure itself and by a custom p5.js system that stretches it as it advances.','Mechanics, projection and code work as a single system: an infinite loop in which the body is transported, transformed and reconfigured without end. Even when deformed, the body depends on the structure to exist: without it there is no image, no movement, no body to show.'],
+    fotos:["convey_1.jpg","convey_2.jpg","convey_3.jpg","convey_4.jpg","convey_5.jpg","convey_6.jpg"]
+  },
+  reflejo: {
+    title:"Reflejo Abierto", year:"2025",
+    subtitle:{es:"Icosaedro interactivo", en:"Interactive icosahedron"},
+    tecnica:{es:"Videoinstalación interactiva", en:"Interactive video installation"},
+    dimensiones:{es:"2,5 × 2,5 × 2,5 m", en:"2.5 × 2.5 × 2.5 m"},
+    materiales:{es:'Estructura desmontable de madera con vértices metálicos de acero galvanizado, cables, 12 cámaras ESP32, 12 pantallas de 6", 4 sensores de proximidad, procesador de video, Video Wall.', en:'Demountable wooden structure with galvanized steel vertices, cables, 12 ESP32 cameras, 12 6" screens, 4 proximity sensors, video processor, Video Wall.'},
+    expo:HIB_EXPO, colab:HIB_COLAB, hibrida:true,
+    es:["En el corazón de HÍBRIDA, el icosaedro se erige como una estructura simbólica y sensorial que articula la interconexión entre lo humano, lo tecnológico y lo territorial. Inspirado en la geometría sagrada, este poliedro encarna el flujo, la transformación y la relación con el agua, estableciendo un vínculo entre la urbe y los cuerpos de agua del Gran Concepción.","Construido en madera y metal, el icosaedro alberga doce cámaras posicionadas en sus vértices, que capturan y proyectan en tiempo real la silueta de los visitantes fusionada con imágenes pregrabadas de las performances en el río Biobío, el humedal Vasco de Gama y la laguna Grande. A través de esta superposición, las identidades se diluyen y los paisajes se entrelazan, generando un flujo de presencias en constante mutación.","Los cables que emergen del icosaedro y se conectan con las pantallas en la sala expositiva refuerzan la noción de una red orgánica y tecnológica, donde el espacio deviene un sistema interdependiente en continuo proceso de transformación. En este entorno, la obra invita al público a experimentar la hibridez de su propia imagen, cuestionando los límites entre cuerpo y naturaleza, materialidad y virtualidad, presencia y ausencia."],
+    en:["At the heart of HÍBRIDA, the icosahedron stands as a symbolic, sensorial structure that articulates the interconnection between the human, the technological and the territorial. Inspired by sacred geometry, this polyhedron embodies flow, transformation and the relationship with water, establishing a link between the city and the bodies of water of Greater Concepción.","Built in wood and metal, the icosahedron houses twelve cameras positioned at its vertices, capturing and projecting in real time the visitors' silhouette merged with pre-recorded images of the performances at the Biobío river, the Vasco de Gama wetland and the Laguna Grande. Through this superimposition, identities dissolve and landscapes intertwine, generating a flow of presences in constant mutation.","The cables that emerge from the icosahedron and connect to the screens in the exhibition room reinforce the notion of an organic, technological network, where space becomes an interdependent system in a continuous process of transformation. In this environment, the work invites the audience to experience the hybridity of their own image, questioning the limits between body and nature, materiality and virtuality, presence and absence."],
+    fotos:["reflejo_1.jpg","reflejo_2.jpg","reflejo_3.jpg","reflejo_4.jpg"]
+  },
+  orilla: {
+    title:"Orilla", year:"2025",
+    subtitle:{es:"Cuencos de agua interactivos", en:"Interactive water bowls"},
+    tecnica:{es:"Instalación sonora interactiva", en:"Interactive sound installation"},
+    dimensiones:{es:"1,5 × 1,5 × 1,3 m aprox.", en:"1.5 × 1.5 × 1.3 m approx."},
+    materiales:{es:"Tres cuencos de acrílico rellenos con agua, estructura de madera, sensores de tacto, sistema Arduino, monitores sonoros y cables.", en:"Three acrylic bowls filled with water, wooden structure, touch sensors, Arduino system, sound monitors and cables."},
+    expo:HIB_EXPO, colab:HIB_COLAB, hibrida:true,
+    es:["Una instalación que activa un diálogo sensorial entre cuerpo, agua y sonido. Sobre plintos dispuestos en la sala, cuencos de acrílico contienen agua, representando las locaciones específicas donde se desarrollaron las performances: el río Biobío, el humedal Vasco de Gama y la laguna Grande.","Cada cuenco responde al tacto del visitante. Equipados con sistemas de contacto, activan sonidos cuando las manos sumergen o rozan el agua. Estas activaciones construyen un paisaje sonoro en constante transformación, donde la presencia del público establece un vínculo entre el cuerpo y la memoria acústica de los cuerpos de agua representados.","El contacto con el agua genera una experiencia de inmersión sensorial, donde la materia, el sonido y el gesto se entrelazan en una red de resonancias efímeras."],
+    en:["An installation that activates a sensorial dialogue between body, water and sound. On plinths arranged in the room, acrylic bowls hold water, representing the specific locations where the performances took place: the Biobío river, the Vasco de Gama wetland and the Laguna Grande.","Each bowl responds to the visitor's touch. Fitted with contact systems, they trigger sounds when hands submerge or brush the water. These activations build a soundscape in constant transformation, where the audience's presence establishes a link between the body and the acoustic memory of the bodies of water represented.","Contact with the water generates an experience of sensorial immersion, where matter, sound and gesture intertwine in a network of ephemeral resonances."],
+    fotos:["orilla_1.jpg","orilla_2.jpg","orilla_3.jpg","orilla_4.jpg"]
+  },
+  mecanica: {
+    title:"Mecánica del Tacto", year:"2025",
+    subtitle:{es:"Brazos mecánicos", en:"Mechanical arms"},
+    tecnica:{es:"Videoinstalación cinética", en:"Kinetic video installation"},
+    dimensiones:{es:"20 × 20 × 70 cm cada dispositivo", en:"20 × 20 × 70 cm each device"},
+    materiales:{es:"Tres brazos mecánicos con mini proyectores, sistema Arduino.", en:"Three mechanical arms with mini projectors, Arduino system."},
+    expo:HIB_EXPO, colab:HIB_COLAB, hibrida:true,
+    es:["Tres brazos mecánicos articulados, anclados en el suelo y las paredes de la sala, despliegan una coreografía autónoma donde la memoria del cuerpo persiste en la máquina. En el extremo de cada brazo, un mini proyector reproduce fragmentos de video de las performances, registrando detalles del cuerpo en contacto con el film plástico, un material que encarna la fricción entre lo orgánico y lo artificial.","A medida que los brazos se mueven, las imágenes se fragmentan y reconfiguran en un ciclo de repetición, evocando gestos residuales, huellas de un cuerpo ausente que insisten en el tiempo. La movilidad de estos dispositivos transporta su rastro, articulando un lenguaje mecánico que fluctúa entre el ensamblaje preciso y la dislocación errática.","Mecánica del Tacto opera como una extensión híbrida del gesto humano, donde la máquina descompone, altera y prolonga movimientos más allá de su origen. En este tránsito, la tecnología no borra la presencia del cuerpo, sino que la desplaza y la transforma en un eco persistente, un vestigio en constante recomposición."],
+    en:["Three articulated mechanical arms, anchored to the floor and walls of the room, unfold an autonomous choreography where the memory of the body persists in the machine. At the end of each arm, a mini projector plays video fragments of the performances, recording details of the body in contact with the plastic film, a material that embodies the friction between the organic and the artificial.","As the arms move, the images fragment and reconfigure in a cycle of repetition, evoking residual gestures, traces of an absent body that insist over time. The mobility of these devices carries their trail, articulating a mechanical language that fluctuates between precise assembly and erratic dislocation.","Mecánica del Tacto operates as a hybrid extension of the human gesture, where the machine decomposes, alters and prolongs movements beyond their origin. In this transit, technology does not erase the presence of the body but displaces it and transforms it into a persistent echo, a vestige in constant recomposition."],
+    fotos:["mecanica_1.jpg","mecanica_2.jpg","mecanica_3.jpg","mecanica_4.jpg","mecanica_5.jpg"]
+  },
+  tensiones: {
+    title:"Tensiones", year:"2022–2024",
+    tecnica:{es:"Instalación de video · smartphones sellados en plástico, cables de acero, casquillos, ojales y cargadores", en:"Video installation · smartphones sealed in plastic, steel cables, ferrules, eyelets and chargers"},
+    dimensiones:{es:"Variables · se adapta a cada locación (mínimo 1 × 1 × 1 m)", en:"Variable · adapts to each location (minimum 1 × 1 × 1 m)"},
+    keywords:{es:"Cuerpo, Tecnología, Videoinstalación, Rizoma, Híbrido", en:"Body, Technology, Video installation, Rhizome, Hybrid"},
+    expo:{es:"Pinacoteca de Concepción (Casa del Arte José Clemente Orozco), exposición «Desfase», septiembre 2022 · Sala Federico Ramírez Punto de Cultura, Concepción, 2024", en:"Pinacoteca de Concepción (Casa del Arte José Clemente Orozco), «Desfase» exhibition, September 2022 · Sala Federico Ramírez Punto de Cultura, Concepción, 2024"},
+    video:{yt:"Prt97pJyWRk"},
+    colab:[
+      {name:"Sofía Bernasconi", es:"Dirección general, performer, registros de fotografía y video, postproducción", en:"General direction, performer, photography and video recording, post-production"},
+      {name:"Caterina Riquelme", es:"Performer", en:"Performer"},
+      {name:"Marienne Le Roy", es:"Performer", en:"Performer"},
+      {name:"Anaís Bugueiro", es:"Asistencia escénica", en:"Stage assistance"},
+      {name:"NYVA", es:"Asistencia de sonido", en:"Sound assistance"},
+      {name:"Viviana Milla", es:"Registros de video y fotografía", en:"Video and photography recording"},
+      {name:"Javiera San Martín", es:"Asistencia escénica", en:"Stage assistance"},
+      {name:"Camila Pinto", es:"Diseño sonoro", en:"Sound design"},
+      {name:"Piero Stemberga", es:"Logística", en:"Logistics"}
+    ],
+    links:[{url:"https://www.youtube.com/watch?v=Prt97pJyWRk", es:"Video teaser", en:"Video teaser"}],
+    es:["Tensiones es la exploración de una corporalidad híbrida en la que un elemento tecnológico, el plástico, actúa como articulador de tensiones que surgen en el diálogo entre componentes presentes en tres lugares —la orilla del río Andalién, el humedal Andalién y el río Andalién—, tres performers y la sala de exposición. Se contrastan las categorías tradicionales cuerpo, tecnología y medio natural, al reconfigurarse en un todo (des)integrado.","La materialización de la indagación es desarrollada a través de un flujo intermedial, donde el video, la performance, la sonoridad y la instalación desbordan el cuerpo a través de diversas fuerzas enfrentadas en una lógica no lineal. Cuerpo se torna plástico, pantalla, acero, árbol, piel, cables, sonido, paredes y agua."],
+    en:["Tensiones is the exploration of a hybrid corporeality in which a technological element, plastic, acts as an articulator of tensions arising in the dialogue between components present in three places —the shore of the Andalién river, the Andalién wetland and the Andalién river—, three performers and the exhibition room. The traditional categories of body, technology and natural environment are contrasted as they reconfigure into a (dis)integrated whole.","The inquiry is materialized through an intermedial flow, where video, performance, sound and installation overflow the body through various forces confronting each other in a non-linear logic. Body becomes plastic, screen, steel, tree, skin, cables, sound, walls and water."],
+    fotos:["tensiones_1.jpg","tensiones_2.jpg","tensiones_3.jpg","tensiones_4.jpg","tensiones_5.jpg"]
+  },
+  cuerpoaguas: {
+    title:"Mi cuerpo toca tus aguas", year:"2024–2025",
+    tecnica:{es:"Videoperformance", en:"Video performance"},
+    lugar:{es:"Proyecto HÍBRIDA", en:"HÍBRIDA project"},
+    es:["Mi cuerpo toca tus aguas es una videoperformance del proyecto HÍBRIDA: el cuerpo entra en el agua como en otra piel, buscando una continuidad entre organismo y territorio, entre lo humano y lo que lo excede.","En cada performance mi cuerpo se envuelve en plástico junto a elementos propios de tres cuerpos de agua del Gran Concepción, en Chile: humedales, lagunas y ríos. Son sitios liminales, ecosistemas en tensión con la especulación inmobiliaria que avanza sobre ellos. Al amarrarme a estos territorios mi cuerpo se hace paisaje: devela esas tensiones y, a la vez, las resiste."],
+    en:["Mi cuerpo toca tus aguas is a video performance from the HÍBRIDA project: the body enters the water as if into another skin, seeking a continuity between organism and territory, between the human and what exceeds it.","In each performance my body wraps itself in plastic alongside elements belonging to three bodies of water of the Gran Concepción, in Chile: wetlands, lagoons and rivers. These are liminal sites, ecosystems in tension with the real-estate speculation encroaching on them. As I tie myself to these territories my body becomes landscape: it reveals those tensions and, at once, resists them."],
+    fotos:["cuerpoaguas_1.jpg","cuerpoaguas_2.jpg","cuerpoaguas_3.jpg","cuerpoaguas_4.jpg"]
+  },
+  cordeles: {
+    title:"También somos una cortina de cordeles", year:"2020",
+    tecnica:{es:"Videoinstalación · proyección de video sobre cortina de cordeles y track sonoro", en:"Video installation · video projection onto a curtain of cords and sound track"},
+    dimensiones:{es:"Cortina 1 × 2,2 × 0,08 m (la distancia de proyección se considera aparte)", en:"Curtain 1 × 2.2 × 0.08 m (projection distance considered separately)"},
+    keywords:{es:"Cuerpo, Tecnología, Cyborg, Videoinstalación, Transfronterización", en:"Body, Technology, Cyborg, Video installation, Border-crossing"},
+    expo:{es:"Museo de Artes Visuales (MAVI UC), Santiago — Premio MAVI UC LarrainVial Arte Joven 2023", en:"Museo de Artes Visuales (MAVI UC), Santiago — MAVI UC LarrainVial Young Art Award 2023"},
+    video:{yt:"7pEBvo6lqFM"},
+    colab:[
+      {name:"Caterina Riquelme", es:"Actuación", en:"Performance"},
+      {name:"Dayano", es:"Diseño sonoro", en:"Sound design"}
+    ],
+    links:[{url:"https://youtu.be/7pEBvo6lqFM", es:"Video teaser", en:"Video teaser"}],
+    es:["«También somos una cortina de cordeles» es una video-instalación que reflexiona sobre la condición cuerpo-tecnología. La obra plantea nuevas formas de comprender el cuerpo desde una mirada transhumanista, presentando la corporalidad como un entramado híbrido, volátil y tensionado.","En la instalación, el cuerpo se funde en cordeles a través de una proyección en bucle, la cual nos muestra una corporalidad desnuda que experimenta distintas emociones. La cortina de cordeles es transitable, permitiendo que el cuerpo se arme y desarme al antojo de quién interactúe con ella. De esta forma, la corporalidad se torna inestable, existiendo en la medida de las relaciones que se generen en la interacción, otorgándole protagonismo al público con la obra y evidenciando la condición relacional del cuerpo."],
+    en:["\"We are also a curtain of cords\" is a video installation that reflects on the body-technology condition. The work proposes new ways of understanding the body from a transhumanist perspective, presenting corporeality as a hybrid, volatile and tensioned weave.","In the installation, the body merges into cords through a looped projection showing a naked corporeality that experiences different emotions. The curtain of cords can be walked through, letting the body assemble and disassemble at the will of whoever interacts with it. In this way corporeality becomes unstable, existing only to the extent of the relationships generated in the interaction, giving the audience a leading role and revealing the relational condition of the body."],
+    fotos:["cordeles_1.jpg","cordeles_2.jpg","cordeles_3.jpg","cordeles_4.jpg"]
+  },
+  sumersiones: {
+    title:"Sumersiones", year:"2019",
+    tecnica:{es:"Videoinstalación", en:"Video installation"},
+    dimensiones:{es:"2 × 1,8 × 0,4 m", en:"2 × 1.8 × 0.4 m"},
+    keywords:{es:"Cuerpo, Tecnología, Videoinstalación, Híbrido", en:"Body, Technology, Video installation, Hybrid"},
+    expo:{es:"Galería Zócalo UDD (2019) · Casa Minga (2022) · Sala Federico Ramírez, Punto de Cultura de la Municipalidad de Concepción — «Desbordes» (2024)", en:"Galería Zócalo UDD (2019) · Casa Minga (2022) · Sala Federico Ramírez, Punto de Cultura, Municipality of Concepción — «Desbordes» (2024)"},
+    video:{yt:"m_cjJsj1cZQ"},
+    colab:[
+      {name:"Franco Van der Molen", es:"Performer", en:"Performer"},
+      {name:"Francisco Iribarra", es:"Performer", en:"Performer"},
+      {name:"Alessandra Marchesani", es:"Performer", en:"Performer"},
+      {name:"María Francisca Aruta", es:"Colaboración en diseño de estructura", en:"Structure design collaboration"},
+      {name:"Claudio Bernasconi y Santiago", es:"Construcción de estructura", en:"Structure construction"}
+    ],
+    links:[
+      {url:"https://www.youtube.com/watch?v=m_cjJsj1cZQ", es:"Video teaser", en:"Video teaser"},
+      {url:"https://sofibernasconi-3.jimdosite.com/proyecto/", es:"Proceso creativo (sitio)", en:"Creative process (site)"}
+    ],
+    es:["Sumersiones es una videoinstalación que reflexiona, desde una perspectiva cyborg, en torno al cuerpo-tecnología. Se muestra, a través de cinco televisores y dvds antiguos, a tres personas sumergidas en el agua. De esta forma, el agua actúa como elemento fusionador entre orgánico e inorgánico, difuminando los límites de la piel y expandiéndose al plano tecnológico de los dispositivos.","Los artefactos se encuentran dispuestos sobre una estructura metálica que deja ver los cables y conexiones que hacen que la instalación funcione. Cada televisor emite un track sonoro, de manera que juntos generan un paisaje sonoro orgánico que varía a medida que los videos, de disímil duración, se desfasan. Cuerpo se torna agua, cable, metal, pantalla, dvd, sonido y plástico."],
+    en:["Sumersiones is a video installation that reflects, from a cyborg perspective, on the body-technology relationship. Through five old televisions and DVD players, three people are shown submerged in water. Water acts as a fusing element between the organic and the inorganic, blurring the limits of the skin and expanding into the technological plane of the devices.","The devices sit on a metal structure that exposes the cables and connections that make the installation work. Each television emits its own sound track, so that together they generate an organic soundscape that shifts as the videos, of differing lengths, fall out of sync. Body becomes water, cable, metal, screen, DVD, sound and plastic."],
+    fotos:["sumersiones_1.jpg","sumersiones_2.jpg","sumersiones_3.jpg","sumersiones_4.jpg"]
+  },
+  residente: {
+    title:"Resid(ente)", year:"2021",
+    tecnica:{es:"Video · residencia / laboratorio transdisciplinar", en:"Video · transdisciplinary residency / laboratory"},
+    keywords:{es:"Cuerpo, Tecnología, Movimiento, Danza, Espacio", en:"Body, Technology, Movement, Dance, Space"},
+    video:{yt:"c6EPw2emrHE"},
+    colab:[
+      {name:"María de los Ángeles Palacios", es:"Performer y co-creadora", en:"Performer and co-creator"},
+      {name:"Franco Van der Molen", es:"Performer y co-creador", en:"Performer and co-creator"},
+      {name:"Lissette Romero", es:"Performer y co-creadora", en:"Performer and co-creator"},
+      {name:"Hernán Yévenes", es:"Performer y co-creador", en:"Performer and co-creator"},
+      {name:"Viviana Milla", es:"Registro audiovisual y co-creadora", en:"Audiovisual recording and co-creator"},
+      {name:"Juan Soto", es:"Asistencia escénica, registro audiovisual y co-creador", en:"Stage assistance, audiovisual recording and co-creator"},
+      {name:"Rodrigo Arriagada", es:"Productor musical", en:"Music producer"},
+      {name:"Piero Stemberga", es:"Asistencia creativa y logística", en:"Creative and logistics assistance"},
+      {name:"Sofía Bernasconi", es:"Dirección del proyecto y co-creadora", en:"Project direction and co-creator"}
+    ],
+    links:[
+      {url:"https://youtu.be/1k7ge2oPUNM", es:"Estela", en:"Estela"},
+      {url:"https://youtu.be/DhFXA4IX7bw", es:"Corteza", en:"Corteza"},
+      {url:"https://youtu.be/gB0o5xwmXgw", es:"Tierra", en:"Tierra"},
+      {url:"https://youtu.be/2N3n_U8eMvA", es:"Automático", en:"Automático"},
+      {url:"https://youtu.be/xpnct_b5X7s", es:"Corpobjetos", en:"Corpobjetos"},
+      {url:"https://youtu.be/rU4LOV2qg10", es:"Juan", en:"Juan"},
+      {url:"https://youtu.be/c6EPw2emrHE", es:"Inversovo", en:"Inversovo"}
+    ],
+    es:["Resid(ente) es un proyecto transdisciplinar con enfoque de laboratorio cuyo objetivo es explorar las posibilidades del cuerpo y su desplazamiento hacia la tecnología, espacios, sonidos y materias que habitamos.","Se organizó una residencia artística de tres días en una casa de campo ubicada en la Región del Bío Bío. Durante este tiempo, un grupo de bailarines —María de los Ángeles Palacios, Franco Van der Molen, Lissette Romero y Hernán Yévenes—, junto al artista arquitecto Juan Soto, la artista Viviana Milla y la artista Sofía Bernasconi, habitaron la casa, recorriendo sus espacios, paisajes, materialidades y particularidades, y buscando la fusión e interacción de los cuerpos con el lugar.","La exploración tiene como resultado siete ejercicios de video con sonorización de Rodrigo Arriagada, quien desarrolló los tracks usando sonidos de campo registrados en la casa. Los videos son: Estela, Corteza, Tierra, Automático, Corpobjetos, Juan e Inversovo."],
+    en:["Resid(ente) is a transdisciplinary, lab-oriented project whose aim is to explore the possibilities of the body and its displacement toward the technology, spaces, sounds and materials we inhabit.","A three-day artistic residency was organized in a country house in the Biobío Region. During this time a group of dancers —María de los Ángeles Palacios, Franco Van der Molen, Lissette Romero and Hernán Yévenes—, together with artist-architect Juan Soto, artist Viviana Milla and artist Sofía Bernasconi, inhabited the house, moving through its spaces, landscapes, materials and particularities, seeking the fusion and interaction of the bodies with the place.","The exploration results in seven video exercises scored by Rodrigo Arriagada, who developed the tracks using field sounds recorded in the house. The videos are: Estela, Corteza, Tierra, Automático, Corpobjetos, Juan and Inversovo."],
+    fotos:["residente_1.jpg","residente_2.jpg","residente_3.jpg","residente_4.jpg"]
+  },
+  deshilacha: {
+    title:"Deshilacha", year:"2019",
+    tecnica:{es:"Video · cortometraje", en:"Video · short film"},
+    duracion:{es:"10:47 min", en:"10:47 min"},
+    keywords:{es:"Patrimonio, Documental, Ficción, Fábrica, Abandono, Tomé", en:"Heritage, Documentary, Fiction, Factory, Abandonment, Tomé"},
+    premio:{es:"Obra ganadora · Premio Ceres 2020, categoría Audiovisual Ficción", en:"Winner · Ceres Award 2020, Audiovisual Fiction category"},
+    colab:[
+      {name:"Sofía Bernasconi", es:"Idea y realización", en:"Concept and direction"},
+      {name:"Else Marie Pade", es:"Música", en:"Music"},
+      {name:"Francisco Huichaqueo", es:"Agradecimientos", en:"Acknowledgements"}
+    ],
+    links:[
+      {url:"https://youtu.be/cXR5RE0aC04", es:"Ver cortometraje", en:"Watch short film"},
+      {url:"https://youtu.be/ZzC5wlxY2qw", es:"Video «comunicaciones» Premios Ceres", en:"Ceres Awards «communications» video"}
+    ],
+    video:{yt:"cXR5RE0aC04"},
+    video2:{yt:"ZzC5wlxY2qw", es:"Entrevista · Premios Ceres", en:"Interview · Ceres Awards"},
+    es:["A espaldas del mar, dentro de la abandonada fábrica textil Bellavista-Oveja Tomé, las maquinarias aún respiran y los hilos cuelgan expectantes.","Deshilacha es un cortometraje experimental de «no ficción» que cruza la frontera de la ficción a través del descubrimiento en primera persona, sin texto ni voz, del edificio de hilandería de la fábrica. La textilería, fundada en 1865, fue durante años una de las principales industrias textiles en Latinoamérica y una notable fuente de trabajo para Tomé. La fábrica, considerada patrimonio arquitectónico, se declaró en quiebra el año 2007 quedando gran parte del edificio sin uso y conservándose intactas las huellas, vestigios y máquinas en un inquietante silencio.","El cortometraje, de tono dramático y misterioso, recorre el edificio suscitando curiosidad por revelar cada rincón y elemento presente en el lugar. Un juego tenso de texturas, fierros, telas y botones lleva al espectador a un viaje íntimo con tintes de surrealismo, donde las máquinas son protagonistas que narran su propia historia."],
+    en:["With its back to the sea, inside the abandoned Bellavista-Oveja Tomé textile factory, the machines still breathe and the threads hang in wait.","Deshilacha is an experimental \"non-fiction\" short film that crosses the border into fiction through a first-person discovery —without text or voice— of the factory's spinning building. Founded in 1865, the mill was for years one of the main textile industries in Latin America and a major source of work for Tomé. Considered architectural heritage, the factory declared bankruptcy in 2007, leaving much of the building unused and preserving its traces, vestiges and machines intact in an unsettling silence.","Dramatic and mysterious in tone, the film travels through the building, arousing the urge to reveal every corner and element in the place. A tense play of textures, iron, fabric and buttons takes the viewer on an intimate journey tinged with surrealism, where the machines are protagonists that narrate their own story."],
+    fotos:["deshilacha_1.jpg","deshilacha_2.jpg"]
+  },
+  sumersiones0: {
+    title:"Bajo el agua", year:"2018",
+    subtitle:{es:"Serie de pintura", en:"Painting series"},
+    tecnica:{es:"Pintura · látex, acrílico y carboncillo sobre cartón", en:"Painting · latex, acrylic and charcoal on cardboard"},
+    dimensiones:{es:"80 × 60 cm cada obra", en:"80 × 60 cm each work"},
+    keywords:{es:"Cuerpo, Líquido, Movimiento", en:"Body, Liquid, Movement"},
+    expo:{es:"Galería Zócalo UDD (2018) · Galería Aura (2018) · Espacio Trafül (2018) · Galería Casa de Salud (2019) · Sala Federico Ramírez, Punto de Cultura, Concepción (2024)", en:"Galería Zócalo UDD (2018) · Galería Aura (2018) · Espacio Trafül (2018) · Galería Casa de Salud (2019) · Sala Federico Ramírez, Punto de Cultura, Concepción (2024)"},
+    colab:[
+      {name:"José Tomás Sepúlveda", es:"Modelo", en:"Model"},
+      {name:"Emilia Urrea", es:"Modelo", en:"Model"},
+      {name:"Caterina Riquelme", es:"Modelo", en:"Model"},
+      {name:"Felipe Parra", es:"Modelo", en:"Model"},
+      {name:"Ignacio Andrade", es:"Modelo", en:"Model"}
+    ],
+    gracias:{es:"A quienes participaron en la producción de esta obra.", en:"To everyone who took part in the production of this work."},
+    es:["Bajo el agua es una serie de ocho obras pictóricas que marcaron mis primeros pasos en la exploración de los límites del cuerpo. A partir del concepto de lo «líquido» surge la necesidad de desbordar y descubrir nuevas fronteras faciales.","En estas obras, distintas personas sumergieron sus rostros en fuentes de vidrio llenas de agua. Esos momentos fueron capturados en fotografías y luego reinterpretados mediante dibujo y pintura. Considero estos ejercicios como el germen de mi interés por desarrollar investigaciones corporales en distintos medios.","Actualmente hay cuatro obras de la serie disponibles para exhibición, correspondientes a las que se muestran en estas imágenes."],
+    en:["Bajo el agua is a series of eight paintings that marked my first steps in exploring the limits of the body. From the notion of the «liquid» comes the need to overflow and to discover new facial borders.","In these works, different people submerged their faces in glass basins filled with water. Those moments were captured in photographs and later reinterpreted through drawing and painting. I consider these exercises the germ of my interest in developing bodily investigations across different media.","Four works from the series are currently available for exhibition, corresponding to those shown in these images."],
+    fotos:["sumersiones0_1.jpg","sumersiones0_2.jpg","sumersiones0_3.jpg","sumersiones0_4.jpg","sumersiones0_5.jpg"],
+    slider_k:{es:"Obras de la serie", en:"Works in the series"},
+    slider:["bajoagua_obra1.jpg","bajoagua_obra2.jpg","bajoagua_obra3.jpg","bajoagua_obra4.jpg","bajoagua_obra5.jpg"]
+  },
+  artwork: {
+    title:"Artwork para álbumes de música", year:"2020",
+    subtitle:{es:"Portadas y arte de disco", en:"Album covers and record art"},
+    tecnica:{es:"Diseño gráfico · fotografía · collage digital", en:"Graphic design · photography · digital collage"},
+    keywords:{es:"Cuerpo, Música, Portada, Sello independiente", en:"Body, Music, Cover art, Independent label"},
+    expo:{es:"Ediciones de La Orquesta Flotante y Organic Records", en:"Releases by La Orquesta Flotante and Organic Records"},
+    colab:[
+      {name:"La Orquesta Flotante", es:"Composición, mezcla y masterización", en:"Composition, mixing and mastering"},
+      {name:"Chiodata en Noise Pilots", es:"Mezcla y masterización", en:"Mixing and mastering"},
+      {name:"Sofía Bernasconi Le Roy", es:"Arte y diseño de portada", en:"Cover art and design"}
+    ],
+    links:[
+      {url:"https://surmechanics.bandcamp.com/album/finding-a-common-language-again", es:"Escuchar «Finding a common language again»", en:"Listen to «Finding a common language again»"},
+      {url:"https://nacionelectrica.cl/2020/05/04/rodrigo-arriagada-vuelve-con-la-orquesta-flotante/", es:"Nota sobre el álbum · Nación Eléctrica", en:"Article about the album · Nación Eléctrica"},
+      {url:"https://organicrecordscl.bandcamp.com/album/silky-sandy-ep", es:"Escuchar OR001 · «Silky Sandy EP»", en:"Listen to OR001 · «Silky Sandy EP»"},
+      {url:"https://organicrecordscl.bandcamp.com/album/vari-s-artistas-i-or002", es:"Escuchar OR002 · «Varios Artistas I»", en:"Listen to OR002 · «Varios Artistas I»"},
+      {url:"https://www.instagram.com/OrganicRecords.cl/", es:"Organic Records · Instagram", en:"Organic Records · Instagram"}
+    ],
+    es:["Arte y diseño de portada para álbumes de música electrónica, donde el cuerpo fragmentado, la trama y la luz se vuelven imagen sonora.","«Finding a common language again», de La Orquesta Flotante, se lanzó el 4 de mayo de 2020. El disco fue compuesto, mezclado y masterizado por La Orquesta Flotante x Chiodata en Noise Pilots, con arte de Sofía Bernasconi Le Roy.","A esto se suman las portadas de OR001 y OR002, los primeros lanzamientos del sello independiente Organic Records."],
+    en:["Cover art and design for electronic music albums, where the fragmented body, pattern and light become sonic image.","«Finding a common language again», by La Orquesta Flotante, was released on 4 May 2020. The record was composed, mixed and mastered by La Orquesta Flotante x Chiodata at Noise Pilots, with art by Sofía Bernasconi Le Roy.","Alongside it are the covers for OR001 and OR002, the first releases by the independent label Organic Records."],
+    fotos:["artwork_1.jpg","artwork_2.jpg","artwork_3.jpg"]
+  }
+};
+
+const ORDER = ["convey","reflejo","orilla","mecanica","tensiones","cuerpoaguas","cordeles","sumersiones","residente","deshilacha","sumersiones0","artwork"];
+// Traducción de los nombres de obra (se muestra entre paréntesis sólo en inglés). Convey me ya está en inglés.
+const TITLE_EN = {
+  reflejo:"Open Reflection", orilla:"Shore", mecanica:"Mechanics of Touch",
+  tensiones:"Tensions", cuerpoaguas:"My Body Touches Your Waters",
+  cordeles:"We Are Also a Curtain of Cords", sumersiones:"Submersions",
+  residente:"Resid(ent)", deshilacha:"Fraying", sumersiones0:"Under Water", artwork:"Artwork for music albums"
+};
+
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+// Descripción de las imágenes (texto alternativo para buscadores y lectores de pantalla)
+const ALT = {
+  convey:"Convey me, instalación cinética de la artista chilena Sofía Bernasconi: estructura de madera tipo cercha con proyección de video sobre un bucle de tela en movimiento",
+  reflejo:"Reflejo Abierto, icosaedro interactivo de madera y metal con doce cámaras y pantallas; obra de artes mediales de Sofía Bernasconi",
+  orilla:"Orilla, instalación sonora interactiva con cuencos de acrílico llenos de agua que responden al tacto, de la artista chilena Sofía Bernasconi",
+  mecanica:"Mecánica del Tacto, brazos mecánicos articulados con mini proyectores; videoinstalación cinética de arte y tecnología de Sofía Bernasconi",
+  tensiones:"Tensiones, videoinstalación de nuevos medios de Sofía Bernasconi: smartphones sellados en plástico suspendidos de cables de acero",
+  cuerpoaguas:"Mi cuerpo toca tus aguas, videoperformance de la artista chilena Sofía Bernasconi: el cuerpo envuelto en plástico en los cuerpos de agua del Gran Concepción",
+  cordeles:"También somos una cortina de cordeles, videoinstalación de Sofía Bernasconi con proyección sobre una cortina transitable de cordeles",
+  sumersiones:"Sumersiones, videoinstalación de artes mediales de Sofía Bernasconi con cinco televisores antiguos sobre una estructura metálica",
+  residente:"Resid(ente), laboratorio transdisciplinar de cuerpo, espacio y tecnología dirigido por la artista chilena Sofía Bernasconi",
+  deshilacha:"Deshilacha, cortometraje de Sofía Bernasconi rodado en la fábrica textil abandonada Bellavista-Oveja Tomé",
+  sumersiones0:"Bajo el agua, serie de pinturas de rostros sumergidos en látex, acrílico y carboncillo sobre cartón, de la artista chilena Sofía Bernasconi",
+  artwork:"Artwork para álbumes de música: portada de disco diseñada por Sofía Bernasconi, artista visual y de artes mediales"
+};
+function altOf(id,i,total){ var b=ALT[id]||(OBRAS[id]?OBRAS[id].title:''); return total>1 ? b+' ('+i+' de '+total+')' : b; }
+
+// Encuadre puntual de fotos de galería (object-position). Y alto = muestra la parte baja.
+const FOTOPOS = {"reflejo_4.jpg":"50% 72%","residente_1.jpg":"14% 50%"};
+// Fotos que se muestran más pequeñas y centradas, en su proporción original
+const FOTOCHICA = {"deshilacha_2.jpg":"50%","artwork_1.jpg":"52%","artwork_2.jpg":"52%","artwork_3.jpg":"52%"};
+function fRow(es,en,v){return '<div class="row"><div class="k" data-es="'+es+'" data-en="'+en+'">'+es+'</div><div>'+esc(v)+'</div></div>';}
+function fRowB(es,en,v){return '<div class="row"><div class="k" data-es="'+es+'" data-en="'+en+'">'+es+'</div><div><span data-es>'+esc(v.es)+'</span><span data-en>'+esc(v.en)+'</span></div></div>';}
+function render(){
+  // cada obra tiene su propia página (obra-<id>.html, generada con tools/build_obras.mjs);
+  // obra.html?id=… queda sólo como plantilla y redirige a la página propia
+  const fija=document.documentElement.getAttribute('data-obra');
+  const id=fija||new URLSearchParams(location.search).get('id');
+  const o=OBRAS[id];
+  if(!o){ location.replace('index.html#open'); return; }
+  if(!fija){ const l=new URLSearchParams(location.search).get('lang'); location.replace('obra-'+id+'.html'+(l?'?lang='+l:'')); return; }
+  document.title=o.title+' ('+o.year+') — Sofía Bernasconi';
+  let h='';
+  h+='<div class="eyebrow" data-es="Proyecto" data-en="Project">Proyecto</div>';
+  h+='<h1>'+(TITLE_EN[id]?'<span class="tes">'+esc(o.title)+'</span><span class="ten">'+esc(TITLE_EN[id])+'<span class="orig"> ('+esc(o.title)+')</span></span>':esc(o.title))+'</h1>';
+  if(o.subtitle) h+='<div class="subtitle"><span data-es>'+esc(o.subtitle.es)+'</span><span data-en>'+esc(o.subtitle.en)+'</span></div>';
+  h+='<div class="year">'+esc(o.year)+'</div>';
+  if(o.hibrida) h+='<div class="partof"><span data-es>Parte de la investigación<br>HÍBRIDA: cuerpos y tecnologías en el icosaedro</span><span data-en>Part of the research<br>HÍBRIDA: bodies and technologies in the icosahedron</span></div>';
+  h+='<div class="top'+(o.video || (o.fotos && o.fotos.length && !o.video)?' has-media':'')+'"><div class="col-text">';
+  h+='<div class="statement">';
+  o.es.forEach((p,i)=>h+='<p data-es'+(i===0?' class="lead"':'')+'>'+esc(p)+'</p>');
+  o.en.forEach((p,i)=>h+='<p data-en'+(i===0?' class="lead"':'')+'>'+esc(p)+'</p>');
+  h+='</div>';// cierra statement
+  h+='</div>';// cierra col-text
+  // video o primera foto (columna derecha, centrado con el abstract)
+  if(o.video || (o.fotos && o.fotos.length)){
+    h+='<div class="col-media">';
+    if(o.video){
+      h+='<div class="video">';
+      if(o.video.yt) h+='<iframe src="https://www.youtube-nocookie.com/embed/'+esc(o.video.yt)+'?rel=0&modestbranding=1" title="'+esc(o.title)+'" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+      else h+='<div class="ph" data-es="Video · próximamente" data-en="Video · coming soon">Video · próximamente</div>';
+      h+='</div>';
+    } else if(o.fotos.length) {
+      h+='<div class="photo"><img src="assets/'+esc(o.fotos[0])+'" alt="'+esc(altOf(id,1,1))+'"></div>';
+    }
+    h+='</div>';
+  }
+  h+='</div>';// cierra .top
+  // ficha (ancho completo, bajo las columnas)
+  h+='<div class="ficha">';
+  h+=fRow('Año','Year',o.year);
+  if(o.tecnica) h+=fRowB('Técnica','Medium',o.tecnica);
+  if(o.duracion) h+=fRowB('Duración','Duration',o.duracion);
+  if(o.dimensiones) h+=fRowB('Dimensiones','Dimensions',o.dimensiones);
+  if(o.materiales) h+=fRowB('Materiales','Materials',o.materiales);
+  if(o.keywords) h+=fRowB('Palabras clave','Keywords',o.keywords);
+  if(o.expo) h+=fRowB('Exposición','Exhibition',o.expo);
+  if(o.premio) h+=fRowB('Premio','Award',o.premio);
+  if(o.colab && o.colab.length){
+    const c=o.colab.map(x=>'<div><span data-es>'+esc(x.name)+' — '+esc(x.es)+'</span><span data-en>'+esc(x.name)+' — '+esc(x.en)+'</span></div>').join('');
+    h+='<div class="row"><div class="k" data-es="Colaboran" data-en="Collaborators">Colaboran</div><div>'+c+'</div></div>';
+  }
+  if(o.links && o.links.length){
+    const l=o.links.map(x=>'<div><a href="'+esc(x.url)+'" target="_blank" rel="noopener"><span data-es>'+esc(x.es)+'</span><span data-en>'+esc(x.en)+'</span></a></div>').join('');
+    h+='<div class="row"><div class="k" data-es="Enlaces" data-en="Links">Enlaces</div><div>'+l+'</div></div>';
+  }
+  if(o.gracias) h+=fRowB('Agradecimientos','Acknowledgements',o.gracias);
+  h+='</div>';
+  // fotos (si no hay video, la primera ya se muestra arriba: no repetirla)
+  var galeria = o.video ? o.fotos : o.fotos.slice(1);
+  h+='<div class="shots">';
+  if(galeria.length) galeria.forEach(function(f){
+    var st='';
+    if(FOTOCHICA[f]) st=' style="width:'+FOTOCHICA[f]+';align-self:center;aspect-ratio:auto;height:auto;object-fit:contain"';
+    else if(FOTOPOS[f]) st=' style="object-position:'+FOTOPOS[f]+'"';
+    h+='<img src="assets/'+esc(f)+'" alt="'+esc(altOf(id,galeria.indexOf(f)+1,galeria.length))+'"'+st+'>';
+  });
+  else if(!o.fotos.length) h+='<div class="pending" data-es="Fotos · pendientes" data-en="Photos · pending">Fotos · pendientes</div>';
+  h+='</div>';
+  // slider de obras individuales
+  if(o.slider && o.slider.length){
+    h+='<div class="slider" id="slider">';
+    h+='<div class="sk" data-es="'+esc(o.slider_k.es)+'" data-en="'+esc(o.slider_k.en)+'">'+esc(o.slider_k.es)+'</div>';
+    h+='<div class="frame">';
+    h+='<button class="nav" id="sprev" aria-label="anterior">‹</button>';
+    h+='<div class="stage" id="stage">';
+    o.slider.forEach(function(f,i){ h+='<img src="assets/'+esc(f)+'" alt="'+esc(altOf(id,i+1,o.slider.length))+'"'+(i===0?' class="on"':'')+' loading="lazy">'; });
+    h+='</div>';
+    h+='<button class="nav" id="snext" aria-label="siguiente">›</button>';
+    h+='</div>';
+    h+='<div class="bar" id="sdots">';
+    o.slider.forEach(function(f,i){ h+='<button class="dot'+(i===0?' on':'')+'" data-i="'+i+'" aria-label="'+(i+1)+'"></button>'; });
+    h+='</div></div>';
+  }
+  // video secundario (bajo la galería)
+  if(o.video2){
+    h+='<div class="video2">';
+    h+='<div class="eyebrow" data-es="'+esc(o.video2.es)+'" data-en="'+esc(o.video2.en)+'">'+esc(o.video2.es)+'</div>';
+    h+='<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/'+esc(o.video2.yt)+'?rel=0&modestbranding=1" title="'+esc(o.video2.es)+'" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>';
+    h+='</div>';
+  }
+  // bloque compartido HÍBRIDA al final (logo + abstract + fundamento teórico desplegable + logos financiamiento)
+  if(o.hibrida){
+    h+='<div class="statement hib">';
+    h+='<img class="hiblogo" src="assets/logo_hibrida.png" alt="HÍBRIDA">';
+    h+='<div class="eyebrow" data-es="Sobre HÍBRIDA" data-en="About HÍBRIDA">Sobre HÍBRIDA</div>';
+    HIB_ABSTRACT.es.forEach((p,i)=>h+='<p data-es'+(i===0?' class="lead"':'')+'>'+esc(p)+'</p>');
+    HIB_ABSTRACT.en.forEach((p,i)=>h+='<p data-en'+(i===0?' class="lead"':'')+'>'+esc(p)+'</p>');
+    h+='<details class="teorico"><summary data-es="Fundamento teórico" data-en="Theoretical framework">Fundamento teórico</summary>';
+    HIB_TEORICO.es.forEach(p=>h+='<p data-es>'+esc(p)+'</p>');
+    HIB_TEORICO.en.forEach(p=>h+='<p data-en>'+esc(p)+'</p>');
+    h+='</details>';
+    h+='</div>';
+    h+='<div class="fund">';
+    h+='<div class="fk" data-es="Financiamiento y apoyo" data-en="Funding and support">Financiamiento y apoyo</div>';
+    h+='<div class="item mincap fund-main"><span class="leg" data-es="Financiada por el Ministerio de las Culturas, las Artes y el Patrimonio · FONDART 2023" data-en="Funded by the Ministry of Cultures, Arts and Heritage · FONDART 2023">Financiada por el Ministerio de las Culturas, las Artes y el Patrimonio · FONDART 2023</span><img src="assets/logo_mincap.png" alt="Ministerio de las Culturas, las Artes y el Patrimonio"></div>';
+    h+='<div class="row fund-sec">';
+    h+='<div class="item"><span class="leg" data-es="Exhibida en" data-en="Exhibited at">Exhibida en</span><img src="assets/logo_baj.png" alt="Balmaceda Arte Joven Biobío"></div>';
+    h+='<div class="item"><span class="leg" data-es="Con el apoyo de · Residencia" data-en="Supported by · Residency">Con el apoyo de · Residencia</span><img src="assets/logo_c3.png" alt="Centro de Creación de Concepción"></div>';
+    h+='</div></div>';
+  }
+  // nav prev/next dentro de proyectos
+  const i=ORDER.indexOf(id), prev=ORDER[(i-1+ORDER.length)%ORDER.length], next=ORDER[(i+1)%ORDER.length];
+  h+='<div class="foot">';
+  h+='<a href="obra-'+prev+'.html">← '+(TITLE_EN[prev]?'<span class="tes">'+esc(OBRAS[prev].title)+'</span><span class="ten">'+esc(TITLE_EN[prev])+'</span>':esc(OBRAS[prev].title))+'</a>';
+  h+='<a href="obra-'+next+'.html">'+(TITLE_EN[next]?'<span class="tes">'+esc(OBRAS[next].title)+'</span><span class="ten">'+esc(TITLE_EN[next])+'</span>':esc(OBRAS[next].title))+' →</a>';
+  h+='</div>';
+  document.getElementById('main').innerHTML=h;
+  applyLang(currentLang);
+  initSlider();
+}
+
+// ==== SLIDER (obras individuales) ====
+function initSlider(){
+  var stage=document.getElementById('stage'); if(!stage) return;
+  var imgs=stage.querySelectorAll('img'), dots=document.querySelectorAll('#sdots .dot'), n=imgs.length, i=0;
+  function go(k){
+    i=(k+n)%n;
+    imgs.forEach(function(im,j){ im.classList.toggle('on', j===i); });
+    dots.forEach(function(d,j){ d.classList.toggle('on', j===i); });
+  }
+  // lightbox
+  var lb=document.getElementById('lightbox'), lbImg=lb.querySelector('img');
+  function open(){ lbImg.src=imgs[i].src; lbImg.alt=imgs[i].alt; lb.classList.add('on'); document.body.style.overflow='hidden'; }
+  function close(){ lb.classList.remove('on'); document.body.style.overflow=''; }
+  stage.addEventListener('click', open);
+  lb.addEventListener('click', close);
+  var pv=document.getElementById('sprev'), nx=document.getElementById('snext');
+  if(pv) pv.addEventListener('click', function(e){ e.stopPropagation(); go(i-1); });
+  if(nx) nx.addEventListener('click', function(e){ e.stopPropagation(); go(i+1); });
+  dots.forEach(function(d){ d.addEventListener('click', function(e){ e.stopPropagation(); go(+d.getAttribute('data-i')); }); });
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape') close();
+    else if(e.key==='ArrowRight'){ go(i+1); if(lb.classList.contains('on')) lbImg.src=imgs[i].src; }
+    else if(e.key==='ArrowLeft'){ go(i-1); if(lb.classList.contains('on')) lbImg.src=imgs[i].src; }
+  });
+}
+
+// ==== IDIOMA (persistente entre páginas) ====
+function withLang(href,l){ if(!href||/^(https?:|mailto:|tel:|#)/i.test(href))return href; var hash='';var h=href.indexOf('#');if(h>=0){hash=href.slice(h);href=href.slice(0,h);} var base=href,qs='';var q=href.indexOf('?');if(q>=0){base=href.slice(0,q);qs=href.slice(q+1);} var pr=new URLSearchParams(qs);pr.set('lang',l);return base+'?'+pr.toString()+hash; }
+function initialLang(){ var u=new URLSearchParams(location.search).get('lang'),st=null;try{st=localStorage.getItem('lang');}catch(e){} return st||u||'es'; }
+let currentLang=initialLang();
+function applyLang(l){
+  currentLang=l;
+  document.documentElement.lang=l;
+  try{localStorage.setItem('lang',l);}catch(e){}
+  document.body.classList.toggle('en',l==='en');
+  document.querySelectorAll('nav a[data-'+l+']').forEach(a=>a.textContent=a.getAttribute('data-'+l));
+  document.querySelectorAll('.eyebrow[data-'+l+'],.ficha .k[data-'+l+'],.video .ph[data-'+l+'],.pending[data-'+l+'],.teorico>summary[data-'+l+'],.fund .fk[data-'+l+'],.fund .leg[data-'+l+']').forEach(el=>el.textContent=el.getAttribute('data-'+l));
+  document.querySelectorAll('#lang span').forEach(s=>s.classList.toggle('on',s.getAttribute('data-l')===l));
+  document.querySelectorAll('a[href]').forEach(a=>a.setAttribute('href',withLang(a.getAttribute('href'),l)));
+}
+document.querySelectorAll('#lang span').forEach(s=>s.addEventListener('click',()=>applyLang(s.getAttribute('data-l'))));
+render();
+</script>
+
+<script>
+// ==== MINI LOGO ANIMADO (igual que bio) ====
+new p5(function(p){
+  let img, parts=[], W, H, blur, mx=-999, my=-999, hoverAmt=0;
+  let nbx0=0,nby0=0,nbx1=0,nby1=0;
+  const FONT='Syne', R=160, VSTRETCH=1.55, LS=(window.innerWidth<700?0.30:0.30), LOX=34, LOY=30;
+  function makeText(){
+    const fs=200, mob=window.innerWidth<700;
+    const m=p.createGraphics(10,10); m.textFont(FONT); m.textStyle(p.BOLD); m.textSize(fs);
+    let g;
+    if(mob){
+      const lines=['SOFIA','BERNASCONI']; let tw=0;
+      for(const l of lines) tw=Math.max(tw, Math.ceil(m.textWidth(l)));
+      m.remove();
+      const lead=fs*1.04;
+      g=p.createGraphics(tw+40, Math.ceil(lead*(lines.length-1)+fs*1.25)); g.pixelDensity(1);
+      g.background(255); g.fill(0); g.noStroke();
+      g.textFont(FONT); g.textStyle(p.BOLD); g.textSize(fs); g.textAlign(p.LEFT,p.CENTER);
+      const cy=g.height/2 - lead*(lines.length-1)/2;
+      lines.forEach((l,i)=>g.text(l, 20, cy+i*lead));
+    } else {
+      m.drawingContext.wordSpacing='75px';
+      const txt='SOFIA BERNASCONI', tw=Math.ceil(m.textWidth(txt)); m.remove();
+      g=p.createGraphics(tw+40, Math.ceil(fs*1.35)); g.pixelDensity(1);
+      g.background(255); g.fill(0); g.noStroke();
+      g.textFont(FONT); g.textStyle(p.BOLD); g.textSize(fs); g.textAlign(p.CENTER,p.CENTER); g.drawingContext.wordSpacing='75px';
+      g.text(txt, g.width/2, g.height/2);
+    }
+    g.loadPixels();
+    return g;
+  }
+  function setHomes(){
+    const tw=(W<700? W*0.92 : Math.min(W*0.72,900)), s=tw/img.width, h=img.height*s*VSTRETCH;
+    const ox=(W-tw)/2, oy=(H-h)/2; nbx0=ox; nby0=oy; nbx1=ox+tw; nby1=oy+h;
+    for(const q of parts){ q.hx=ox+q.ix*s; q.hy=oy+q.iy*s*VSTRETCH; q.hyL=(q.iy % (img.height/2))*s*VSTRETCH;   /* fase de la onda sin depender de la posición en pantalla: no salta cuando el teléfono cambia de alto al scrollear */ }
+  }
+  function build(){
+    parts=[]; W=window.innerWidth; H=window.innerHeight; img.loadPixels();
+    const s=(W<700? W*0.92 : Math.min(W*0.72,900))/img.width, step=Math.max(2,Math.round((W<700?1.8:2.4)/s));
+    for(let y=0;y<img.height;y+=step) for(let x=0;x<img.width;x+=step)
+      if(img.pixels[4*(x+y*img.width)]<115) parts.push({ix:x,iy:y,ox:0,oy:0,ovx:0,ovy:0,ev:0,seed:p.random(1000),sz:p.random(0.5,1.15)});
+    setHomes();
+  }
+  function inName(x,y){ const w=(nbx1-nbx0)*LS, hh=(nby1-nby0)*LS; return x>=LOX&&x<=LOX+w&&y>=LOY&&y<=LOY+hh; }
+  p.setup=function(){
+    W=window.innerWidth; H=window.innerHeight;
+    let c=p.createCanvas(W,H); c.parent('c'); p.pixelDensity(Math.min(2, window.devicePixelRatio||1));
+    blur=p.createGraphics(W,H); blur.pixelDensity(1); blur.elt.id='blurlayer'; document.body.appendChild(blur.elt);
+    const boot=()=>{ img=makeText(); build(); };
+    if(document.fonts&&document.fonts.load){ document.fonts.load('700 120px \"'+FONT+'\"').then(boot).catch(boot); } else boot();
+    window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY; document.body.style.cursor=inName(mx,my)?'pointer':'default';});
+    window.addEventListener('click',e=>{ if(inName(e.clientX,e.clientY)) window.location.href=withLang('index.html#open',currentLang); });
+    window.addEventListener('mouseout',()=>{mx=-999;my=-999;});
+  };
+  p.draw=function(){
+    p.clear(); blur.clear();
+    hoverAmt+=((inName(mx,my)?1:0)-hoverAmt)*0.11;
+    const act=1, t=p.frameCount*0.003, wt=p.frameCount*0.01;   // igual que el logo chico de la portada: siempre con su movimiento
+    const cX=LOX+(nbx1-nbx0)*LS/2, cY=LOY+(nby1-nby0)*LS/2;
+    for(const q of parts){
+      const hx=LOX+(q.hx-nbx0)*LS, hy=LOY+(q.hy-nby0)*LS;
+      const wv=(W<700?q.hyL:q.hy);   // móvil: y relativa a cada línea -> SOFIA y BERNASCONI en fase (misma dirección), misma onda de antes
+      const waveX=( Math.sin(wv*0.07 - wt*1.2)*20 + Math.sin(wv*0.15 + wt*0.8)*8 )*(1-q.ev)*LS*act;
+      const baseX=hx+waveX, baseY=hy;
+      const px=baseX+q.ox, py=baseY+q.oy;
+      const k=0.016*(1-0.99*q.ev);
+      let ax=-q.ox*k, ay=-q.oy*k;
+      ax += (p.noise(q.seed,t)-0.5)*0.05*LS*act;
+      const Reff=R*LS, dx=px-mx, dy=py-my, d=Math.hypot(dx,dy);
+      if(d<Reff){ q.ev=Math.min(1, q.ev+(1-d/Reff)*0.09); }
+      if(q.ev>0.02){
+        const a=p.noise(px*0.0016, py*0.0016, t*0.4)*p.TWO_PI*2.0, drift=0.5*q.ev*LS*act;
+        ax+=Math.cos(a)*drift; ay+=Math.sin(a)*drift;
+        ax+=(px-cX)*0.00075*q.ev*LS*act; ay+=(py-cY)*0.00075*q.ev*LS*act;
+      }
+      q.ev*=0.991; const fr=0.92+0.05*q.ev;
+      q.ovx=(q.ovx+ax)*fr; q.ovy=(q.ovy+ay)*fr;
+      const cap=3.2*Math.max(LS,0.5), sp=Math.hypot(q.ovx,q.ovy); if(sp>cap){ q.ovx*=cap/sp; q.ovy*=cap/sp; }
+      q.ox+=q.ovx; q.oy+=q.ovy;
+      const dpx=baseX+q.ox, dpy=baseY+q.oy, dot=q.sz*1.5*Math.max(LS,0.62)*(window.innerWidth<700?0.7:1);
+      p.noStroke(); blur.noStroke();
+      const aC=255*(1-q.ev);
+      if(aC>4){ p.fill(255,255,255,aC); p.circle(dpx,dpy, dot); }
+      const bA=150*q.ev;
+      if(q.ev>0.03){ blur.fill(255,255,255,bA); blur.circle(dpx,dpy, dot+q.ev*3*LS); }
+    }
+  };
+  let to; p.windowResized=function(){ W=window.innerWidth; H=window.innerHeight; p.resizeCanvas(W,H); blur.resizeCanvas(W,H); clearTimeout(to); to=setTimeout(()=>{ if(img) setHomes(); },120); };
+});
+</script>
+<!--IDIOMA-CLICK-GUARD-->
+<script>(function(){
+  function L(){var u=null,s=null;try{u=new URLSearchParams(location.search).get('lang');}catch(e){}try{s=localStorage.getItem('lang');}catch(e){}return s||u||'es';}
+  document.addEventListener('click',function(e){
+    var a=e.target&&e.target.closest?e.target.closest('a[href]'):null; if(!a)return;
+    var h=a.getAttribute('href'); if(!h||/^(https?:|mailto:|tel:)/i.test(h)||h.charAt(0)==='#')return;
+    var l=L(),hash='',hi=h.indexOf('#'); if(hi>=0){hash=h.slice(hi);h=h.slice(0,hi);}
+    var base=h,qs='',qi=h.indexOf('?'); if(qi>=0){base=h.slice(0,qi);qs=h.slice(qi+1);}
+    var pr; try{pr=new URLSearchParams(qs);}catch(e){pr=new URLSearchParams();}
+    pr.set('lang',l); a.setAttribute('href', base+'?'+pr.toString()+hash);
+  }, true);
+})();</script>
+<!--UI-HIDE-ON-SCROLL-->
+<script>(function(){
+  function getST(){return window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0;}
+  var last=0;
+  function on(){
+    var s=getST();
+    if(s<40) document.body.classList.remove('ui-hide');
+    else if(s>last) document.body.classList.add("ui-hide");
+    else if(s<last) document.body.classList.remove("ui-hide");
+    last=s;
+  }
+  window.addEventListener('scroll', on, {passive:true, capture:true});
+  document.addEventListener('scroll', on, {passive:true, capture:true});
+})();</script>
+  <footer class="foot-site">
+    <div class="in">
+      <a href="mailto:contacto@sofiabernasconi.com">contacto@sofiabernasconi.com</a>
+      <span>Concepción, Chile · New York, USA</span>
+      <a class="ig" href="https://www.instagram.com/sofibernasconi/" target="_blank" rel="noopener" aria-label="Instagram: @sofibernasconi">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.5" cy="6.5" r="1.15" fill="currentColor" stroke="none"/></svg>@sofibernasconi</a>
+    </div>
+  </footer>
+</body>
+</html>
