@@ -141,7 +141,7 @@
   body.menu-on .proj .comp .ph{opacity:1}
 
   @media(max-width:700px){
-    #topmask{height:22vh;height:22svh}
+    #topmask{height:22vh;height:max(22svh,var(--finmenu,0px))}
     .proj{padding:20vh 5% 9vh}
     .proj:first-child{padding-top:42vh}
     .proj .comp{gap:3vh 0}
@@ -149,7 +149,7 @@
     .proj:nth-child(1) .comp img:nth-child(1){width:92% !important;max-width:92% !important;max-height:none !important}
     .proj:nth-child(2) .comp img,.proj:nth-child(3) .comp img,.proj:nth-child(5) .comp img{width:92% !important;max-width:92% !important;max-height:none !important}
     .proj:nth-child(2) .comp img:nth-child(1),.proj:nth-child(3) .comp img:nth-child(4),.proj:nth-child(5) .comp img:nth-child(1),.proj:nth-child(5) .comp img:nth-child(2),.proj:nth-child(5) .comp img:nth-child(3),.proj:nth-child(5) .comp img:nth-child(4),.proj:nth-child(5) .comp img:nth-child(5){width:92% !important;max-width:92% !important;max-height:none !important}
-    .cap{top:30vh;top:30svh}   /* bien debajo de la franja superior: que nunca la corte */
+    .cap{top:30vh;top:max(30svh,calc(var(--finmenu,0px) + 22px))}   /* bien debajo de la franja superior: que nunca la corte */
     /* Safari en iPhone no mezcla bien el modo 'diferencia' mientras el título se desvanece
        (se veía blanco y cortado). En el teléfono el título es negro normal, y la copia blanca
        recortada a la foto se encarga de que se lea encima de las imágenes */
@@ -222,6 +222,10 @@
     <a href="prensa.html" data-es="Prensa" data-en="Press">Prensa</a>
     <a href="contacto.html" data-es="Contacto" data-en="Contact">Contacto</a>
   </nav>
+  <script>/*franja-menu*/(function(){ // en celular la franja blanca de arriba siempre termina bajo el menú (pantallas bajas, navegador de Instagram)
+    function aj(){ var m=document.getElementById('menu'); if(!m) return; var b=0; m.querySelectorAll('a').forEach(function(a){ b=Math.max(b,a.getBoundingClientRect().bottom); }); if(b>0) document.documentElement.style.setProperty('--finmenu',Math.ceil(b+18)+'px'); }
+    aj(); addEventListener('load',aj); addEventListener('resize',aj); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(aj);
+  })();</script>
   <a id="logohit" href="bio.html" aria-label="Bio"></a>
   <div id="namehit"></div>
   <div id="hero" aria-hidden="true"></div>
