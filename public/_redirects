@@ -60,5 +60,5 @@
 /home/*                          /                      301
 /inicio/*                        /                      301
 
-# Cualquier otra dirección antigua en inglés → portada en inglés
-/en/*                            /en                    301
+# Portada antigua en inglés
+/en/                             /en                    301
