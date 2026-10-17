@@ -357,7 +357,7 @@
             const DRIFT=46;                            // desktop: como estaba antes
             ty=(p<0?Math.min(1,-p):0)*DRIFT;
             const bot=r.bottom/vh;                     // el título acompaña la obra hasta casi el final
-            if(pi>0.4) op=(0.8-pi)/0.4;                 // aparece cuando sube la primera foto
+            if(pi>0.46) op=(0.86-pi)/0.4;                 // aparece cuando sube la primera foto
             else if(bot<0.6) op=(bot-0.35)/0.25;       // se desvanece cuando el final de la obra sube
             else op=1;
             if(op<0)op=0; if(op>1)op=1;
@@ -483,7 +483,7 @@ new p5(function(p){
     blur=p.createGraphics(W,H); blur.pixelDensity(1); blur.elt.id='blurlayer'; document.body.appendChild(blur.elt);
     namehit=document.getElementById('namehit');
     startOpen = location.hash==='#open';
-    const boot=()=>{ img=makeText(); build(); themeLerp=1; LS=1; LOX=nbx0; LOY=nby0; if(startOpen){ parked=true; LS=MINI_S; LOX=MINI_X; LOY=MINI_Y; const g=document.getElementById('gallery'); if(g) g.scrollIntoView(); } };
+    const boot=()=>{ img=makeText(); build(); themeLerp=1; LS=1; LOX=nbx0; LOY=nby0; if(startOpen){ parked=true; LS=MINI_S; LOX=MINI_X; LOY=MINI_Y; if(window.__irGaleria) window.__irGaleria(false); else { const g=document.getElementById('gallery'); if(g) g.scrollIntoView(); } } };
     // la intro nueva lo llama al entrar: el logo aparece ya reducido en la esquina
     window.__park=function(){ parked=true; LS=MINI_S; LOX=MINI_X; LOY=MINI_Y; themeLerp=1; startOpen=true; p.loop(); };
     // mientras la intro esté encima, este sketch no dibuja: se lo comía todo
@@ -501,7 +501,7 @@ new p5(function(p){
       else if(parked && y < hh*0.03){ parked=false; document.body.classList.remove('parked'); }
     };
     document.addEventListener('scroll', alScroll, true);
-    window.__irGaleria=()=>{ const g=document.getElementById('gallery'); if(g) g.scrollIntoView({behavior:'smooth'}); };
+    window.__irGaleria=(suave=true)=>{ const g=document.getElementById('gallery'); if(!g) return; const aire=innerWidth>700?innerHeight*0.07:0; /* en escritorio deja aire entre el título y la primera foto */ window.scrollTo({top:Math.max(0,g.getBoundingClientRect().top+(window.pageYOffset||0)-aire),behavior:suave?'smooth':'auto'}); };
     window.addEventListener('click',e=>{
       if(!inName(e.clientX,e.clientY)) return;
       if(!parked){ window.__irGaleria(); }            // click en el nombre grande: baja a las obras
