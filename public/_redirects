@@ -1,0 +1,64 @@
+# Direcciones de la web antigua (WordPress) → páginas nuevas.
+# 301 = mudanza permanente: Google reemplaza el resultado viejo por el nuevo.
+# Se evalúa de arriba abajo; la primera regla que calza gana.
+
+# Obras que existen en el sitio nuevo
+/portfolio/deshilacha            /obra-deshilacha       301
+/portfolio/deshilacha/           /obra-deshilacha       301
+/en/portfolio/deshilacha         /en-obra-deshilacha    301
+/en/portfolio/deshilacha/        /en-obra-deshilacha    301
+
+# Bio, equipo y curaduría
+/en/bio                          /en-bio                301
+/en/bio/                         /en-bio                301
+/en/team                         /en-bio                301
+/en/team/                        /en-bio                301
+/team                            /bio                   301
+/team/                           /bio                   301
+/equipo                          /bio                   301
+/equipo/                         /bio                   301
+/curatoria                       /bio                   301
+/curatoria/                      /bio                   301
+/curaduria                       /bio                   301
+/curaduria/                      /bio                   301
+/en/curatoria                    /en-bio                301
+/en/curatoria/                   /en-bio                301
+/en/curatorship                  /en-bio                301
+/en/curatorship/                 /en-bio                301
+
+# Notas de prensa antiguas
+/galeria-aura-se-sumerge-en-el-cyberpunk-una-exposicion-sobre-cuerpos-perifericos-da-vida-a-un-cyborg/*  /prensa  301
+/en/galeria-aura-se-sumerge-en-el-cyberpunk-una-exposicion-sobre-cuerpos-perifericos-da-vida-a-un-cyborg/*  /en-prensa  301
+/estudiante-de-arte-udec-expone-trabajos-en-bar-galeria-aura-2019/*  /prensa  301
+/en/estudiante-de-arte-udec-expone-trabajos-en-bar-galeria-aura-2019/*  /en-prensa  301
+/premios-ceres-dio-a-conocer-ganadores-de-especial-version-2020/*  /prensa  301
+/en/premios-ceres-dio-a-conocer-ganadores-de-especial-version-2020/*  /en-prensa  301
+/en/press/*                      /en-prensa             301
+/press/*                         /en-prensa             301
+
+# Otras secciones y proyectos antiguos → Proyectos
+/cablerio-cuerpos-perifericos/*  /proyectos             301
+/en/cablerio-cuerpos-perifericos/*  /en-proyectos       301
+/en/portfolio/*                  /en-proyectos          301
+/portfolio/*                     /proyectos             301
+/en/artwork/*                    /en-proyectos          301
+/artwork/*                       /proyectos             301
+/exposiciones-colectivas/*       /proyectos             301
+/exposiciones-individuales/*     /proyectos             301
+/en/group-exhibitions/*          /en-proyectos          301
+/en/solo-exhibitions/*           /en-proyectos          301
+/group-exhibitions/*             /en-proyectos          301
+/solo-exhibitions/*              /en-proyectos          301
+/contact/*                       /en-contacto           301
+/en/contact/*                    /en-contacto           301
+
+# Restos típicos de WordPress
+/category/*                      /                      301
+/tag/*                           /                      301
+/author/*                        /                      301
+/page/*                          /                      301
+/home/*                          /                      301
+/inicio/*                        /                      301
+
+# Cualquier otra dirección antigua en inglés → portada en inglés
+/en/*                            /en                    301
