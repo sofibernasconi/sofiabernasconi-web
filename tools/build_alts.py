@@ -56,12 +56,39 @@ def poner_js(txt):
     return txt
 
 
+VIDEOS = {k: v for k, v in json.loads((RAIZ / 'tools' / 'videos.json').read_text('utf8')).items() if not k.startswith('_')}
+LD_VIDEO = re.compile(r'<script type="application/ld\+json" id="ld-video">.*?</script>\n?', re.S)
+
+
+def poner_videos(txt, nombre, lang):
+    """Ficha VideoObject para los videos de YouTube de la obra (Google Videos)."""
+    txt = LD_VIDEO.sub('', txt)
+    m = re.match(r'(?:en-)?obra-([a-z0-9]+)\.html$', nombre)
+    if not m or m.group(1) not in VIDEOS:
+        return txt
+    url = SITIO + '/' + nombre[:-5]
+    items = []
+    for v in VIDEOS[m.group(1)]:
+        titulo, desc = v[lang]
+        items.append({"@type": "VideoObject", "name": titulo, "description": desc,
+                      "thumbnailUrl": f"https://i.ytimg.com/vi/{v['yt']}/hqdefault.jpg",
+                      "uploadDate": v['fecha'], "embedUrl": f"https://www.youtube.com/embed/{v['yt']}",
+                      "url": f"https://www.youtube.com/watch?v={v['yt']}", "inLanguage": lang,
+                      "creator": {"@type": "Person", "name": "Sofía Bernasconi", "url": SITIO},
+                      "isPartOf": {"@type": "WebPage", "@id": url}})
+    data = {"@context": "https://schema.org", "@graph": items} if len(items) > 1 else dict({"@context": "https://schema.org"}, **items[0])
+    tag = '<script type="application/ld+json" id="ld-video">' + json.dumps(data, ensure_ascii=False) + '</script>\n'
+    return txt.replace('</head>', tag + '</head>', 1)
+
+
 def main():
     for p in sorted(PUB.glob('*.html')):
         txt = p.read_text('utf8')
         nuevo = poner_alts(txt, idioma(txt))
         if p.name == 'obra.html' or p.name.startswith(('obra-', 'en-obra-')):
             nuevo = poner_js(nuevo)
+        if p.name.startswith(('obra-', 'en-obra-')):
+            nuevo = poner_videos(nuevo, p.name, idioma(txt))
         if nuevo != txt:
             p.write_text(nuevo, 'utf8')
             print('alts:', p.name)
