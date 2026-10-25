@@ -1,0 +1,6 @@
+# Imágenes que no queremos que Google use en resultados ni en Google Imágenes
+# (se siguen viendo normal en el sitio)
+/assets/deshilacha_2.jpg
+  X-Robots-Tag: noindex
+/assets/og.jpg
+  X-Robots-Tag: noindex
