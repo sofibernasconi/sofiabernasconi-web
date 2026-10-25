@@ -2,6 +2,66 @@
 # 301 = mudanza permanente: Google reemplaza el resultado viejo por el nuevo.
 # Se evalúa de arriba abajo; la primera regla que calza gana.
 
+# Fotos renombradas con el nombre de la artista (25/10)
+/assets/convey_1.jpg                 /assets/sofia-bernasconi-convey-me-1.jpg  301
+/assets/convey_2.jpg                 /assets/sofia-bernasconi-convey-me-2.jpg  301
+/assets/convey_3.jpg                 /assets/sofia-bernasconi-convey-me-3.jpg  301
+/assets/convey_4.jpg                 /assets/sofia-bernasconi-convey-me-4.jpg  301
+/assets/convey_5.jpg                 /assets/sofia-bernasconi-convey-me-5.jpg  301
+/assets/convey_6.jpg                 /assets/sofia-bernasconi-convey-me-6.jpg  301
+/assets/reflejo_1.jpg                /assets/sofia-bernasconi-reflejo-abierto-1.jpg  301
+/assets/reflejo_2.jpg                /assets/sofia-bernasconi-reflejo-abierto-2.jpg  301
+/assets/reflejo_3.jpg                /assets/sofia-bernasconi-reflejo-abierto-3.jpg  301
+/assets/reflejo_4.jpg                /assets/sofia-bernasconi-reflejo-abierto-4.jpg  301
+/assets/orilla_1.jpg                 /assets/sofia-bernasconi-orilla-1.jpg  301
+/assets/orilla_2.jpg                 /assets/sofia-bernasconi-orilla-2.jpg  301
+/assets/orilla_3.jpg                 /assets/sofia-bernasconi-orilla-3.jpg  301
+/assets/orilla_4.jpg                 /assets/sofia-bernasconi-orilla-4.jpg  301
+/assets/mecanica_1.jpg               /assets/sofia-bernasconi-mecanica-del-tacto-1.jpg  301
+/assets/mecanica_2.jpg               /assets/sofia-bernasconi-mecanica-del-tacto-2.jpg  301
+/assets/mecanica_3.jpg               /assets/sofia-bernasconi-mecanica-del-tacto-3.jpg  301
+/assets/mecanica_4.jpg               /assets/sofia-bernasconi-mecanica-del-tacto-4.jpg  301
+/assets/mecanica_5.jpg               /assets/sofia-bernasconi-mecanica-del-tacto-5.jpg  301
+/assets/tensiones_1.jpg              /assets/sofia-bernasconi-tensiones-1.jpg  301
+/assets/tensiones_2.jpg              /assets/sofia-bernasconi-tensiones-2.jpg  301
+/assets/tensiones_3.jpg              /assets/sofia-bernasconi-tensiones-3.jpg  301
+/assets/tensiones_4.jpg              /assets/sofia-bernasconi-tensiones-4.jpg  301
+/assets/tensiones_5.jpg              /assets/sofia-bernasconi-tensiones-5.jpg  301
+/assets/cuerpoaguas_1.jpg            /assets/sofia-bernasconi-mi-cuerpo-toca-tus-aguas-1.jpg  301
+/assets/cuerpoaguas_2.jpg            /assets/sofia-bernasconi-mi-cuerpo-toca-tus-aguas-2.jpg  301
+/assets/cuerpoaguas_3.jpg            /assets/sofia-bernasconi-mi-cuerpo-toca-tus-aguas-3.jpg  301
+/assets/cuerpoaguas_4.jpg            /assets/sofia-bernasconi-mi-cuerpo-toca-tus-aguas-4.jpg  301
+/assets/cordeles_1.jpg               /assets/sofia-bernasconi-cortina-de-cordeles-1.jpg  301
+/assets/cordeles_2.jpg               /assets/sofia-bernasconi-cortina-de-cordeles-2.jpg  301
+/assets/cordeles_3.jpg               /assets/sofia-bernasconi-cortina-de-cordeles-3.jpg  301
+/assets/cordeles_4.jpg               /assets/sofia-bernasconi-cortina-de-cordeles-4.jpg  301
+/assets/sumersiones_1.jpg            /assets/sofia-bernasconi-sumersiones-1.jpg  301
+/assets/sumersiones_2.jpg            /assets/sofia-bernasconi-sumersiones-2.jpg  301
+/assets/sumersiones_3.jpg            /assets/sofia-bernasconi-sumersiones-3.jpg  301
+/assets/sumersiones_4.jpg            /assets/sofia-bernasconi-sumersiones-4.jpg  301
+/assets/residente_1.jpg              /assets/sofia-bernasconi-residente-1.jpg  301
+/assets/residente_2.jpg              /assets/sofia-bernasconi-residente-2.jpg  301
+/assets/residente_3.jpg              /assets/sofia-bernasconi-residente-3.jpg  301
+/assets/residente_4.jpg              /assets/sofia-bernasconi-residente-4.jpg  301
+/assets/deshilacha_1.jpg             /assets/sofia-bernasconi-deshilacha-1.jpg  301
+/assets/deshilacha_2.jpg             /assets/sofia-bernasconi-deshilacha-2.jpg  301
+/assets/sumersiones0_1.jpg           /assets/sofia-bernasconi-bajo-el-agua-1.jpg  301
+/assets/sumersiones0_2.jpg           /assets/sofia-bernasconi-bajo-el-agua-2.jpg  301
+/assets/sumersiones0_3.jpg           /assets/sofia-bernasconi-bajo-el-agua-3.jpg  301
+/assets/sumersiones0_4.jpg           /assets/sofia-bernasconi-bajo-el-agua-4.jpg  301
+/assets/sumersiones0_5.jpg           /assets/sofia-bernasconi-bajo-el-agua-5.jpg  301
+/assets/bajoagua_obra1.jpg           /assets/sofia-bernasconi-bajo-el-agua-pintura-1.jpg  301
+/assets/bajoagua_obra2.jpg           /assets/sofia-bernasconi-bajo-el-agua-pintura-2.jpg  301
+/assets/bajoagua_obra3.jpg           /assets/sofia-bernasconi-bajo-el-agua-pintura-3.jpg  301
+/assets/bajoagua_obra4.jpg           /assets/sofia-bernasconi-bajo-el-agua-pintura-4.jpg  301
+/assets/bajoagua_obra5.jpg           /assets/sofia-bernasconi-bajo-el-agua-pintura-5.jpg  301
+/assets/artwork_1.jpg                /assets/sofia-bernasconi-portada-disco-1.jpg  301
+/assets/artwork_2.jpg                /assets/sofia-bernasconi-portada-disco-2.jpg  301
+/assets/artwork_3.jpg                /assets/sofia-bernasconi-portada-disco-3.jpg  301
+/assets/bio_retrato.jpg              /assets/sofia-bernasconi-retrato.jpg  301
+/assets/bio_autorretrato.jpg         /assets/sofia-bernasconi-autorretrato.jpg  301
+/assets/convey_7.jpg                 /assets/sofia-bernasconi-convey-me-7.jpg  301
+
 # Obras que existen en el sitio nuevo
 /portfolio/deshilacha            /obra-deshilacha       301
 /portfolio/deshilacha/           /obra-deshilacha       301

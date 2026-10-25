@@ -45,6 +45,8 @@
   main{max-width:680px;margin:0 auto;padding:22vh 2rem 14rem}
   @media(min-width:860px){main{margin-left:300px;margin-right:auto;padding-top:18vh}}
   .biofoto{width:100%;display:block;margin:0 0 3.5rem}
+  .biofoto img{width:100%;display:block}
+  .biofoto figcaption{margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;opacity:.6}
   /* computador: texto a la izquierda, foto a la derecha (más chica) */
   @media(min-width:860px){
     main{margin-left:max(120px,10vw);max-width:min(1000px, calc(100vw - max(120px,10vw) - 230px))}   /* deja libre el menú de la derecha */
@@ -92,7 +94,7 @@
 
   <main>
     <div class="biotop">
-    <img class="biofoto" src="assets/bio_retrato.jpg" alt="Retrato de Sofía Bernasconi, artista chilena de videoinstalación, arte medial y nuevos medios">
+    <figure class="biofoto"><img src="assets/sofia-bernasconi-retrato.jpg" alt="Retrato de Sofía Bernasconi, artista chilena de videoinstalación, arte medial y nuevos medios"><figcaption>Sofía Bernasconi, Brooklyn, 2026</figcaption></figure>
     <div class="biotxt">
     <div class="eyebrow">Bio</div>
     <p data-es>Sofía Bernasconi Le Roy (Concepción, Chile, 1994) es artista visual, realizadora audiovisual y curadora. Vive y trabaja en Brooklyn, Nueva York. Su práctica se centra principalmente en la video instalación y las artes mediales, donde investiga el cuerpo híbrido y sus umbrales con la tecnología: la piel como membrana, el organismo que se filtra en la máquina y en el territorio.</p>
@@ -103,7 +105,7 @@
     <p data-en>Her work engages critically with the thought of Donna Haraway, Jean-Luc Nancy, Paul B. Preciado, Flavia Costa and Valeria Radrigán, questioning traditional definitions of the body. She won the 2020 Ceres Award (Audiovisual Fiction) with the short-documentary "Deshilacha" and was selected for the 2023 MAVI UC Young Art Award with the video installation "We are also a curtain of cords".</p>
     </div>
     </div>
-    <img class="biofoto2" src="assets/bio_autorretrato.jpg" alt="Autorretrato de Sofía Bernasconi, artista chilena, con el rostro cubierto de plástico" loading="lazy">
+    <img class="biofoto2" src="assets/sofia-bernasconi-autorretrato.jpg" alt="Autorretrato de Sofía Bernasconi, artista chilena, con el rostro cubierto de plástico" loading="lazy">
     <div class="meta">Concepción · New York<br>contacto@sofiabernasconi.com</div>
   </main>
 
