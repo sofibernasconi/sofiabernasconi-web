@@ -8,6 +8,66 @@
 /en/portfolio/deshilacha         /en-obra-deshilacha    301
 /en/portfolio/deshilacha/        /en-obra-deshilacha    301
 
+
+# Obras del portfolio antiguo con página propia en el sitio nuevo
+/portfolio/convey                 /obra-convey           301
+/en/portfolio/convey              /en-obra-convey        301
+/portfolio/convey/                /obra-convey           301
+/en/portfolio/convey/             /en-obra-convey        301
+/portfolio/reflejo                /obra-reflejo          301
+/en/portfolio/reflejo             /en-obra-reflejo       301
+/portfolio/reflejo/               /obra-reflejo          301
+/en/portfolio/reflejo/            /en-obra-reflejo       301
+/portfolio/orilla                 /obra-orilla           301
+/en/portfolio/orilla              /en-obra-orilla        301
+/portfolio/orilla/                /obra-orilla           301
+/en/portfolio/orilla/             /en-obra-orilla        301
+/portfolio/mecanica               /obra-mecanica         301
+/en/portfolio/mecanica            /en-obra-mecanica      301
+/portfolio/mecanica/              /obra-mecanica         301
+/en/portfolio/mecanica/           /en-obra-mecanica      301
+/portfolio/tensiones              /obra-tensiones        301
+/en/portfolio/tensiones           /en-obra-tensiones     301
+/portfolio/tensiones/             /obra-tensiones        301
+/en/portfolio/tensiones/          /en-obra-tensiones     301
+/portfolio/cuerpoaguas            /obra-cuerpoaguas      301
+/en/portfolio/cuerpoaguas         /en-obra-cuerpoaguas   301
+/portfolio/cuerpoaguas/           /obra-cuerpoaguas      301
+/en/portfolio/cuerpoaguas/        /en-obra-cuerpoaguas   301
+/portfolio/cordeles               /obra-cordeles         301
+/en/portfolio/cordeles            /en-obra-cordeles      301
+/portfolio/cordeles/              /obra-cordeles         301
+/en/portfolio/cordeles/           /en-obra-cordeles      301
+/portfolio/sumersiones            /obra-sumersiones      301
+/en/portfolio/sumersiones         /en-obra-sumersiones   301
+/portfolio/sumersiones/           /obra-sumersiones      301
+/en/portfolio/sumersiones/        /en-obra-sumersiones   301
+/portfolio/residente              /obra-residente        301
+/en/portfolio/residente           /en-obra-residente     301
+/portfolio/residente/             /obra-residente        301
+/en/portfolio/residente/          /en-obra-residente     301
+/portfolio/video-artedeshilacha/*  /obra-deshilacha  301
+/en/portfolio/video-artedeshilacha/*  /en-obra-deshilacha  301
+
+# Más notas de prensa y secciones antiguas (encontradas en Search Console, 25/10)
+/la-artista-penquista-sofia-bernasconi-es-una-de-las-46-finalistas-del-xvi-premio-mavi-uc-arte-joven-2023/*  /prensa  301
+/y-el-cuerpo-se-convirtio-en-control-remoto-se-presentara-esta-semana-a-traves-del-canal-youtube-2021/*  /prensa  301
+/una-muestra-interactiva-que-mezcla-cuerpo-paisaje-y-maquina-diario-concepcion/*  /prensa  301
+/una-muestra-que-une-la-corporalidad-con-nuevos-lenguajes-exposicion-desbordes-de-sofia-bernasconi/*  /prensa  301
+/en/una-muestra-que-une-la-corporalidad-con-nuevos-lenguajes-exposicion-desbordes-de-sofia-bernasconi/*  /en-prensa  301
+/en/exposicion-desfase-experiencias-liminales-llega-a-la-casa-del-arte-2022/*  /en-prensa  301
+/exposicion-desfase-experiencias-liminales-llega-a-la-casa-del-arte-2022/*  /prensa  301
+/noticias/*                      /prensa                301
+/en/noticias/*                   /en-prensa             301
+/obras/*                         /proyectos             301
+/en/obras/*                      /en-proyectos          301
+/video-comercial/*               /proyectos             301
+/en/video-comercial/*            /en-proyectos          301
+/en/category/*                   /en                    301
+/en/tag/*                        /en                    301
+/feed/*                          /                      301
+/en/feed/*                       /en                    301
+
 # Bio, equipo y curaduría
 /en/bio                          /en-bio                301
 /en/bio/                         /en-bio                301
