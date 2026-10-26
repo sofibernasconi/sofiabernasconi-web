@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Aplica las descripciones de fotos (tools/alts.json) a todo el sitio.
+"""Applies the photo descriptions (tools/alts.json) across the whole site.
 
-- Reemplaza el alt de cada <img src="assets/…"> según el idioma de la página (data-lang).
-- En obra.html y en las páginas de obra (obra-*.html, en-obra-*.html) deja la tabla
-  FOTO_ALT en el script, para que las fotos que dibuja JavaScript usen la misma descripción.
-- Agrega las fotos de cada página al sitemap (image:image), para Google Imágenes.
+- Replaces the alt text of every <img src="assets/…"> according to the page language (data-lang).
+- In obra.html and the artwork pages (obra-*.html, en-obra-*.html) it injects the FOTO_ALT
+  table into the script, so photos drawn by JavaScript use the same descriptions.
+- Adds each page's photos to the sitemap (image:image) for Google Images.
+- Adds VideoObject structured data for each artwork's YouTube videos (tools/videos.json).
 
-Correr después de build_obras.mjs y build_idiomas.py:
+Run after build_obras.mjs and build_idiomas.py:
     python3 tools/build_alts.py
 """
 import json, re, pathlib, html
@@ -61,7 +62,7 @@ LD_VIDEO = re.compile(r'<script type="application/ld\+json" id="ld-video">.*?</s
 
 
 def poner_videos(txt, nombre, lang):
-    """Ficha VideoObject para los videos de YouTube de la obra (Google Videos)."""
+    """VideoObject structured data for the artwork's YouTube videos (Google Videos)."""
     txt = LD_VIDEO.sub('', txt)
     m = re.match(r'(?:en-)?obra-([a-z0-9]+)\.html$', nombre)
     if not m or m.group(1) not in VIDEOS:
@@ -93,7 +94,7 @@ def main():
             p.write_text(nuevo, 'utf8')
             print('alts:', p.name)
 
-    # sitemap de imágenes
+    # image sitemap
     sm = PUB / 'sitemap.xml'
     x = sm.read_text('utf8')
     x = re.sub(r'\s*<image:image>.*?</image:image>', '', x, flags=re.S)
@@ -117,7 +118,7 @@ def main():
 
     x = re.sub(r'<url>.*?</url>', con_fotos, x, flags=re.S)
     sm.write_text(x, 'utf8')
-    print('sitemap: imágenes', x.count('<image:image>'))
+    print('sitemap: images', x.count('<image:image>'))
 
 
 if __name__ == '__main__':

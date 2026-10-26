@@ -1,3 +1,11 @@
+# OS
 .DS_Store
+Thumbs.db
+
+# Dependencies & build caches
 node_modules/
 .wrangler/
+__pycache__/
+
+# Temporary file created by tools/build_obras.mjs
+public/__tmp_obra.html

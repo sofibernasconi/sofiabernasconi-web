@@ -1,5 +1,5 @@
-# Imágenes que no queremos que Google use en resultados ni en Google Imágenes
-# (se siguen viendo normal en el sitio)
+# Images we don't want Google to show in search results or Google Images
+# (they still display normally on the site)
 /assets/sofia-bernasconi-deshilacha-2.jpg
   X-Robots-Tag: noindex
 /assets/og.jpg

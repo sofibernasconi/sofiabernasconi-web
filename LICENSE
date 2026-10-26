@@ -1,0 +1,29 @@
+Copyright (c) 2018–2026 Sofía Bernasconi Le Roy. All rights reserved.
+
+This repository contains the source of https://sofiabernasconi.com.
+
+ARTWORK AND CONTENT
+All artworks, photographs, video stills, images, texts, the "SOFIA BERNASCONI"
+logo and the visual design of this website are the intellectual property of
+Sofía Bernasconi Le Roy, unless otherwise credited. They are protected by
+copyright and may not be reproduced, distributed, modified, published, used to
+train machine-learning models, or used commercially in any form without prior
+written permission from the artist.
+
+CODE
+The source code in this repository (HTML, CSS, JavaScript, Python and the p5.js
+sketches, including logo-p5/) is also proprietary. It is published so it can be
+viewed and deployed, not as open source. No license is granted to copy, modify
+or redistribute it, in whole or in part, without prior written permission.
+
+THIRD-PARTY MATERIAL
+Press clippings and their thumbnails (public/assets/prensa/), and the logos of
+institutions, funders and partner organizations (public/assets/logo_*.png,
+except the artist's own project logos) belong to their respective owners and
+are included only for reference and press purposes. Fonts are served by Google
+Fonts under their own licenses (SIL Open Font License), and p5.js is loaded
+from a CDN under the GNU LGPL v2.1. Neither is redistributed here.
+
+PERMISSIONS
+For permission requests (press, exhibitions, publications or any other use),
+contact contacto@sofiabernasconi.com.

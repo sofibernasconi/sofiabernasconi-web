@@ -1,8 +1,9 @@
-// Genera una página propia por obra, en español (public/obra-<id>.html) y en inglés
-// (public/en-obra-<id>.html), a partir de la plantilla public/obra.html.
-// Cada página trae su título, descripción, URL oficial (canonical), imagen para redes, ficha
-// para Google (JSON-LD) y el contenido ya escrito en el HTML (Google lo lee sin ejecutar código).
-// Uso: después de editar obra.html →  node tools/build_obras.mjs
+// Generates one page per artwork, in Spanish (public/obra-<id>.html) and English
+// (public/en-obra-<id>.html), from the template public/obra.html.
+// Each page gets its own title, description, canonical URL, social image, structured data
+// for Google (JSON-LD) and the content pre-rendered into the HTML (readable without running JS).
+// Requires Playwright (npm i playwright && npx playwright install chromium).
+// Usage: after editing obra.html →  node tools/build_obras.mjs
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');

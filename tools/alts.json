@@ -1,5 +1,5 @@
 {
- "_nota": "Descripción (texto alternativo) de cada foto, en español e inglés. Fuente única: tools/build_alts.py la aplica a todas las páginas y al sitemap de imágenes. Para cambiar una descripción, edita aquí y corre build_alts.py.",
+ "_note": "Alt text for every photo, in Spanish and English. Single source of truth: tools/build_alts.py applies it to every page and to the image sitemap. To change a description, edit it here and run build_alts.py.",
  "sofia-bernasconi-convey-me-1.jpg": {
   "es": "Convey me, instalación cinética y videoinstalación, arte y tecnología. Sofía Bernasconi: cercha de madera con un bucle de tela iluminado por una proyección de video en la oscuridad",
   "en": "Convey me, kinetic installation and video installation, art and technology. Sofía Bernasconi: wooden truss with a fabric loop lit by video projection in the dark"

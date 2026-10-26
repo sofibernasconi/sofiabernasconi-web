@@ -1,4 +1,4 @@
-// Configuración para Cloudflare: publica la carpeta public/ en el Worker del sitio.
+// Cloudflare config: serves the public/ folder as static assets on the site's Worker.
 {
   "name": "sofiabernasconi-website",
   "compatibility_date": "2026-09-01",

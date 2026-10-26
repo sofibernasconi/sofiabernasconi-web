@@ -1,5 +1,5 @@
 {
- "_nota": "Videos de YouTube de cada obra, para la ficha VideoObject (Google Videos). build_alts.py la agrega a obra-<id> y en-obra-<id>. Video nuevo: agregarlo aquí con su fecha de publicación en YouTube.",
+ "_note": "YouTube videos for each artwork, used for VideoObject structured data (Google Videos). build_alts.py adds it to obra-<id> and en-obra-<id>. To add a new video, list it here with its YouTube publish date.",
  "convey": [{"yt":"naS8u7d6TRU","fecha":"2026-08-09",
    "es":["Convey me, escultura cinética de Sofía Bernasconi (NYU ITP/IMA Spring Show 2026)","Video de Convey me, instalación cinética y videoinstalación de la artista chilena Sofía Bernasconi: una cinta de tela en movimiento sobre una cercha de madera con proyección de video."],
    "en":["Convey me, kinetic sculpture by Sofía Bernasconi (NYU ITP/IMA Spring Show 2026)","Video of Convey me, a kinetic sculpture and video installation by Chilean artist Sofía Bernasconi: a moving fabric belt on a wooden truss with video projection."]}],

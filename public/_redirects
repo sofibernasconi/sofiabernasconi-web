@@ -1,8 +1,8 @@
-# Direcciones de la web antigua (WordPress) → páginas nuevas.
-# 301 = mudanza permanente: Google reemplaza el resultado viejo por el nuevo.
-# Se evalúa de arriba abajo; la primera regla que calza gana.
+# URLs from the old site (WordPress) → new pages.
+# 301 = permanent move: Google replaces the old result with the new one.
+# Rules are evaluated top to bottom; the first match wins.
 
-# Fotos renombradas con el nombre de la artista (25/10)
+# Photos renamed to include the artist's name (Oct 25, 2026)
 /assets/convey_1.jpg                 /assets/sofia-bernasconi-convey-me-1.jpg  301
 /assets/convey_2.jpg                 /assets/sofia-bernasconi-convey-me-2.jpg  301
 /assets/convey_3.jpg                 /assets/sofia-bernasconi-convey-me-3.jpg  301
@@ -62,14 +62,14 @@
 /assets/bio_autorretrato.jpg         /assets/sofia-bernasconi-autorretrato.jpg  301
 /assets/convey_7.jpg                 /assets/sofia-bernasconi-convey-me-7.jpg  301
 
-# Obras que existen en el sitio nuevo
+# Artworks that exist on the new site
 /portfolio/deshilacha            /obra-deshilacha       301
 /portfolio/deshilacha/           /obra-deshilacha       301
 /en/portfolio/deshilacha         /en-obra-deshilacha    301
 /en/portfolio/deshilacha/        /en-obra-deshilacha    301
 
 
-# Obras del portfolio antiguo con página propia en el sitio nuevo
+# Old portfolio artworks that have their own page on the new site
 /portfolio/convey                 /obra-convey           301
 /en/portfolio/convey              /en-obra-convey        301
 /portfolio/convey/                /obra-convey           301
@@ -111,7 +111,7 @@
 /en/portfolio/video-artedeshilacha         /en-obra-deshilacha  301
 /en/portfolio/video-artedeshilacha/        /en-obra-deshilacha  301
 
-# Más notas de prensa y secciones antiguas (encontradas en Search Console, 25/10)
+# More old press articles and sections (found in Search Console, Oct 25, 2026)
 /la-artista-penquista-sofia-bernasconi-es-una-de-las-46-finalistas-del-xvi-premio-mavi-uc-arte-joven-2023/*  /prensa  301
 /y-el-cuerpo-se-convirtio-en-control-remoto-se-presentara-esta-semana-a-traves-del-canal-youtube-2021/*  /prensa  301
 /una-muestra-interactiva-que-mezcla-cuerpo-paisaje-y-maquina-diario-concepcion/*  /prensa  301
@@ -130,7 +130,7 @@
 /feed/*                          /                      301
 /en/feed/*                       /en                    301
 
-# Bio, equipo y curaduría
+# Bio, team and curatorship
 /en/bio                          /en-bio                301
 /en/bio/                         /en-bio                301
 /en/team                         /en-bio                301
@@ -148,7 +148,7 @@
 /en/curatorship                  /en-bio                301
 /en/curatorship/                 /en-bio                301
 
-# Notas de prensa antiguas
+# Old press articles
 /galeria-aura-se-sumerge-en-el-cyberpunk-una-exposicion-sobre-cuerpos-perifericos-da-vida-a-un-cyborg/*  /prensa  301
 /en/galeria-aura-se-sumerge-en-el-cyberpunk-una-exposicion-sobre-cuerpos-perifericos-da-vida-a-un-cyborg/*  /en-prensa  301
 /estudiante-de-arte-udec-expone-trabajos-en-bar-galeria-aura-2019/*  /prensa  301
@@ -158,7 +158,7 @@
 /en/press/*                      /en-prensa             301
 /press/*                         /en-prensa             301
 
-# Otras secciones y proyectos antiguos → Proyectos
+# Other old sections and projects → Projects
 /cablerio-cuerpos-perifericos/*  /proyectos             301
 /en/cablerio-cuerpos-perifericos/*  /en-proyectos       301
 /en/portfolio/*                  /en-proyectos          301
@@ -174,7 +174,7 @@
 /contact/*                       /en-contacto           301
 /en/contact/*                    /en-contacto           301
 
-# Restos típicos de WordPress
+# Common WordPress leftovers
 /category/*                      /                      301
 /tag/*                           /                      301
 /author/*                        /                      301
@@ -182,5 +182,5 @@
 /home/*                          /                      301
 /inicio/*                        /                      301
 
-# Portada antigua en inglés
+# Old English homepage
 /en/                             /en                    301
