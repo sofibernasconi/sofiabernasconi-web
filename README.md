@@ -34,6 +34,7 @@ tools/                   Build scripts (not published)
 └── renombre_fotos.json          Old → new photo filenames (kept for reference)
 
 logo-p5/                 Standalone p5.js version of the interactive logo (not published)
+drafts/                  Intro/logo experiments and backup photos (not published)
 wrangler.jsonc           Cloudflare configuration
 ```
 

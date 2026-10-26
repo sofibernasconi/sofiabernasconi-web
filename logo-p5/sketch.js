@@ -44,7 +44,9 @@ function makeText() {
   m.textFont(FONT); m.textStyle(BOLD); m.textSize(fs);
   m.drawingContext.wordSpacing = '75px';
   let tw = 0;
-  for (const l of lines) tw = Math.max(tw, Math.ceil(m.textWidth(l)));
+  for (const l of lines) {
+    tw = Math.max(tw, Math.ceil(m.textWidth(l)));
+  }
   m.remove();
   const pad = 20, lead = fs * 1.04;
   const g = createGraphics(tw + pad * 2, Math.ceil(lead * (nLines - 1) + fs * 1.3));
@@ -55,7 +57,9 @@ function makeText() {
   const multi = nLines > 1;                       // two lines are left-aligned, like on the site
   g.textAlign(multi ? LEFT : CENTER, CENTER);
   const cy = g.height / 2 - lead * (nLines - 1) / 2;
-  lines.forEach((l, i) => g.text(l, multi ? pad : g.width / 2, cy + i * lead));
+  for (let i = 0; i < lines.length; i++) {
+    g.text(lines[i], multi ? pad : g.width / 2, cy + i * lead);
+  }
   g.loadPixels();
   return g;
 }
@@ -66,11 +70,14 @@ function build() {
   parts = [];
   const s = targetW() / img.width;
   const step = Math.max(2, Math.round((isNarrow() ? 1.8 : DENSITY) / s));
-  for (let y = 0; y < img.height; y += step)
-    for (let x = 0; x < img.width; x += step)
-      if (img.pixels[4 * (x + y * img.width)] < 115)
+  for (let y = 0; y < img.height; y += step) {
+    for (let x = 0; x < img.width; x += step) {
+      if (img.pixels[4 * (x + y * img.width)] < 115) {
         parts.push({ ix: x, iy: y, ox: 0, oy: 0, vx: 0, vy: 0, ev: 0,
                      seed: random(1000), sz: random(0.5, 1.15), fst: frameCount + random(0, 85) });
+      }
+    }
+  }
   setHomes();
 }
 
