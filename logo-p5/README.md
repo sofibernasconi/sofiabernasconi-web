@@ -21,7 +21,7 @@ The name is made of particles held loosely by a soft spring, floating on a noise
 | `R` | Rebuild the particles |
 | `I` | Invert colours (light / dark) |
 
-Settings (font, text, cursor radius, density, colours) are at the top of `sketch.js`.
+Settings (font, text, cursor radius, density, colours) are at the top of `sketch.js`. Set `MIST = true` to make evaporated particles leave a blurred, enlarged trail (off by default, matching the website).
 
 ---
 

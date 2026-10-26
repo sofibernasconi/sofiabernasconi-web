@@ -15,18 +15,35 @@ const TEXT_LINES_MOBILE = ['SOFIA', 'BERNASCONI']; // narrow screens: two lines
 const R = 160;                // cursor influence radius (px)
 const VSTRETCH = 1.55;        // vertical stretch of the name
 const DENSITY = 2.4;          // particle spacing (lower = denser, heavier)
-let PAPER = [247, 246, 244];  // background
-let INK = [21, 21, 15];       // particle colour
+const PAPER_LIGHT = '#f7f6f4', PAPER_DARK = '#0a0a0b';  // page background (light / dark)
+const MIST = false;           // true = evaporated particles also leave a blurred, enlarged mist
+                              // (off, as on the website: there they simply fade away)
+const BLUR = 2.6;             // blur of the mist layer (CSS px), only used when MIST = true
+// As on the site, particles are drawn in WHITE with the 'difference' blend mode:
+// they read black on the light paper and white on dark backgrounds.
+let paper = PAPER_LIGHT;
 
 // ---------- state ----------
 let img, parts = [], nLines = 1, glow;
 let x0 = 0, y0 = 0, x1 = 0, y1 = 0;   // name bounding box on screen
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  const c = createCanvas(windowWidth, windowHeight);
   pixelDensity(Math.min(2, window.devicePixelRatio || 1));
+  // Mist layer: a second canvas on top, blurred with CSS — exactly like the site.
   glow = createGraphics(width, height);
   glow.pixelDensity(1);
+  document.body.appendChild(glow.elt);
+  for (const el of [c.elt, glow.elt]) {
+    el.style.position = 'fixed'; el.style.left = '0'; el.style.top = '0';
+    el.style.pointerEvents = 'none'; el.style.mixBlendMode = 'difference';
+  }
+  glow.elt.style.display = MIST ? 'block' : 'none';
+  glow.elt.style.filter = 'blur(' + BLUR + 'px)';
+  document.documentElement.style.background = paper;
+  document.body.style.margin = '0';
+  document.body.style.background = paper;
+  document.body.style.overflow = 'hidden';
   const boot = () => { img = makeText(); build(); };
   if (document.fonts && document.fonts.load) {
     document.fonts.load('700 120px "' + FONT + '"').then(boot).catch(boot);
@@ -93,7 +110,7 @@ function setHomes() {
 }
 
 function draw() {
-  background(PAPER);
+  clear();
   glow.clear();
   if (!img) return;
 
@@ -138,20 +155,35 @@ function draw() {
     const dx = baseX + q.ox, dy = baseY + q.oy;
     const dot = q.sz * 1.5 * (isNarrow() ? 0.7 : 1);
     const aC = 255 * (1 - q.ev) * fade;
-    if (aC > 4) { fill(INK[0], INK[1], INK[2], aC); circle(dx, dy, dot); }
-    if (q.ev > 0.03) { glow.fill(INK[0], INK[1], INK[2], 150 * q.ev * fade); glow.circle(dx, dy, dot + q.ev * 3); }
+    if (aC > 4) { fill(255, aC); circle(dx, dy, dot); }
+    if (MIST && q.ev > 0.03) { glow.fill(255, 150 * q.ev * fade); glow.circle(dx, dy, dot + q.ev * 3); }
   }
+}
 
-  // evaporated particles become a blurred mist
-  drawingContext.filter = 'blur(2.6px)';
-  image(glow, 0, 0, width, height);
-  drawingContext.filter = 'none';
+// Flatten paper + particles + blurred mist into one image, the way the browser shows it.
+function savePNG() {
+  const out = createGraphics(width, height);
+  out.pixelDensity(pixelDensity());
+  out.background(paper);
+  out.blendMode(DIFFERENCE);
+  out.image(get(), 0, 0, width, height);
+  if (MIST) {
+    out.drawingContext.filter = 'blur(' + (BLUR * pixelDensity()) + 'px)';
+    out.image(glow, 0, 0, width, height);
+    out.drawingContext.filter = 'none';
+  }
+  out.save('sofia-bernasconi-logo.png');
+  out.remove();
 }
 
 function keyPressed() {
-  if (key === 's' || key === 'S') saveCanvas('sofia-bernasconi-logo', 'png');
+  if (key === 's' || key === 'S') savePNG();
   if (key === 'r' || key === 'R') build();
-  if (key === 'i' || key === 'I') { [PAPER, INK] = [INK, PAPER]; }
+  if (key === 'i' || key === 'I') {
+    paper = paper === PAPER_LIGHT ? PAPER_DARK : PAPER_LIGHT;
+    document.documentElement.style.background = paper;
+    document.body.style.background = paper;
+  }
 }
 
 function touchMoved() { return false; } // keep the page from scrolling while drawing
