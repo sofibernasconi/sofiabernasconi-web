@@ -26,6 +26,8 @@ BLOCK = MARK_START + r'''
   /* abierto: las barritas se quedan igual y el menú vuelve a aparecer */
   body.ui-hide.mm-open nav,body.ui-hide.mm-open #menu{opacity:1 !important;transform:none;pointer-events:auto}
   body.ui-hide.mm-open #lang{opacity:1 !important;pointer-events:auto;right:76px}
+  /* el logo en movimiento vuelve junto con el menú */
+  body.ui-hide.mm-open #c,body.ui-hide.mm-open #blurlayer{opacity:1 !important}
   /* en la portada el menú es negro: al abrirlo sobre fotos, que se lea igual que en las otras páginas */
   body.ui-hide.mm-open #menu,body.ui-hide.mm-open #lang{mix-blend-mode:difference;color:#fff}
   body.ui-hide.mm-open #menu a{color:#fff}
