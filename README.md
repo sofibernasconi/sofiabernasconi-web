@@ -29,6 +29,7 @@ tools/                   Build scripts (not published)
 ├── build_obras.mjs              obra.html → one page per artwork, ES + EN
 ├── build_idiomas.py             English pages, hreflang links and sitemap
 ├── build_alts.py                Photo alt text, image sitemap and video structured data
+├── mini_menu.py                 Menu that folds into three small bars when scrolling (all pages)
 ├── alts.json                    Alt text for every photo (ES / EN)
 ├── videos.json                  YouTube videos per artwork
 └── renombre_fotos.json          Old → new photo filenames (kept for reference)
@@ -46,6 +47,7 @@ wrangler.jsonc           Cloudflare configuration
   node tools/build_obras.mjs        # needs Playwright: npm i playwright && npx playwright install chromium
   python3 tools/build_idiomas.py
   python3 tools/build_alts.py
+  python3 tools/mini_menu.py       # re-adds the mini menu (bars on scroll) to every page
   ```
 - **Preview locally:** `npx wrangler dev`, or open the HTML files directly in a browser.
 
