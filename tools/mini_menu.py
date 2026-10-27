@@ -2,7 +2,7 @@
 
 When the visitor scrolls down, the full menu (ES/EN + links) folds into three
 short bars in the top-right corner instead of disappearing. Tapping the bars
-opens the menu again; tapping again, a link, outside, Esc, or scrolling closes it.
+opens the menu again; tapping them again, a link, outside, Esc, or scrolling closes it.
 Scrolling back up brings the full menu back, as before.
 
 Run again after rebuilding pages (it replaces the old block, never duplicates it):
@@ -23,10 +23,7 @@ BLOCK = MARK_START + r'''
   #mm i:nth-child(2){width:12px}
   #mm:hover i:nth-child(2){width:18px}
   body.ui-hide #mm{opacity:1;transform:none;pointer-events:auto}
-  /* abierto: las barritas se vuelven una X y el menú vuelve a aparecer */
-  body.mm-open #mm i:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
-  body.mm-open #mm i:nth-child(2){opacity:0}
-  body.mm-open #mm i:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+  /* abierto: las barritas se quedan igual y el menú vuelve a aparecer */
   body.ui-hide.mm-open nav,body.ui-hide.mm-open #menu{opacity:1 !important;transform:none;pointer-events:auto}
   body.ui-hide.mm-open #lang{opacity:1 !important;pointer-events:auto;right:76px}
   /* en la portada el menú es negro: al abrirlo sobre fotos, que se lea igual que en las otras páginas */
