@@ -54,9 +54,8 @@
   body.parked #logohit{display:block}
   /* statement: justo después del logo grande, antes de la primera obra */
   #statement{position:relative;z-index:80;background:#f7f6f4;box-sizing:border-box;scroll-snap-align:start;padding:30vh 6% 4vh;text-align:center}
-  #statement .st-eyebrow{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#8f8f8a;margin-bottom:2.2rem}
-  #statement .st-txt{margin:0 auto;max-width:36em;font-family:'Space Grotesk',sans-serif;font-weight:300;font-size:clamp(1rem,1.4vw,1.28rem);line-height:1.6;letter-spacing:-.005em;color:#26262a;text-wrap:pretty}
-  @media(max-width:700px){ #statement{padding:0 7% 2vh;padding-top:max(26svh,calc(var(--finmenu,0px) + 48px))} #statement .st-txt{font-size:1.02rem} }
+  #statement .st-txt{margin:0 auto;max-width:46em;font-family:'JetBrains Mono',monospace;font-weight:500;font-size:12px;letter-spacing:.06em;line-height:2;color:#26262a;text-wrap:pretty}
+  @media(max-width:700px){ #statement{padding:0 7% 2vh;padding-top:max(26svh,calc(var(--finmenu,0px) + 48px))} #statement .st-txt{font-size:12px;line-height:1.95} }
   #hero{height:78vh;scroll-snap-align:start;position:relative;z-index:80}   /* la primera obra queda justo bajo el borde: apenas se baja, empieza a subir */
   @media(max-width:700px){ #hero{height:57vh} }
   /* en la primera pantalla el scroll es libre: se baja de a poco y la obra va apareciendo;
@@ -236,7 +235,6 @@
   <div id="namehit"></div>
   <div id="hero" aria-hidden="true"></div>
   <section id="statement">
-    <div class="st-eyebrow">Statement</div>
     <p class="st-txt" data-es="Deformo cuerpos para hacer visible su hibridez con lo más que humano. El cuerpo es una interfaz que se transforma con lo que la atraviesa: sistemas, máquinas, agua, luz, otras especies. Construyo dispositivos que estiran, fragmentan y transportan mi cuerpo o su imagen. Carne y mecanismo en negociación." data-en="I deform bodies to make their hybridity with the more-than-human visible. The body is an interface that changes with what passes through it: systems, machines, water, light, other species. I build devices that stretch, fragment and carry my body or its image. Flesh and mechanism, negotiating.">I deform bodies to make their hybridity with the more-than-human visible. The body is an interface that changes with what passes through it: systems, machines, water, light, other species. I build devices that stretch, fragment and carry my body or its image. Flesh and mechanism, negotiating.</p>
   </section>
   <div id="gallery">
@@ -353,6 +351,8 @@
     function update(){
       if(document.body.classList.contains('menu-on')){
         const vh=window.innerHeight||1;
+        const stEl=document.querySelector('#statement .st-txt'), stB=stEl? stEl.getBoundingClientRect().bottom/vh : -1;
+        let stF=(0.24-stB)/0.12; if(stF<0)stF=0; if(stF>1)stF=1;   // el título de la obra aparece recién cuando el statement ya subió
         for(const s of secs){
           const cap=s.__cap||s.querySelector('.cap'); if(!cap) continue;
           const r=s.getBoundingClientRect(), p=r.top/vh;
@@ -364,7 +364,7 @@
             if(pi>0.45) op=(0.85-pi)/0.4;             // aparece de a poco cuando sube la primera foto
             else if(bot<0.7) op=(bot-0.5)/0.2;        // desaparece: se va justo en el cruce (bot=0.5 = p=0.5 de la siguiente) -> sin solape ni hueco
             else op=1;
-            if(op<0)op=0; if(op>1)op=1;
+            if(op<0)op=0; if(op>1)op=1; op*=stF;
             ty=0; dis=1-op;                            // sin deriva: el título nuevo aparece en el mismo lugar que el anterior
             tf='translateY('+ty.toFixed(2)+'vh)';
           } else {
@@ -374,7 +374,7 @@
             if(pi>0.46) op=(0.86-pi)/0.4;                 // aparece cuando sube la primera foto
             else if(bot<0.6) op=(bot-0.35)/0.25;       // se desvanece cuando el final de la obra sube
             else op=1;
-            if(op<0)op=0; if(op>1)op=1;
+            if(op<0)op=0; if(op>1)op=1; op*=stF;
             dis=1-op;
             tf='translateY('+(ty+dis*dis*4).toFixed(2)+'vh) scale('+(1+dis*0.04).toFixed(3)+')';
           }
