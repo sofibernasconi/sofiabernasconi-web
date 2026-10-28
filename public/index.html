@@ -54,7 +54,7 @@
   body.parked #logohit{display:block}
   /* statement: justo después del logo grande, antes de la primera obra */
   #statement{position:relative;z-index:80;background:#f7f6f4;box-sizing:border-box;scroll-snap-align:start;padding:30vh 6% 4vh;text-align:center}
-  #statement .st-txt{margin:0 auto;max-width:46em;font-family:'JetBrains Mono',monospace;font-weight:500;font-size:12px;letter-spacing:.06em;line-height:2;color:#26262a;text-wrap:pretty}
+  #statement .st-txt{margin:0 auto;max-width:46em;font-family:'JetBrains Mono',monospace;font-weight:500;font-size:12px;letter-spacing:.06em;line-height:2;color:#26262a;text-wrap:pretty;filter:blur(.95px);opacity:0;will-change:opacity,filter}
   @media(max-width:700px){ #statement{padding:0 7% 2vh;padding-top:max(26svh,calc(var(--finmenu,0px) + 48px))} #statement .st-txt{font-size:12px;line-height:1.95} }
   #hero{height:78vh;scroll-snap-align:start;position:relative;z-index:80}   /* la primera obra queda justo bajo el borde: apenas se baja, empieza a subir */
   @media(max-width:700px){ #hero{height:57vh} }
@@ -237,6 +237,16 @@
   <section id="statement">
     <p class="st-txt" data-es="Deformo cuerpos para hacer visible su hibridez con lo más que humano. El cuerpo es una interfaz que se transforma con lo que la atraviesa: sistemas, máquinas, agua, luz, otras especies. Construyo dispositivos que estiran, fragmentan y transportan mi cuerpo o su imagen. Carne y mecanismo en negociación." data-en="I deform bodies to make their hybridity with the more-than-human visible. The body is an interface that changes with what passes through it: systems, machines, water, light, other species. I build devices that stretch, fragment and carry my body or its image. Flesh and mechanism, negotiating.">Deformo cuerpos para hacer visible su hibridez con lo más que humano. El cuerpo es una interfaz que se transforma con lo que la atraviesa: sistemas, máquinas, agua, luz, otras especies. Construyo dispositivos que estiran, fragmentan y transportan mi cuerpo o su imagen. Carne y mecanismo en negociación.</p>
   </section>
+  <script>/*statement-fade*/(function(){ // el statement aparece al entrar en pantalla y se desvanece al seguir bajando (borroso, estilo brat)
+    var el=document.querySelector('#statement .st-txt'); if(!el) return;
+    var red=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function f(){ var vh=innerHeight||1, r=el.getBoundingClientRect(), c=(r.top+r.height/2)/vh, op;
+      if(c>0.62) op=(0.9-c)/0.28; else if(c<0.36) op=(c-0.12)/0.24; else op=1;
+      if(op<0)op=0; if(op>1)op=1; if(red) op=c>0.05&&c<1?1:0;
+      el.style.opacity=op.toFixed(3); el.style.filter='blur('+(0.95+(1-op)*2.4).toFixed(2)+'px)'; }
+    var q=0; function t(){ if(!q){ q=1; requestAnimationFrame(function(){ q=0; f(); }); } }
+    addEventListener('scroll',t,{passive:true}); document.addEventListener('scroll',t,{passive:true,capture:true}); addEventListener('resize',t); f(); setInterval(f,400);
+  })();</script>
   <div id="gallery">
     <section class="proj" data-id="convey">
       <div class="cap">Convey me · 2025–2026</div>
