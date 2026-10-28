@@ -52,6 +52,13 @@
   #menu a:hover{opacity:1}
   #logohit{position:fixed;top:26px;left:32px;width:300px;height:70px;z-index:130;display:none;cursor:pointer}
   body.parked #logohit{display:block}
+  /* statement: justo después del logo grande, antes de la primera obra */
+  #statement{position:relative;z-index:80;background:#f7f6f4;min-height:100vh;box-sizing:border-box;scroll-snap-align:start;padding:24vh 6% 14vh;display:flex;flex-direction:column;justify-content:center}
+  #statement .st-eyebrow{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#8f8f8a;margin-bottom:2.2rem}
+  #statement .st-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:3.2vw;max-width:1280px}
+  #statement p{margin:0;font-family:'Space Grotesk',sans-serif;font-weight:300;font-size:clamp(.92rem,1.1vw,1.06rem);line-height:1.7;color:#26262a}
+  @media(max-width:1000px){ #statement .st-cols{grid-template-columns:1fr;row-gap:1.4rem;max-width:620px} }
+  @media(max-width:700px){ #statement{padding:30vh 7% 12vh;padding-top:max(30svh,calc(var(--finmenu,0px) + 40px))} #statement p{font-size:1rem} }
   #hero{height:78vh;scroll-snap-align:start;position:relative;z-index:80}   /* la primera obra queda justo bajo el borde: apenas se baja, empieza a subir */
   @media(max-width:700px){ #hero{height:57vh} }
   /* en la primera pantalla el scroll es libre: se baja de a poco y la obra va apareciendo;
@@ -186,7 +193,7 @@
   body.menu-on .foot-site{opacity:1}
 
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500;700&family=Inter:ital,wght@1,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@500;700&family=Inter:ital,wght@1,800&display=swap" rel="stylesheet">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Sofía Bernasconi","primaryImageOfPage":{"@type":"ImageObject","url":"https://sofiabernasconi.com/assets/sofia-bernasconi-convey-me-7.jpg","width":1600,"height":900,"caption":"Convey me, Sofía Bernasconi"}}</script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Person",
@@ -230,6 +237,14 @@
   <a id="logohit" href="bio.html" aria-label="Bio"></a>
   <div id="namehit"></div>
   <div id="hero" aria-hidden="true"></div>
+  <section id="statement">
+    <div class="st-eyebrow">Statement</div>
+    <div class="st-cols">
+      <p data-es="Trabajo con mi propio cuerpo como materia prima. En mis instalaciones se proyecta, se estira, se fragmenta y se pone en movimiento a través de máquinas que construyo: cintas transportadoras, brazos mecánicos, rodillos, sensores y código. Me interesa el momento en que el cuerpo deja de pertenecerse solo a sí mismo y se vuelve materia en tránsito, algo que puede ser transportado, deformado y puesto de nuevo en circulación." data-en="I work with my own body as raw material. In my installations it is projected, stretched, fragmented and set in motion by machines I build: conveyor belts, mechanical arms, rollers, sensors and code. I am interested in the moment when the body stops belonging only to itself and becomes matter in transit, something that can be carried, deformed and put back into circulation.">Trabajo con mi propio cuerpo como materia prima. En mis instalaciones se proyecta, se estira, se fragmenta y se pone en movimiento a través de máquinas que construyo: cintas transportadoras, brazos mecánicos, rodillos, sensores y código. Me interesa el momento en que el cuerpo deja de pertenecerse solo a sí mismo y se vuelve materia en tránsito, algo que puede ser transportado, deformado y puesto de nuevo en circulación.</p>
+      <p data-es="En mi obra, la máquina sostiene al cuerpo y al mismo tiempo lo dobla. Sin la estructura no hay imagen, ni movimiento, ni cuerpo que mostrar. Esa dependencia es lo que quiero hacer visible: un cuerpo que existe a través de los sistemas que lo sostienen y le dan forma. Quizás no es coincidencia que el agua vuelva una y otra vez a mi obra: como el cuerpo, es moldeable, y también necesita una estructura para estar." data-en="In my work, the machine holds the body up and bends it at the same time. Without the structure there is no image, no movement, no body to show. That dependence is what I want to make visible: a body that exists through the systems that hold it and give it shape. Perhaps it is no coincidence that water keeps returning to my work: like the body, it is malleable, and it also needs a structure in order to be.">En mi obra, la máquina sostiene al cuerpo y al mismo tiempo lo dobla. Sin la estructura no hay imagen, ni movimiento, ni cuerpo que mostrar. Esa dependencia es lo que quiero hacer visible: un cuerpo que existe a través de los sistemas que lo sostienen y le dan forma. Quizás no es coincidencia que el agua vuelva una y otra vez a mi obra: como el cuerpo, es moldeable, y también necesita una estructura para estar.</p>
+      <p data-es="Si el cuerpo existe a través de lo que lo sostiene, esas estructuras incluyen lo más que humano: el agua, la luz, otras especies. Hoy trabajo en It&#x27;s always dawning somewhere, donde un fax antiguo sigue el amanecer y reproduce en vivo a los pájaros que cantan con la primera luz, captados por una red abierta de micrófonos; luego imprime a cada uno. El canto viaja con la luz, como si el planeta entero fuera el cuerpo." data-en="If the body exists through what holds it, those structures include the more-than-human: water, light, other species. I am currently working on It&#x27;s always dawning somewhere, in which an old fax machine follows the sunrise and plays, live, the birds singing at first light, picked up by an open network of microphones; it then prints each one. The song travels with the light, as if the whole planet were the body.">Si el cuerpo existe a través de lo que lo sostiene, esas estructuras incluyen lo más que humano: el agua, la luz, otras especies. Hoy trabajo en It&#x27;s always dawning somewhere, donde un fax antiguo sigue el amanecer y reproduce en vivo a los pájaros que cantan con la primera luz, captados por una red abierta de micrófonos; luego imprime a cada uno. El canto viaja con la luz, como si el planeta entero fuera el cuerpo.</p>
+    </div>
+  </section>
   <div id="gallery">
     <section class="proj" data-id="convey">
       <div class="cap">Convey me · 2025–2026</div>
@@ -506,7 +521,7 @@ new p5(function(p){
       else if(parked && y < hh*0.03){ parked=false; document.body.classList.remove('parked'); }
     };
     document.addEventListener('scroll', alScroll, true);
-    window.__irGaleria=(suave=true)=>{ const g=document.getElementById('gallery'); if(!g) return; const aire=innerWidth>700?innerHeight*0.07:0; /* en escritorio deja aire entre el título y la primera foto */ window.scrollTo({top:Math.max(0,g.getBoundingClientRect().top+(window.pageYOffset||0)-aire),behavior:suave?'smooth':'auto'}); };
+    window.__irGaleria=(suave=true)=>{ const g=document.getElementById('statement')||document.getElementById('gallery'); if(!g) return; const aire=innerWidth>700?innerHeight*0.07:0; /* en escritorio deja aire entre el título y la primera foto */ window.scrollTo({top:Math.max(0,g.getBoundingClientRect().top+(window.pageYOffset||0)-aire),behavior:suave?'smooth':'auto'}); };
     window.addEventListener('click',e=>{
       if(!inName(e.clientX,e.clientY)) return;
       if(!parked){ window.__irGaleria(); }            // click en el nombre grande: baja a las obras
