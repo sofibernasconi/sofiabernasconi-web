@@ -333,7 +333,7 @@ new p5(function(p){
     var s=getST();
     if(s<40) document.body.classList.remove('ui-hide');
     else if(s>last) document.body.classList.add("ui-hide");
-    else if(s<last) document.body.classList.remove("ui-hide");
+    // al volver a subir se queda igual (logo chico y barritas); sólo arriba de todo vuelve el menú completo
     last=s;
   }
   window.addEventListener('scroll', on, {passive:true, capture:true});
