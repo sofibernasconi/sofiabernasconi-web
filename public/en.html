@@ -188,6 +188,8 @@
     body #gallery .proj[data-id="sumersiones0"] .comp img:nth-child(5){grid-column:6 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:62vh;margin-top:-6vh}
     body #gallery .proj[data-id="orilla"] .comp img:nth-child(1){object-position:50% 88%}   /* que no se corten los plintos */
   }
+  /* Mecánica: la foto del proyector va espejada, para que apunte hacia la proyección de la foto de al lado */
+  .proj[data-id="mecanica"] .comp img:nth-child(3){scale:-1 1}
   .proj .comp .ph{width:230px;height:32vh;background:#f6eeee;border:1px solid #e6cccc;display:flex;align-items:center;justify-content:center;color:#c99;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;text-align:center;opacity:0;transition:opacity 1s ease;padding:1rem;line-height:1.7}
   body.menu-on .proj .comp .ph{opacity:1}
 
