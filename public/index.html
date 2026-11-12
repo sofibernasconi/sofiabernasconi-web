@@ -148,6 +148,46 @@
     #topmask{transition:opacity .4s ease,background-color 1.2s ease}
     body.foto-full #topmask{opacity:0}
   }
+  /* computador: cada obra con su propia composición (tamaños distintos, la última foto no siempre a la izquierda) */
+  @media(min-width:701px){
+    body #gallery .proj[data-id="convey"] .comp img:nth-child(2){grid-column:1 / 7;justify-self:start;width:auto;max-width:100%;height:auto;max-height:60vh;margin-top:0vh}
+    body #gallery .proj[data-id="convey"] .comp img:nth-child(3){grid-column:8 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:56vh;margin-top:14vh}
+    body #gallery .proj[data-id="convey"] .comp img:nth-child(4){grid-column:1 / 6;justify-self:start;width:auto;max-width:100%;height:auto;max-height:44vh;margin-top:-2vh}
+    body #gallery .proj[data-id="convey"] .comp img:nth-child(5){grid-column:7 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:62vh;margin-top:8vh}
+    body #gallery .proj[data-id="convey"] .comp img:nth-child(6){grid-column:3 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:72vh;margin-top:4vh}
+    body #gallery .proj[data-id="reflejo"] .comp img:nth-child(2){grid-column:1 / 6;justify-self:start;width:auto;max-width:100%;height:auto;max-height:74vh;margin-top:0vh}
+    body #gallery .proj[data-id="reflejo"] .comp img:nth-child(3){grid-column:7 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:48vh;margin-top:18vh}
+    body #gallery .proj[data-id="reflejo"] .comp img:nth-child(4){grid-column:5 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:62vh;margin-top:6vh}
+    body #gallery .proj[data-id="orilla"] .comp img:nth-child(2){grid-column:1 / 8;justify-self:start;width:auto;max-width:100%;height:auto;max-height:62vh;margin-top:0vh}
+    body #gallery .proj[data-id="orilla"] .comp img:nth-child(3){grid-column:9 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:40vh;margin-top:26vh}
+    body #gallery .proj[data-id="orilla"] .comp img:nth-child(4){grid-column:6 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:58vh;margin-top:4vh}
+    body #gallery .proj[data-id="mecanica"] .comp img:nth-child(2){grid-column:1 / 8;justify-self:start;width:auto;max-width:100%;height:auto;max-height:64vh;margin-top:0vh}
+    body #gallery .proj[data-id="mecanica"] .comp img:nth-child(3){grid-column:9 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:38vh;margin-top:30vh}
+    body #gallery .proj[data-id="mecanica"] .comp img:nth-child(4){grid-column:1 / 5;justify-self:start;width:auto;max-width:100%;height:auto;max-height:40vh;margin-top:6vh}
+    body #gallery .proj[data-id="mecanica"] .comp img:nth-child(5){grid-column:7 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:78vh;margin-top:6vh}
+    body #gallery .proj[data-id="tensiones"] .comp img:nth-child(2){grid-column:1 / 8;justify-self:start;width:auto;max-width:100%;height:auto;max-height:72vh;margin-top:0vh}
+    body #gallery .proj[data-id="tensiones"] .comp img:nth-child(3){grid-column:10 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:32vh;margin-top:34vh}
+    body #gallery .proj[data-id="tensiones"] .comp img:nth-child(4){grid-column:6 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:60vh;margin-top:4vh}
+    body #gallery .proj[data-id="tensiones"] .comp img:nth-child(5){grid-column:1 / 5;justify-self:start;width:auto;max-width:100%;height:auto;max-height:34vh;margin-top:-10vh}
+    body #gallery .proj[data-id="cuerpoaguas"] .comp img:nth-child(2){grid-column:1 / 6;justify-self:start;width:auto;max-width:100%;height:auto;max-height:46vh;margin-top:0vh}
+    body #gallery .proj[data-id="cuerpoaguas"] .comp img:nth-child(3){grid-column:7 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:66vh;margin-top:10vh}
+    body #gallery .proj[data-id="cuerpoaguas"] .comp img:nth-child(4){grid-column:1 / 8;justify-self:start;width:auto;max-width:100%;height:auto;max-height:58vh;margin-top:-4vh}
+    body #gallery .proj[data-id="cordeles"] .comp img:nth-child(2){grid-column:1 / 5;justify-self:start;width:auto;max-width:100%;height:auto;max-height:70vh;margin-top:0vh}
+    body #gallery .proj[data-id="cordeles"] .comp img:nth-child(3){grid-column:6 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:60vh;margin-top:12vh}
+    body #gallery .proj[data-id="cordeles"] .comp img:nth-child(4){grid-column:8 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:44vh;margin-top:4vh}
+    body #gallery .proj[data-id="sumersiones"] .comp img:nth-child(2){grid-column:1 / 7;justify-self:start;width:auto;max-width:100%;height:auto;max-height:58vh;margin-top:0vh}
+    body #gallery .proj[data-id="sumersiones"] .comp img:nth-child(3){grid-column:9 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:40vh;margin-top:20vh}
+    body #gallery .proj[data-id="sumersiones"] .comp img:nth-child(4){grid-column:7 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:76vh;margin-top:2vh}
+    body #gallery .proj[data-id="residente"] .comp img:nth-child(2){grid-column:1 / 9;justify-self:start;width:auto;max-width:100%;height:auto;max-height:66vh;margin-top:0vh}
+    body #gallery .proj[data-id="residente"] .comp img:nth-child(3){grid-column:9 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:38vh;margin-top:30vh}
+    body #gallery .proj[data-id="residente"] .comp img:nth-child(4){grid-column:6 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:54vh;margin-top:6vh}
+    body #gallery .proj[data-id="deshilacha"] .comp img:nth-child(2){grid-column:7 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:66vh;margin-top:0vh}
+    body #gallery .proj[data-id="sumersiones0"] .comp img:nth-child(2){grid-column:1 / 8;justify-self:start;width:auto;max-width:100%;height:auto;max-height:64vh;margin-top:0vh}
+    body #gallery .proj[data-id="sumersiones0"] .comp img:nth-child(3){grid-column:9 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:36vh;margin-top:26vh}
+    body #gallery .proj[data-id="sumersiones0"] .comp img:nth-child(4){grid-column:1 / 5;justify-self:start;width:auto;max-width:100%;height:auto;max-height:38vh;margin-top:8vh}
+    body #gallery .proj[data-id="sumersiones0"] .comp img:nth-child(5){grid-column:6 / 13;justify-self:end;width:auto;max-width:100%;height:auto;max-height:62vh;margin-top:-6vh}
+    body #gallery .proj[data-id="orilla"] .comp img:nth-child(1){object-position:50% 88%}   /* que no se corten los plintos */
+  }
   .proj .comp .ph{width:230px;height:32vh;background:#f6eeee;border:1px solid #e6cccc;display:flex;align-items:center;justify-content:center;color:#c99;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;text-align:center;opacity:0;transition:opacity 1s ease;padding:1rem;line-height:1.7}
   body.menu-on .proj .comp .ph{opacity:1}
 
