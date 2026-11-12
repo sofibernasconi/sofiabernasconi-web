@@ -52,11 +52,10 @@
   #menu a:hover{opacity:1}
   #logohit{position:fixed;top:26px;left:32px;width:300px;height:70px;z-index:130;display:none;cursor:pointer}
   body.parked #logohit{display:block}
-  /* statement: justo después del logo grande, antes de la primera obra */
-  #statement{position:relative;z-index:81;background:#f7f6f4;box-sizing:border-box;scroll-snap-align:start;padding:30vh 6% 4vh;text-align:center}
-  #statement .st-txt{margin:0 auto;max-width:46em;font-family:'JetBrains Mono',monospace;font-weight:500;font-size:12px;letter-spacing:.06em;line-height:2;color:#26262a;text-wrap:pretty;text-align:justify;text-align-last:left;-webkit-hyphens:auto;hyphens:auto;filter:blur(.95px);opacity:0;will-change:opacity,filter,transform}
-  @media(max-width:700px){ #statement{padding:0 7% 2vh;padding-top:max(26svh,calc(var(--finmenu,0px) + 48px))} #statement .st-txt{font-size:12px;line-height:1.95} }
-  #hero{height:78vh;scroll-snap-align:start;position:relative;z-index:80}   /* la primera obra queda justo bajo el borde: apenas se baja, empieza a subir */
+  /* statement: en la misma pantalla del logo grande, en letra chica debajo de él (sin sección propia) */
+  #hero .st-txt{position:absolute;left:50%;top:61vh;width:min(40em,84vw);margin:0;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-weight:500;font-size:11px;letter-spacing:.06em;line-height:1.95;color:#26262a;text-wrap:pretty;text-align:justify;text-align-last:left;-webkit-hyphens:auto;hyphens:auto;filter:blur(.95px);opacity:0;pointer-events:auto;transition:opacity .5s ease}
+  @media(max-width:700px){ #hero .st-txt{top:72vh;top:72svh;width:84vw;font-size:10.5px;line-height:1.85;text-align:left} }
+  #hero{height:78vh;scroll-snap-align:start;position:relative;z-index:81}   /* la primera obra queda justo bajo el borde: apenas se baja, empieza a subir */
   @media(max-width:700px){ #hero{height:57vh} }
   /* en la primera pantalla el scroll es libre: se baja de a poco y la obra va apareciendo;
      desde la primera obra en adelante vuelve el encaje por obra */
@@ -122,7 +121,7 @@
   @media(min-width:701px){
     .proj:nth-child(1) .comp{display:grid;grid-template-columns:repeat(12,1fr);column-gap:2.2vw;row-gap:7vh;align-items:start;transform:none}
     .proj:nth-child(1) .comp img{width:100%;max-width:none;max-height:none;margin:0}
-    .proj:nth-child(1) .comp img:nth-child(1){grid-column:3 / 13;max-width:none;max-height:none}
+    .proj:nth-child(1) .comp img:nth-child(1){grid-column:4 / 13;max-width:none;max-height:none}
     .proj:nth-child(1) .comp img:nth-child(2){grid-column:1 / 7}
     .proj:nth-child(1) .comp img:nth-child(3){grid-column:8 / 13;margin-top:14vh}
     .proj:nth-child(1) .comp img:nth-child(4){grid-column:1 / 6;margin-top:-4vh}
@@ -236,18 +235,13 @@
   })();</script>
   <a id="logohit" href="bio.html" aria-label="Bio"></a>
   <div id="namehit"></div>
-  <div id="hero" aria-hidden="true"></div>
-  <section id="statement">
-    <p class="st-txt" data-es="Deformo cuerpos para hacer visible su hibridez con lo más que humano. El cuerpo es una interfaz que se transforma con lo que la atraviesa: sistemas, máquinas, agua, luz, otras especies. Construyo dispositivos que estiran, fragmentan y transportan mi cuerpo, otros cuerpos o su imagen. Carne y mecanismo en negociación." data-en="I deform bodies to make their hybridity with the more-than-human visible. The body is an interface that changes with what passes through it: systems, machines, water, light, other species. I build devices that stretch, fragment and carry my body, other bodies, or their image. Flesh and mechanism, negotiating.">Deformo cuerpos para hacer visible su hibridez con lo más que humano. El cuerpo es una interfaz que se transforma con lo que la atraviesa: sistemas, máquinas, agua, luz, otras especies. Construyo dispositivos que estiran, fragmentan y transportan mi cuerpo, otros cuerpos o su imagen. Carne y mecanismo en negociación.</p>
-  </section>
-  <script>/*statement-fade*/(function(){ // el statement aparece al entrar en pantalla y se desvanece al seguir bajando (borroso, estilo brat)
-    var el=document.querySelector('#statement .st-txt'); if(!el) return;
-    var red=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var sec=document.getElementById('statement');
-    function f(){ var vh=innerHeight||1, r=sec.getBoundingClientRect(), c=(r.top+el.offsetTop+el.offsetHeight/2)/vh, op;
-      if(c>0.62) op=(0.9-c)/0.28; else if(c<0.36) op=(c-0.12)/0.24; else op=1;
-      if(op<0)op=0; if(op>1)op=1; if(red) op=c>0.05&&c<1?1:0;
-      el.style.opacity=op.toFixed(3); var ty=(innerWidth>700&&!red)?(0.5-c)*vh*0.38:0; el.style.transform='translate3d(0,'+ty.toFixed(1)+'px,0)'; el.style.filter='blur('+(0.95+(1-op)*2.4).toFixed(2)+'px)'; }
+  <div id="hero"><p class="st-txt" data-es="Deformo cuerpos para hacer visible su hibridez con lo más que humano. El cuerpo es una interfaz que se transforma con lo que la atraviesa: sistemas, máquinas, agua, luz, otras especies. Construyo dispositivos que estiran, fragmentan y transportan mi cuerpo, otros cuerpos o su imagen. Carne y mecanismo en negociación." data-en="I deform bodies to make their hybridity with the more-than-human visible. The body is an interface that changes with what passes through it: systems, machines, water, light, other species. I build devices that stretch, fragment and carry my body, other bodies, or their image. Flesh and mechanism, negotiating.">Deformo cuerpos para hacer visible su hibridez con lo más que humano. El cuerpo es una interfaz que se transforma con lo que la atraviesa: sistemas, máquinas, agua, luz, otras especies. Construyo dispositivos que estiran, fragmentan y transportan mi cuerpo, otros cuerpos o su imagen. Carne y mecanismo en negociación.</p></div>
+  <script>/*statement-fade*/(function(){ // el statement se ve con el logo y se desvanece (borroso) apenas se empieza a bajar
+    var el=document.querySelector('#hero .st-txt'); if(!el) return;
+    function f(){ var vh=innerHeight||1, y=window.scrollY||document.documentElement.scrollTop||0, op=1-y/(vh*0.32);
+      if(document.body.classList.contains('intro-viva')) op=0;
+      if(op<0)op=0; if(op>1)op=1;
+      el.style.opacity=op.toFixed(3); el.style.filter='blur('+(0.95+(1-op)*2.4).toFixed(2)+'px)'; el.style.visibility=op>0?'visible':'hidden'; }
     var q=0; function t(){ if(!q){ q=1; requestAnimationFrame(function(){ q=0; f(); }); } }
     addEventListener('scroll',t,{passive:true}); document.addEventListener('scroll',t,{passive:true,capture:true}); addEventListener('resize',t); f(); setInterval(f,400);
   })();</script>
@@ -365,8 +359,8 @@
     function update(){
       if(document.body.classList.contains('menu-on')){
         const vh=window.innerHeight||1;
-        const stEl=document.querySelector('#statement .st-txt'), stB=stEl? stEl.getBoundingClientRect().bottom/vh : -1;
-        let stF=(0.24-stB)/0.12; if(stF<0)stF=0; if(stF>1)stF=1;   // el título de la obra aparece recién cuando el statement ya subió
+        const stEl=document.querySelector('#hero .st-txt'), stB=stEl? stEl.getBoundingClientRect().bottom/vh : -1;
+        let stF=stEl? 1-(parseFloat(stEl.style.opacity)||0) : 1;   // el título de la obra aparece a medida que el statement se desvanece
         for(const s of secs){
           const cap=s.__cap||s.querySelector('.cap'); if(!cap) continue;
           const r=s.getBoundingClientRect(), p=r.top/vh;
@@ -529,7 +523,7 @@ new p5(function(p){
       else if(parked && y < hh*0.03){ parked=false; document.body.classList.remove('parked'); }
     };
     document.addEventListener('scroll', alScroll, true);
-    window.__irGaleria=(suave=true)=>{ const g=document.getElementById('statement')||document.getElementById('gallery'); if(!g) return; const aire=innerWidth>700?innerHeight*0.07:0; /* en escritorio deja aire entre el título y la primera foto */ window.scrollTo({top:Math.max(0,g.getBoundingClientRect().top+(window.pageYOffset||0)-aire),behavior:suave?'smooth':'auto'}); };
+    window.__irGaleria=(suave=true)=>{ const g=document.getElementById('gallery'); if(!g) return; const aire=innerWidth>700?innerHeight*0.07:0; /* en escritorio deja aire entre el título y la primera foto */ window.scrollTo({top:Math.max(0,g.getBoundingClientRect().top+(window.pageYOffset||0)-aire),behavior:suave?'smooth':'auto'}); };
     window.addEventListener('click',e=>{
       if(!inName(e.clientX,e.clientY)) return;
       if(!parked){ window.__irGaleria(); }            // click en el nombre grande: baja a las obras
