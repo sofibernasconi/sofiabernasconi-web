@@ -139,6 +139,15 @@
     #gallery .proj:not(:first-child) .comp img:nth-child(4){grid-column:1 / 7;justify-self:start;width:auto;max-height:50vh;margin-top:-2vh}
     #gallery .proj:not(:first-child) .comp img:nth-child(5){grid-column:8 / 13;justify-self:end;width:auto;max-height:50vh;margin-top:10vh}
   }
+  /* computador: la foto principal de cada obra entra a pantalla completa (recortada para cubrir todo);
+     Artwork queda fuera porque sus fotos son cuadradas */
+  @media(min-width:701px){
+    #gallery .proj:not([data-id="artwork"]){scroll-snap-align:none}   /* el scroll se detiene en la foto grande, no en el borde de la sección */
+    #gallery .proj:not([data-id="artwork"]) .comp img:nth-child(1){scroll-snap-align:start;transform:none !important}
+    #gallery .proj:not([data-id="artwork"]) .comp img:nth-child(1){grid-column:1 / -1 !important;justify-self:stretch !important;width:100% !important;height:100vh !important;max-width:none !important;max-height:none !important;object-fit:cover;margin:0 0 4vh !important;box-shadow:none !important}
+    #topmask{transition:opacity .4s ease,background-color 1.2s ease}
+    body.foto-full #topmask{opacity:0}
+  }
   .proj .comp .ph{width:230px;height:32vh;background:#f6eeee;border:1px solid #e6cccc;display:flex;align-items:center;justify-content:center;color:#c99;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;text-align:center;opacity:0;transition:opacity 1s ease;padding:1rem;line-height:1.7}
   body.menu-on .proj .comp .ph{opacity:1}
 
@@ -240,7 +249,7 @@
     </section>
     <section class="proj" data-id="reflejo">
       <div class="cap"><span class="tes">Reflejo Abierto</span><span class="ten">Open Reflection<span class="orig"> (Reflejo Abierto)</span></span> · 2025</div>
-      <div class="comp"><img src="assets/sofia-bernasconi-reflejo-abierto-1.jpg" alt="Reflejo Abierto, instalación interactiva de arte y tecnología. Sofía Bernasconi: icosaedro de madera y metal suspendido en una sala blanca, con cámaras y pantallas en los muros"><img src="assets/sofia-bernasconi-reflejo-abierto-2.jpg" alt="Reflejo Abierto, arte medial chileno. Sofía Bernasconi: detalle de una unión metálica del icosaedro con una cámara"><img src="assets/sofia-bernasconi-reflejo-abierto-3.jpg" alt="Reflejo Abierto, nuevos medios y video en vivo. Sofía Bernasconi: pantalla en el muro que transmite en vivo la imagen de una de las cámaras"><img src="assets/sofia-bernasconi-reflejo-abierto-4.jpg" alt="Reflejo Abierto, instalación interactiva, arte latinoamericano contemporáneo. Sofía Bernasconi: público dentro y alrededor del icosaedro de madera"></div>
+      <div class="comp"><img src="assets/sofia-bernasconi-reflejo-abierto-2.jpg" alt="Reflejo Abierto, arte medial chileno. Sofía Bernasconi: detalle de una unión metálica del icosaedro con una cámara"><img src="assets/sofia-bernasconi-reflejo-abierto-1.jpg" alt="Reflejo Abierto, instalación interactiva de arte y tecnología. Sofía Bernasconi: icosaedro de madera y metal suspendido en una sala blanca, con cámaras y pantallas en los muros"><img src="assets/sofia-bernasconi-reflejo-abierto-3.jpg" alt="Reflejo Abierto, nuevos medios y video en vivo. Sofía Bernasconi: pantalla en el muro que transmite en vivo la imagen de una de las cámaras"><img src="assets/sofia-bernasconi-reflejo-abierto-4.jpg" alt="Reflejo Abierto, instalación interactiva, arte latinoamericano contemporáneo. Sofía Bernasconi: público dentro y alrededor del icosaedro de madera"></div>
     </section>
     <section class="proj" data-id="orilla">
       <div class="cap"><span class="tes">Orilla</span><span class="ten">Shore<span class="orig"> (Orilla)</span></span> · 2025</div>
@@ -1081,5 +1090,11 @@ new p5(function(p){
   window.addEventListener('scroll', on, {passive:true, capture:true});
   document.addEventListener('scroll', on, {passive:true, capture:true});
 })();</script>
+  <script>/*foto-full*/(function(){ // mientras una foto a pantalla completa ocupa la parte de arriba, la franja superior se oculta para que la foto llegue al borde
+    function f(){ var on=false; if(innerWidth>700){ var h=innerHeight*0.15; document.querySelectorAll('#gallery .proj:not([data-id="artwork"]) .comp img:first-child').forEach(function(i){ var r=i.getBoundingClientRect(); if(r.top<h&&r.bottom>h) on=true; }); }
+      document.body.classList.toggle('foto-full',on); }
+    var q=0; function t(){ if(!q){ q=1; requestAnimationFrame(function(){ q=0; f(); }); } }
+    addEventListener('scroll',t,{passive:true}); document.addEventListener('scroll',t,{passive:true,capture:true}); addEventListener('resize',t); f();
+  })();</script>
 </body>
 </html>
