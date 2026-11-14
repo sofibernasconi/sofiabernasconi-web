@@ -2,6 +2,13 @@
 # 301 = permanent move: Google replaces the old result with the new one.
 # Rules are evaluated top to bottom; the first match wins.
 
+# Short CV links, printed in the portfolio PDFs (Nov 14, 2026).
+# 302 on purpose: the PDF behind them can be renamed later without breaking the printed link.
+/cv                              /assets/sofia-bernasconi-cv.pdf     302
+/cv/                             /assets/sofia-bernasconi-cv.pdf     302
+/cv-es                           /assets/sofia-bernasconi-cv-es.pdf  302
+/cv-es/                          /assets/sofia-bernasconi-cv-es.pdf  302
+
 # Photos renamed to include the artist's name (Oct 25, 2026)
 /assets/convey_1.jpg                 /assets/sofia-bernasconi-convey-me-1.jpg  301
 /assets/convey_2.jpg                 /assets/sofia-bernasconi-convey-me-2.jpg  301
