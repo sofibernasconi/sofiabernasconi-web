@@ -693,7 +693,7 @@ new p5(function(p){
     const boot=()=>{ img=makeText(); build(); };
     if(document.fonts&&document.fonts.load){ document.fonts.load('700 120px \"'+FONT+'\"').then(boot).catch(boot); } else boot();
     window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY; document.body.style.cursor=inName(mx,my)?'pointer':'default';});
-    window.addEventListener('click',e=>{ if(inName(e.clientX,e.clientY)) window.location.href=withLang('index.html#open',currentLang); });
+    window.addEventListener('click',e=>{ if(inName(e.clientX,e.clientY)) window.location.href=withLang('index.html',currentLang); });
     window.addEventListener('mouseout',()=>{mx=-999;my=-999;});
   };
   p.draw=function(){

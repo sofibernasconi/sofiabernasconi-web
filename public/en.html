@@ -56,8 +56,8 @@
   #menu a:hover{opacity:1}
   #logohit{position:fixed;top:26px;left:32px;width:300px;height:70px;z-index:130;display:none;cursor:pointer}
   body.parked #logohit{display:block}
-  #hero{height:78vh;scroll-snap-align:start;position:relative;z-index:80}   /* la primera obra queda justo bajo el borde: apenas se baja, empieza a subir */
-  @media(max-width:700px){ #hero{height:57vh} }
+  #hero{height:62vh;scroll-snap-align:start;position:relative;z-index:80}   /* se asoma ~12% de la primera foto abajo, para que se entienda que hay que bajar (62vh + 26vh de padding = 88vh) */
+  @media(max-width:700px){ #hero{height:45vh;height:calc(87svh - 42vh)} }   /* celular: igual, medido sobre la pantalla visible (svh) */
   /* en la primera pantalla el scroll es libre: se baja de a poco y la obra va apareciendo;
      desde la primera obra en adelante vuelve el encaje por obra */
   body.menu-on.libre{scroll-snap-type:none}
@@ -285,7 +285,7 @@
     function aj(){ var m=document.getElementById('menu'); if(!m) return; var b=0; m.querySelectorAll('a').forEach(function(a){ b=Math.max(b,a.getBoundingClientRect().bottom); }); if(b>0) document.documentElement.style.setProperty('--finmenu',Math.ceil(b+18)+'px'); }
     aj(); addEventListener('load',aj); addEventListener('resize',aj); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(aj);
   })();</script>
-  <a id="logohit" href="en-bio.html" aria-label="About"></a>
+  <a id="logohit" href="en.html" aria-label="Home"></a>
   <div id="namehit"></div>
   <div id="hero" aria-hidden="true"></div>
   <div id="gallery">
@@ -570,7 +570,7 @@ new p5(function(p){
     window.addEventListener('click',e=>{
       if(!inName(e.clientX,e.clientY)) return;
       if(!parked){ window.__irGaleria(); }            // click en el nombre grande: baja a las obras
-      else { window.location.href='bio.html'; }
+      else { window.location.href=LHREF(document.documentElement.getAttribute('data-lang')==='en'?'en.html':'index.html'); }   // logo chico: vuelve a la portada desde cero, con la animación del logo grande
       document.body.style.cursor='default';});
     window.addEventListener('mouseout',()=>{mx=-999;my=-999});
     // touch support for phones (no hover -> drag a finger to open the name)

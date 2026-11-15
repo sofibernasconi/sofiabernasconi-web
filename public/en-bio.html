@@ -195,7 +195,7 @@ new p5(function(p){
     const boot=()=>{ img=makeText(); build(); };
     if(document.fonts&&document.fonts.load){ document.fonts.load('700 120px \"'+FONT+'\"').then(boot).catch(boot); } else boot();
     window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY; document.body.style.cursor=inName(mx,my)?'pointer':'default';});
-    window.addEventListener('click',e=>{ if(inName(e.clientX,e.clientY)){ var u=new URLSearchParams(location.search).get('lang'),s=null;try{s=localStorage.getItem('lang')}catch(x){} window.location.href='index.html?lang='+(s||u||'es')+'#open'; } });
+    window.addEventListener('click',e=>{ if(inName(e.clientX,e.clientY)){ var u=new URLSearchParams(location.search).get('lang'),s=null;try{s=localStorage.getItem('lang')}catch(x){} window.location.href='index.html?lang='+(s||u||'es'); } });
     window.addEventListener('mouseout',()=>{mx=-999;my=-999;});
   };
   p.draw=function(){
