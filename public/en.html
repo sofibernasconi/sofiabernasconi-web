@@ -285,7 +285,7 @@
     function aj(){ var m=document.getElementById('menu'); if(!m) return; var b=0; m.querySelectorAll('a').forEach(function(a){ b=Math.max(b,a.getBoundingClientRect().bottom); }); if(b>0) document.documentElement.style.setProperty('--finmenu',Math.ceil(b+18)+'px'); }
     aj(); addEventListener('load',aj); addEventListener('resize',aj); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(aj);
   })();</script>
-  <a id="logohit" href="en.html" aria-label="Home"></a>
+  <a id="logohit" href="en.html" aria-label="Inicio"></a>
   <div id="namehit"></div>
   <div id="hero" aria-hidden="true"></div>
   <div id="gallery">
@@ -570,7 +570,7 @@ new p5(function(p){
     window.addEventListener('click',e=>{
       if(!inName(e.clientX,e.clientY)) return;
       if(!parked){ window.__irGaleria(); }            // click en el nombre grande: baja a las obras
-      else { window.location.href=LHREF(document.documentElement.getAttribute('data-lang')==='en'?'en.html':'index.html'); }   // logo chico: vuelve a la portada desde cero, con la animación del logo grande
+      else { window.location.href=LHREF('index.html'); }   // logo chico: vuelve a la portada desde cero, con la animación del logo grande
       document.body.style.cursor='default';});
     window.addEventListener('mouseout',()=>{mx=-999;my=-999});
     // touch support for phones (no hover -> drag a finger to open the name)
@@ -1144,5 +1144,55 @@ new p5(function(p){
     var q=0; function t(){ if(!q){ q=1; requestAnimationFrame(function(){ q=0; f(); }); } }
     addEventListener('scroll',t,{passive:true}); document.addEventListener('scroll',t,{passive:true,capture:true}); addEventListener('resize',t); f();
   })();</script>
+<!--PUNTOS-->
+<style>
+  /* puntos de navegación a la derecha: uno para el inicio y uno por obra; el que se está viendo se marca */
+  #puntos{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:120;display:flex;flex-direction:column;gap:13px;margin:0;padding:0;list-style:none;mix-blend-mode:difference;opacity:0;pointer-events:none;transition:opacity .6s ease}
+  body.menu-on #puntos{opacity:1;pointer-events:auto}
+  #puntos button{position:relative;display:block;width:16px;height:16px;padding:0;margin:0;border:0;background:none;cursor:pointer}
+  #puntos button::before{content:"";position:absolute;left:50%;top:50%;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;background:#fff;opacity:.38;transition:transform .35s ease,opacity .35s ease}
+  #puntos button:hover::before{opacity:.8}
+  #puntos button.on::before{opacity:1;transform:scale(1.7)}
+  #puntos button span{position:absolute;right:24px;top:50%;transform:translateY(-50%);white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:#fff;opacity:0;pointer-events:none;transition:opacity .25s ease}
+  #puntos button:hover span,#puntos button:focus-visible span{opacity:1}
+  #puntos button:focus-visible{outline:1px solid #fff;outline-offset:2px;border-radius:50%}
+  @media(max-width:700px){
+    #puntos{right:7px;gap:9px}
+    #puntos button{width:14px;height:14px}
+    #puntos button::before{width:4px;height:4px;margin:-2px 0 0 -2px}
+    #puntos button span{display:none}
+    body.menu-on:not(.ui-hide) #puntos{opacity:0;pointer-events:none}   /* en el teléfono no compite con el menú abierto */
+  }
+</style>
+<nav id="puntos" aria-label="Obras"></nav>
+<script>(function(){
+  var nav=document.getElementById('puntos'), en=document.documentElement.lang==='en';
+  var secs=[].slice.call(document.querySelectorAll('#gallery .proj'));
+  function titulo(s){ var c=s.__cap||s.querySelector('.cap')||document.querySelector('.cap[data-id="'+s.dataset.id+'"]'); if(!c) return s.dataset.id;
+    var x=c.querySelector(en?'.ten':'.tes'); if(x){ x=x.cloneNode(true); var o=x.querySelector('.orig'); if(o) o.remove(); return x.textContent.trim(); }
+    return c.textContent.split('·')[0].trim(); }
+  var items=[{label:en?'Home':'Inicio',el:null}].concat(secs.map(function(s){ return {label:titulo(s),el:s}; }));
+  var btns=items.map(function(it,i){
+    var b=document.createElement('button'); b.type='button'; b.setAttribute('aria-label',it.label);
+    var sp=document.createElement('span'); sp.textContent=it.label; b.appendChild(sp);
+    b.addEventListener('click',function(){
+      if(!it.el){ window.scrollTo({top:0,behavior:'smooth'}); document.body.scrollTo&&document.body.scrollTo({top:0,behavior:'smooth'}); return; }
+      // ir al punto donde el scroll se detiene: la foto grande si la obra tiene una, si no la sección
+      var f=it.el.querySelector('.comp img'), dest=(f&&getComputedStyle(f).scrollSnapAlign.indexOf('start')>-1)?f:it.el;
+      document.body.classList.add('ui-hide');
+      dest.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+    nav.appendChild(b); return b;
+  });
+  function marcar(){
+    var vh=innerHeight, k=0;
+    secs.forEach(function(s,i){ var r=s.getBoundingClientRect(); if(r.top<vh*0.5) k=i+1; });
+    var g=document.getElementById('gallery'); if(g&&g.getBoundingClientRect().top>vh*0.5) k=0;
+    btns.forEach(function(b,i){ var on=i===k; b.classList.toggle('on',on); if(on) b.setAttribute('aria-current','true'); else b.removeAttribute('aria-current'); });
+  }
+  var q=0; function t(){ if(!q){ q=1; requestAnimationFrame(function(){ q=0; marcar(); }); } }
+  addEventListener('scroll',t,{passive:true}); document.addEventListener('scroll',t,{passive:true,capture:true}); addEventListener('resize',t); marcar();
+})();</script>
+<!--/PUNTOS-->
 </body>
 </html>
