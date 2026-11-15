@@ -67,7 +67,7 @@
   body.menu-on #gallery{background:#f7f6f4}
   body.menu-on{scroll-snap-type:y mandatory}
   .proj{min-height:100vh;scroll-snap-align:start;position:relative;padding:26vh 6% 8vh;display:flex;align-items:center}
-  .cap{position:fixed;left:6%;top:24vh;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.1em;color:#fff;mix-blend-mode:difference;opacity:0;transition:font-weight .2s ease;z-index:101;pointer-events:auto;cursor:pointer;will-change:transform,opacity,filter;max-width:88vw}
+  .cap{position:fixed;left:6%;top:24vh;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.15;letter-spacing:.06em;color:#fff;mix-blend-mode:difference;opacity:0;transition:font-weight .2s ease;z-index:101;pointer-events:auto;cursor:pointer;will-change:transform,opacity,filter;max-width:88vw}
   /* el título siempre entra y sale desvaneciéndose, aunque el scroll dé un salto (p. ej. la primera obra) */
   .cap{transition:font-weight .2s ease,opacity .7s ease,filter .7s ease}
   @media(max-width:700px){ .cap{transition:opacity 1.1s ease,filter 1.1s ease} }   /* en el teléfono el dedo scrollea rápido: fundido más largo */
@@ -408,26 +408,21 @@
           const r=s.getBoundingClientRect(), p=r.top/vh;
           // el título aparece según dónde va la PRIMERA FOTO (no el borde de la sección): así no se adelanta ni se cruza con el logo
           const f1=s.querySelector('.comp img'), pi=f1 ? f1.getBoundingClientRect().top/vh : p;
-          let op, ty, dis, tf;
-          if(window.innerWidth<700){
-            const bot=r.bottom/vh;                    // móvil: el título acompaña TODA la obra
-            if(pi>0.45) op=(0.85-pi)/0.4;             // aparece de a poco cuando sube la primera foto
-            else if(bot<0.7) op=(bot-0.5)/0.2;        // desaparece: se va justo en el cruce (bot=0.5 = p=0.5 de la siguiente) -> sin solape ni hueco
-            else op=1;
-            if(op<0)op=0; if(op>1)op=1; op*=stF;
-            ty=0; dis=1-op;                            // sin deriva: el título nuevo aparece en el mismo lugar que el anterior
-            tf='translateY('+ty.toFixed(2)+'vh)';
-          } else {
-            const DRIFT=46;                            // desktop: como estaba antes
-            ty=(p<0?Math.min(1,-p):0)*DRIFT;
-            const bot=r.bottom/vh;                     // el título acompaña la obra hasta casi el final
-            if(pi>0.46) op=(0.86-pi)/0.4;                 // aparece cuando sube la primera foto
-            else if(bot<0.6) op=(bot-0.35)/0.25;       // se desvanece cuando el final de la obra sube
-            else op=1;
-            if(op<0)op=0; if(op>1)op=1; op*=stF;
-            dis=1-op;
-            tf='translateY('+(ty+dis*dis*4).toFixed(2)+'vh) scale('+(1+dis*0.04).toFixed(3)+')';
-          }
+          let op, dis, tf='none';
+          // el título aparece grande cuando la obra ya está en pantalla, se va achicando a medida que bajas
+          // y se desvanece antes de que termine la obra; queda fijo, no se mueve
+          const mob=window.innerWidth<700, bot=r.bottom/vh, alto=r.height/vh;
+          if(pi>0.12) op=(0.42-pi)/0.3;               // aparece cuando la primera foto ya llegó arriba
+          else if(bot<1.05) op=(bot-0.6)/0.45;        // se va antes del final de la obra
+          else op=1;
+          if(op<0)op=0; if(op>1)op=1; op*=stF;
+          dis=1-op;
+          let prog=(0.12-pi)/Math.max(0.6,alto-1.3);   // 0 al aparecer, 1 cerca del final
+          if(prog<0)prog=0; if(prog>1)prog=1;
+          const grande=mob?Math.min(27,innerWidth*0.068):Math.min(64,innerWidth*0.045), chico=12;
+          const fsz=grande+(chico-grande)*(1-Math.pow(1-prog,1.6));
+          cap.style.fontSize=fsz.toFixed(1)+'px';
+          if(s.__capw) s.__capw.style.fontSize=cap.style.fontSize;
           cap.style.transform=tf;
           cap.style.opacity=op.toFixed(3);
           cap.style.filter = dis>0.02 ? 'blur('+(dis*dis*(window.innerWidth<700?2:3.2)).toFixed(2)+'px)' : 'none';
