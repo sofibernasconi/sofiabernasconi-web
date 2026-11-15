@@ -118,6 +118,7 @@ const PRESS = [
   {year:"2025", src:"Diario Concepción", title:"«Hacen falta más espacios para este tipo de arte»: Sofía Bernasconi por exposición de HÍBRIDA", url:"https://www.diarioconcepcion.cl/cultura/2025/06/23/hacen-falta-mas-espacios-para-este-tipo-de-arte-sofia-bernasconi-por-exposicion-de-hibrida.html", tag:"video", thumb:"diariovideo2025.jpg"},
   {year:"2025", src:"Diario Concepción", title:"«HÍBRIDA» de Sofía Bernasconi Le Roy: una muestra interactiva que mezcla cuerpo, paisaje y máquina", url:"assets/prensa/diarioconcepcion_hibrida_2025.jpg", tag:"impreso", thumb:"diarioprint2025.jpg"},
   {year:"2024", src:"Toda la Teoría del Universo · Radiovisual", title:"Radiovisual, capítulo 9: Martín Rivas y Sofía Bernasconi — Cuerpos disidentes y tecnologías situadas", url:"https://www.youtube.com/watch?v=0_vfNkpDb-M&t=2303s", tag:"charla · video"},
+  {year:"2024", src:"Femenina FM", title:"Sofía Bernasconi expone «Desbordes», una invitación a explorar un diálogo entre cuerpo y tecnología", url:"https://www.youtube.com/watch?v=4azxUvoAlrs", tag:"entrevista · video"},
   {year:"2024", src:"Canal 9 Bío Bío TV", title:"«Desbordes»: artista visual penquista explora en exhibición el diálogo entre el cuerpo y la tecnología", url:"assets/prensa/canal9_desbordes.png", tag:"TV · recorte", thumb:"canal9_2024.jpg"},
   {year:"2024", src:"Hora 12", title:"Sofía Bernasconi inaugura la exposición «Desbordes», una invitación a explorar un diálogo entre cuerpo y tecnología", url:"https://hora12.cl/2024/06/05/sofia-bernasconi-inaugura-exposicion-desbordes-una-invitacion-a-explorar-un-dialogo-entre-cuerpo-y-tecnologia/", thumb:"hora12_2024.jpg"},
   {year:"2024", src:"Diario Concepción", title:"Exposición «Desbordes» de Sofía Bernasconi", url:"assets/prensa/diario_desbordes_2024.pdf", tag:"impreso", thumb:"diariodesb2024.jpg"},
@@ -148,6 +149,7 @@ const PRESS_EN = [
   "«We need more spaces for this kind of art»: Sofía Bernasconi on the HÍBRIDA exhibition",
   "«HÍBRIDA» by Sofía Bernasconi Le Roy: an interactive show blending body, landscape and machine",
   "Radiovisual, episode 9: Martín Rivas and Sofía Bernasconi — Dissident bodies and situated technologies",
+  "Sofía Bernasconi presents «Desbordes», an invitation to explore a dialogue between body and technology",
   "«Desbordes»: penquista visual artist explores in exhibition the dialogue between body and technology",
   "Sofía Bernasconi opens the «Desbordes» exhibition, an invitation to explore a dialogue between body and technology",
   "Sofía Bernasconi's «Desbordes» exhibition",
@@ -169,7 +171,7 @@ const PRESS_EN = [
 ];
 function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 // etiquetas de formato, en los dos idiomas
-const TAG_EN = {"charla · video":"talk · video","impreso":"print","entrevista":"interview","video":"video","recorte":"clipping",
+const TAG_EN = {"charla · video":"talk · video","entrevista · video":"interview · video","impreso":"print","entrevista":"interview","video":"video","recorte":"clipping",
                 "TV · recorte":"TV · clip","radio · recorte":"radio · clip"};
 document.getElementById('list').innerHTML = PRESS.map((p,i)=>{
   const tag = p.tag
