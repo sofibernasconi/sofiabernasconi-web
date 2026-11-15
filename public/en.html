@@ -1157,8 +1157,8 @@ new p5(function(p){
   #puntos button:hover span,#puntos button:focus-visible span{opacity:1}
   #puntos button:focus-visible{outline:1px solid #fff;outline-offset:2px;border-radius:50%}
   @media(max-width:700px){
-    #puntos{right:5px;gap:7px}
-    #puntos button{width:18px;height:18px}
+    #puntos{right:8px;gap:2px}   /* más separados del borde y con zona de toque grande */
+    #puntos button{width:32px;height:32px}
     #puntos button::before{width:9px;height:9px;margin:-4.5px 0 0 -4.5px}
     #puntos button span{display:none}
     body.menu-on:not(.ui-hide) #puntos{opacity:0;pointer-events:none}   /* en el teléfono no compite con el menú abierto */
