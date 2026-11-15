@@ -1170,6 +1170,7 @@ new p5(function(p){
     #puntos button::before{width:7px;height:7px;margin:-3.5px 0 0 -3.5px}
     #puntos button span{display:none}
     body.menu-on:not(.ui-hide) #puntos{opacity:0;pointer-events:none}   /* en el teléfono no compite con el menú abierto */
+    body.mm-open #puntos{opacity:0;pointer-events:none}   /* ni con el menú abierto desde ☰ */
   }
 </style>
 <nav id="puntos" aria-label="Obras"></nav>
@@ -1209,16 +1210,17 @@ new p5(function(p){
     if(k!==ult){ ult=k; ir(k); btns.forEach(function(b,i){ b.classList.toggle('on',i===k); }); } },{passive:false});
   nav.addEventListener('touchend',function(){ arr=false; },{passive:true});
   nav.addEventListener('click',function(e){ if(mov){ e.stopPropagation(); e.preventDefault(); mov=false; } },true);   // tras arrastrar no repite el salto
-  // computador: la columna queda centrada en la ventana, pero nunca sube por encima del final del menú;
-  // si la ventana es baja, primero se acorta el espacio entre puntos y después los puntos mismos
+  // la columna queda centrada en la ventana, pero nunca sube por encima del menú (computador) ni del ícono ☰ (celular / ventana angosta);
+  // si la ventana es baja, primero se acorta el espacio entre puntos y después los puntos se acercan más
   function lugar(){
-    if(innerWidth<=700){ nav.style.top=''; nav.style.gap=''; btns.forEach(function(b){ b.style.height=''; }); return; }
-    var fm=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--finmenu'))||200;
-    var n=btns.length, bh=22, g=12, libre=innerHeight-fm-16, h=n*bh+(n-1)*g;
+    var movil=innerWidth<=700, tope;
+    if(movil){ var mm=document.getElementById('mm'); tope=(mm?mm.offsetTop+mm.offsetHeight:56)+10; }
+    else tope=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--finmenu'))||200;
+    var n=btns.length, bh0=movil?32:22, bh=bh0, g=movil?2:12, libre=innerHeight-tope-16, h=n*bh+(n-1)*g;
     if(h>libre){ g=Math.max(0,(libre-n*bh)/(n-1)); h=n*bh+(n-1)*g; }
     if(h>libre){ bh=Math.max(12,libre/n); g=0; h=n*bh; }
-    nav.style.gap=g+'px'; btns.forEach(function(b){ b.style.height=bh<22?bh+'px':''; });
-    nav.style.top=Math.max(innerHeight/2, fm+h/2)+'px';
+    nav.style.gap=g+'px'; btns.forEach(function(b){ b.style.height=bh<bh0?bh+'px':''; });
+    nav.style.top=Math.max(innerHeight/2, tope+h/2)+'px';
   }
   var q=0; function t(){ if(!q){ q=1; requestAnimationFrame(function(){ q=0; marcar(); }); } }
   addEventListener('scroll',t,{passive:true}); document.addEventListener('scroll',t,{passive:true,capture:true}); addEventListener('resize',t); marcar();
