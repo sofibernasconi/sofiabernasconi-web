@@ -62,8 +62,9 @@
   @media(min-width:1180px){
     .biotop{align-items:stretch;margin-bottom:16rem}
     .biotop .biofoto{position:relative}
-    .biotop .biofoto img{position:absolute;top:0;left:0;right:0;bottom:1.5rem;width:100%;height:calc(100% - 1.5rem);object-fit:cover;object-position:60% 18%}   /* 1.5rem = margen inferior del último párrafo; si hace falta recorta solo fondo a los lados */
-    .biotop .biofoto-meta{position:absolute;top:calc(100% - 1.5rem);left:0;right:0}
+    .biotop .biofoto{font-size:clamp(.9rem,1.25vw,1.05rem)}   /* mismo tamaño que el texto de la bio, para medir en em */
+    .biotop .biofoto img{position:absolute;left:0;right:0;top:.49em;bottom:calc(1.5rem + .51em);width:100%;height:calc(100% - 1.5rem - 1em);object-fit:cover;object-position:60% 18%}   /* arriba: altura de las mayúsculas de la 1ª línea; abajo: línea base de la última (Space Grotesk, interlineado 1.7). 1.5rem = margen del último párrafo */
+    .biotop .biofoto-meta{position:absolute;top:calc(100% - 1.5rem - .51em);left:0;right:0}
   }
   .biofoto2{width:38%;max-width:240px;display:block;margin:9rem 0 0}   /* a la izquierda, con aire antes; justo sobre el contacto */
   @media(max-width:700px){ .biofoto2{width:52%;margin:6rem 0 0} }
