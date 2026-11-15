@@ -46,6 +46,10 @@
   /* al bajar ya no hay franja de color arriba: el logo y las barritas del menú (en modo diferencia) toman el color contrario a lo que tienen debajo */
   #topmask{transition:opacity .4s ease,background-color 1.2s ease}
   body.menu-on.ui-hide #topmask{opacity:0}
+  /* al bajar el logo chico se esconde (también en el computador); vuelve sólo si abres el menú con las barritas */
+  body.menu-on.ui-hide:not(.llegando):not(.mm-open) #c,body.menu-on.ui-hide:not(.llegando):not(.mm-open) #blurlayer{opacity:0}
+  /* títulos de las obras: sin el nombre original en español en la versión en inglés */
+  .cap .orig{display:none !important}
   #lang{position:fixed;top:36px;right:36px;z-index:120;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;color:#111116;opacity:0;transition:opacity .9s ease;pointer-events:none}
   body.menu-on #lang{opacity:1;pointer-events:auto}
   #lang span{cursor:pointer;opacity:.4;transition:opacity .3s}
