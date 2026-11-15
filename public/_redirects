@@ -3,11 +3,11 @@
 # Rules are evaluated top to bottom; the first match wins.
 
 # Short CV links, printed in the portfolio PDFs (Nov 14, 2026).
-# 302 on purpose: the PDF behind them can be renamed later without breaking the printed link.
-/cv                              /assets/sofia-bernasconi-cv.pdf     302
-/cv/                             /assets/sofia-bernasconi-cv.pdf     302
-/cv-es                           /assets/sofia-bernasconi-cv-es.pdf  302
-/cv-es/                          /assets/sofia-bernasconi-cv-es.pdf  302
+# Official CVs live in Google Drive (folder 15CYXlfd8wYF-TQARW7xWyLYziUo0FKcx); 302 so the target can change.
+/cv                              https://drive.google.com/file/d/1jneVjJCI5rqkfz3qecTqCmZNPL_lIVK1/view  302
+/cv/                             https://drive.google.com/file/d/1jneVjJCI5rqkfz3qecTqCmZNPL_lIVK1/view  302
+/cv-es                           https://drive.google.com/file/d/1ysFE-Vy8KJKX4oCt52fxpgHSILV82T7D/view  302
+/cv-es/                          https://drive.google.com/file/d/1ysFE-Vy8KJKX4oCt52fxpgHSILV82T7D/view  302
 /portfolio                       /assets/sofia-bernasconi-portfolio.pdf    302
 /portfolio/                      /assets/sofia-bernasconi-portfolio.pdf    302
 /portafolio                      /assets/sofia-bernasconi-portafolio.pdf   302
