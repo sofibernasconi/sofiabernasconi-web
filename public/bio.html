@@ -52,6 +52,8 @@
     main{margin-left:max(120px,10vw);max-width:min(1000px, calc(100vw - max(120px,10vw) - 230px))}   /* deja libre el menú de la derecha */
     .biotop{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:4.5rem;align-items:start}   /* retrato alineado arriba con el comienzo del texto */
     .biotop .biofoto{grid-column:2;grid-row:1;margin:0}
+    .biotop .biofoto img{width:calc(100% + max(100vw - max(120px,10vw) - 1000px, 230px) + 2rem);max-width:none}   /* retrato horizontal hasta el borde derecho de la ventana */
+    html,body{overflow-x:clip}
     .biotop .biotxt{grid-column:1;grid-row:1;max-width:620px}
     .meta{max-width:620px}
   }
