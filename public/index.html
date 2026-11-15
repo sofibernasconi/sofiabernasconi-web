@@ -634,7 +634,7 @@ new p5(function(p){
     }
   };
   let to;
-  p.windowResized=function(){ W=window.innerWidth; H=window.innerHeight; p.resizeCanvas(W,H); blur.resizeCanvas(W,H); clearTimeout(to); to=setTimeout(()=>{ if(img) setHomes(); },120); };
+  p.windowResized=function(){ if(window.visualViewport&&visualViewport.scale>1.01) return;   /* al hacer zoom con los dedos no se rearma el logo (antes se achicaba) */ W=window.innerWidth; H=window.innerHeight; p.resizeCanvas(W,H); blur.resizeCanvas(W,H); clearTimeout(to); to=setTimeout(()=>{ if(img) setHomes(); },120); };
 });
 });
 </script>

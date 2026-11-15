@@ -296,7 +296,7 @@ new p5(function(p){
       if(q.ev>0.03){ blur.fill(255,255,255,bA); blur.circle(dpx,dpy, dot+q.ev*3*LS); }
     }
   };
-  let to; p.windowResized=function(){ W=window.innerWidth; H=window.innerHeight; p.resizeCanvas(W,H); blur.resizeCanvas(W,H); clearTimeout(to); to=setTimeout(()=>{ if(img) setHomes(); },120); };
+  let to; p.windowResized=function(){ if(window.visualViewport&&visualViewport.scale>1.01) return;   /* al hacer zoom con los dedos no se rearma el logo (antes se achicaba) */ W=window.innerWidth; H=window.innerHeight; p.resizeCanvas(W,H); blur.resizeCanvas(W,H); clearTimeout(to); to=setTimeout(()=>{ if(img) setHomes(); },120); };
 });
 </script>
 <!--IDIOMA-CLICK-GUARD-->
