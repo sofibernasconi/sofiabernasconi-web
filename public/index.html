@@ -1150,16 +1150,16 @@ new p5(function(p){
   #puntos{position:fixed;right:20px;top:50%;transform:translateY(-50%);z-index:120;display:flex;flex-direction:column;gap:12px;margin:0;padding:0;list-style:none;mix-blend-mode:difference;opacity:0;pointer-events:none;transition:opacity .6s ease}
   body.menu-on #puntos{opacity:1;pointer-events:auto}
   #puntos button{position:relative;display:block;width:22px;height:22px;padding:0;margin:0;border:0;background:none;cursor:pointer}
-  #puntos button::before{content:"";position:absolute;left:50%;top:50%;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;background:radial-gradient(circle,#fff 0,#fff 30%,rgba(255,255,255,.55) 55%,rgba(255,255,255,0) 72%);filter:blur(.8px);opacity:.42;transition:transform .45s ease,opacity .45s ease,filter .45s ease}   /* círculo de borde borroso */
+  #puntos button::before{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:#fff;opacity:.42;transition:transform .45s ease,opacity .45s ease}   /* círculo nítido */
   #puntos button:hover::before{opacity:.8}
-  #puntos button.on::before{opacity:1;transform:scale(1.9);filter:blur(1.4px)}
+  #puntos button.on::before{opacity:1;transform:scale(1.6)}
   #puntos button span{position:absolute;right:30px;top:50%;transform:translateY(-50%);white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:#fff;opacity:0;pointer-events:none;transition:opacity .25s ease}
   #puntos button:hover span,#puntos button:focus-visible span{opacity:1}
   #puntos button:focus-visible{outline:1px solid #fff;outline-offset:2px;border-radius:50%}
   @media(max-width:700px){
     #puntos{right:8px;gap:2px}   /* más separados del borde y con zona de toque grande */
     #puntos button{width:32px;height:32px}
-    #puntos button::before{width:9px;height:9px;margin:-4.5px 0 0 -4.5px}
+    #puntos button::before{width:7px;height:7px;margin:-3.5px 0 0 -3.5px}
     #puntos button span{display:none}
     body.menu-on:not(.ui-hide) #puntos{opacity:0;pointer-events:none}   /* en el teléfono no compite con el menú abierto */
   }
