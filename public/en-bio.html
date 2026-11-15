@@ -58,6 +58,13 @@
     .biotop .biotxt{grid-column:1;grid-row:1;max-width:620px}
     .meta{max-width:620px}
   }
+  /* pantallas anchas: la foto toma exactamente la altura del texto de la bio */
+  @media(min-width:1180px){
+    .biotop{align-items:stretch;margin-bottom:16rem}
+    .biotop .biofoto{position:relative}
+    .biotop .biofoto img{position:absolute;top:0;left:0;right:0;bottom:1.5rem;width:100%;height:calc(100% - 1.5rem);object-fit:cover;object-position:60% 18%}   /* 1.5rem = margen inferior del último párrafo; si hace falta recorta solo fondo a los lados */
+    .biotop .biofoto-meta{position:absolute;top:calc(100% - 1.5rem);left:0;right:0}
+  }
   .biofoto2{width:38%;max-width:240px;display:block;margin:9rem 0 0}   /* a la izquierda, con aire antes; justo sobre el contacto */
   @media(max-width:700px){ .biofoto2{width:52%;margin:6rem 0 0} }
   .cv{margin-top:1.5rem;font-family:'JetBrains Mono',monospace;font-size:.78rem !important;letter-spacing:.12em;text-transform:uppercase}
@@ -73,12 +80,9 @@
   .st-bio[data-es] + .st-bio[data-es], .st-bio[data-en] + .st-bio[data-en]{margin-top:1.4em !important}   /* statement en dos párrafos */
   /* statement: segunda fila, debajo de la bio; texto a la izquierda (misma columna que la bio), autorretrato a la derecha */
   .stsec{margin:9rem 0 0}
+  @media(min-width:1180px){ .stsec{margin:0} }   /* en pantallas anchas el espacio lo da .biotop */
   .stsec .biofoto2{margin:3.5rem 0 0}
-  @media(min-width:860px){
-    .stsec{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:4.5rem;align-items:start}
-    .stsec .sttxt{max-width:620px}
-    .stsec .biofoto2{width:100%;max-width:240px;margin:2.6rem 0 0 auto}   /* alineado arriba con el texto, pegado a la derecha de su columna */
-  }
+  @media(min-width:860px){ .stsec .sttxt{max-width:620px} .stsec .biofoto2{margin:4.5rem 0 0} }   /* autorretrato debajo del statement, a la izquierda */
   .eyebrow{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#8f8f8a;margin-bottom:2rem}
   main p{font-size:clamp(.9rem,1.25vw,1.05rem);margin-bottom:1.5rem;color:#26262a}
   main p.en{color:#8a8a86;font-size:.86rem}
@@ -117,7 +121,7 @@
   <main>
     <div class="eyebrow">About</div>
     <div class="biotop">
-    <figure class="biofoto"><img src="assets/sofia-bernasconi-retrato.jpg" alt="Portrait of Sofía Bernasconi, Chilean video installation, media and new media artist"><figcaption>Sofía Bernasconi, Brooklyn, 2026</figcaption><p class="cv" data-es><a href="assets/sofia-bernasconi-cv-es.pdf" target="_blank" rel="noopener">CV ↓</a><small>PDF</small></p><p class="cv pf" data-es><a href="assets/sofia-bernasconi-portafolio.pdf" target="_blank" rel="noopener">Portafolio ↓</a><small>PDF</small></p><p class="cv" data-en><a href="assets/sofia-bernasconi-cv.pdf" target="_blank" rel="noopener">CV ↓</a><small>PDF</small></p><p class="cv pf" data-en><a href="assets/sofia-bernasconi-portfolio.pdf" target="_blank" rel="noopener">Portfolio ↓</a><small>PDF</small></p></figure>
+    <figure class="biofoto"><img src="assets/sofia-bernasconi-retrato.jpg" alt="Portrait of Sofía Bernasconi, Chilean video installation, media and new media artist"><div class="biofoto-meta"><figcaption>Sofía Bernasconi, Brooklyn, 2026</figcaption><p class="cv" data-es><a href="assets/sofia-bernasconi-cv-es.pdf" target="_blank" rel="noopener">CV ↓</a><small>PDF</small></p><p class="cv pf" data-es><a href="assets/sofia-bernasconi-portafolio.pdf" target="_blank" rel="noopener">Portafolio ↓</a><small>PDF</small></p><p class="cv" data-en><a href="assets/sofia-bernasconi-cv.pdf" target="_blank" rel="noopener">CV ↓</a><small>PDF</small></p><p class="cv pf" data-en><a href="assets/sofia-bernasconi-portfolio.pdf" target="_blank" rel="noopener">Portfolio ↓</a><small>PDF</small></p></div></figure>
     <div class="biotxt">
     <p data-es>Sofía Bernasconi (Concepción, Chile, 1994) es artista medial y trabaja entre la instalación cinética, el video y la performance. Su práctica explora la porosidad entre cuerpo, territorio y máquina: envuelve su propio cuerpo en humedales, lo estira con mecanismos y lo proyecta sobre superficies en movimiento, y aborda la piel como una membrana en una relación viva y cambiante con el agua, la tecnología y otras especies.</p>
     <p data-en>Sofía Bernasconi (Concepción, Chile, 1994) is a media artist working across kinetic installation, video and performance. Her practice explores the porosity between body, territory and machine: she wraps her own body in wetlands, stretches it through mechanisms and projects it onto moving surfaces, approaching skin as a membrane in a living, shifting relationship with water, technology and other species.</p>
