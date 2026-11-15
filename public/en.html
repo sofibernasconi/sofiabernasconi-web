@@ -1165,7 +1165,7 @@ new p5(function(p){
   #puntos button:hover span,#puntos button:focus-visible span{opacity:1}
   #puntos button:focus-visible{outline:1px solid #fff;outline-offset:2px;border-radius:50%}
   @media(max-width:700px){
-    #puntos{right:calc(37.4px - 16px);gap:2px}   /* más separados del borde y con zona de toque grande */
+    #puntos{right:calc(37.4px - 16px);gap:2px;touch-action:none}   /* más separados del borde y con zona de toque grande */
     #puntos button{width:32px;height:32px}
     #puntos button::before{width:7px;height:7px;margin:-3.5px 0 0 -3.5px}
     #puntos button span{display:none}
@@ -1198,6 +1198,17 @@ new p5(function(p){
     var g=document.getElementById('gallery'); if(g&&g.getBoundingClientRect().top>vh*0.5) k=0;
     btns.forEach(function(b,i){ var on=i===k; b.classList.toggle('on',on); if(on) b.setAttribute('aria-current','true'); else b.removeAttribute('aria-current'); });
   }
+  // teléfono: deslizar el dedo por la columna de puntos funciona como slider (salta de obra en obra mientras arrastras)
+  function destino(i){ var it=items[i]; if(!it.el) return null; var f=it.el.querySelector('.comp img'); return (f&&getComputedStyle(f).scrollSnapAlign.indexOf('start')>-1)?f:it.el; }
+  function ir(i){ var d=destino(i); document.body.classList.add('ui-hide');
+    if(!d){ window.scrollTo(0,0); document.body.scrollTop=0; } else d.scrollIntoView({block:'start'}); }
+  var arr=false, mov=false, ult=-1;
+  function cual(y){ var k=0, m=1e9; btns.forEach(function(b,i){ var r=b.getBoundingClientRect(), d=Math.abs(r.top+r.height/2-y); if(d<m){ m=d; k=i; } }); return k; }
+  nav.addEventListener('touchstart',function(e){ arr=true; mov=false; ult=cual(e.touches[0].clientY); },{passive:true});
+  nav.addEventListener('touchmove',function(e){ if(!arr) return; e.preventDefault(); mov=true; var k=cual(e.touches[0].clientY);
+    if(k!==ult){ ult=k; ir(k); btns.forEach(function(b,i){ b.classList.toggle('on',i===k); }); } },{passive:false});
+  nav.addEventListener('touchend',function(){ arr=false; },{passive:true});
+  nav.addEventListener('click',function(e){ if(mov){ e.stopPropagation(); e.preventDefault(); mov=false; } },true);   // tras arrastrar no repite el salto
   var q=0; function t(){ if(!q){ q=1; requestAnimationFrame(function(){ q=0; marcar(); }); } }
   addEventListener('scroll',t,{passive:true}); document.addEventListener('scroll',t,{passive:true,capture:true}); addEventListener('resize',t); marcar();
 })();</script>
