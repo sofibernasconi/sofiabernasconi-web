@@ -71,7 +71,7 @@
   body.menu-on #gallery{background:#f7f6f4}
   body.menu-on{scroll-snap-type:y mandatory}
   .proj{min-height:100vh;scroll-snap-align:start;position:relative;padding:26vh 6% 8vh;display:flex;align-items:center}
-  .cap{position:fixed;left:6%;top:24vh;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.15;letter-spacing:.06em;color:#fff;mix-blend-mode:difference;opacity:0;transition:font-weight .2s ease;z-index:101;pointer-events:auto;cursor:pointer;will-change:transform,opacity,filter;max-width:88vw}
+  .cap{position:fixed;left:6%;top:24vh;transform-origin:0 0;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.15;letter-spacing:.06em;color:#fff;mix-blend-mode:difference;opacity:0;transition:font-weight .2s ease;z-index:101;pointer-events:auto;cursor:pointer;will-change:transform,opacity,filter;max-width:88vw}
   /* el título siempre entra y sale desvaneciéndose, aunque el scroll dé un salto (p. ej. la primera obra) */
   .cap{transition:font-weight .2s ease,opacity .7s ease,filter .7s ease}
   @media(max-width:700px){ .cap{transition:opacity 1.1s ease,filter 1.1s ease} }   /* en el teléfono el dedo scrollea rápido: fundido más largo */
@@ -425,7 +425,9 @@
           if(prog<0)prog=0; if(prog>1)prog=1;
           const grande=mob?Math.min(27,innerWidth*0.068):Math.min(64,innerWidth*0.045), chico=12;
           const fsz=grande+(chico-grande)*(1-Math.pow(1-prog,1.6));
-          cap.style.fontSize=fsz.toFixed(1)+'px';
+          // se achica con scale (no con el tamaño de letra): los renglones quedan cortados igual que cuando es grande, nada salta
+          const kEsc=fsz/grande; s.__k=kEsc;
+          cap.style.fontSize=grande.toFixed(1)+'px'; tf='scale('+kEsc.toFixed(4)+')';
           if(s.__capw) s.__capw.style.fontSize=cap.style.fontSize;
           cap.style.transform=tf;
           cap.style.opacity=op.toFixed(3);
@@ -467,8 +469,9 @@
                   const b = Math.max(0, cr.bottom    - mejor.bottom);
                   const l = Math.max(0, mejor.left   - cr.left);
                   const r = Math.max(0, cr.right     - mejor.right);
-                  capw.style.clipPath = 'inset('+t.toFixed(1)+'px '+r.toFixed(1)+'px '
-                                              +b.toFixed(1)+'px '+l.toFixed(1)+'px)';
+                  const kk = s.__k || 1;   // el recorte va en medidas del título sin escalar
+                  capw.style.clipPath = 'inset('+(t/kk).toFixed(1)+'px '+(r/kk).toFixed(1)+'px '
+                                              +(b/kk).toFixed(1)+'px '+(l/kk).toFixed(1)+'px)';
                   capw.style.visibility = 'visible';
                 } else capw.style.visibility = 'hidden';   // sin foto detrás: la copia blanca no se ve
               } else capw.style.visibility = 'hidden';     // (Safari dibujaba media copia con inset(50% 0))
