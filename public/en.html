@@ -50,6 +50,7 @@
   body.menu-on.ui-hide:not(.llegando):not(.mm-open) #c,body.menu-on.ui-hide:not(.llegando):not(.mm-open) #blurlayer{opacity:0}
   /* títulos de las obras: sin el nombre original en español en la versión en inglés */
   .cap .orig{display:none !important}
+  .cap .anio{white-space:nowrap}
   #lang{position:fixed;top:36px;right:36px;z-index:120;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;color:#111116;opacity:0;transition:opacity .9s ease;pointer-events:none}
   body.menu-on #lang{opacity:1;pointer-events:auto}
   #lang span{cursor:pointer;opacity:.4;transition:opacity .3s}
@@ -402,6 +403,10 @@
     // los títulos se sacan de la galería y quedan directo en la página, encima de la
     // franja superior: así ningún navegador (Safari en iPhone) los corta al aparecer
     secs.forEach(function(sec){ const c=sec.querySelector('.cap'); if(c){ c.dataset.id=sec.dataset.id; sec.__cap=c; document.body.appendChild(c); } });
+    // el punto va pegado al título: si ocupa dos renglones, el "·" queda arriba al final del título y el año baja solo
+    secs.forEach(function(sec){ const c=sec.__cap; if(!c) return; const n=[].slice.call(c.childNodes).reverse().find(function(x){ return x.nodeType===3 && x.nodeValue.indexOf('·')>-1; });
+      if(!n) return; const i=n.nodeValue.lastIndexOf('·'); const sp=document.createElement('span'); sp.className='anio'; sp.textContent=n.nodeValue.slice(i+1).trim();
+      n.nodeValue=n.nodeValue.slice(0,i).replace(/\s+$/,'')+'\u00a0· '; c.insertBefore(sp,n.nextSibling); });
     const DRIFT=46; // cuánto desciende la leyenda (vh) a lo largo de la obra
     function update(){
       if(document.body.classList.contains('menu-on')){
