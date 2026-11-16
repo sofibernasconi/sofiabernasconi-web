@@ -72,7 +72,7 @@
   body.menu-on #gallery{background:#f7f6f4}
   body.menu-on{scroll-snap-type:y mandatory}
   .proj{min-height:100vh;scroll-snap-align:start;position:relative;padding:26vh 6% 8vh;display:flex;align-items:center}
-  .cap{position:fixed;left:6%;top:24vh;transform-origin:0 0;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.15;letter-spacing:.06em;color:#fff;mix-blend-mode:difference;opacity:0;transition:font-weight .2s ease;z-index:101;pointer-events:auto;cursor:pointer;will-change:transform,opacity,filter;max-width:88vw}
+  .cap{position:fixed;left:6%;top:24vh;transform-origin:0 0;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.15;letter-spacing:.06em;color:#fff;mix-blend-mode:difference;opacity:0;transition:font-weight .2s ease;z-index:101;pointer-events:none;cursor:pointer;will-change:transform,opacity,filter;max-width:88vw}
   /* el título siempre entra y sale desvaneciéndose, aunque el scroll dé un salto (p. ej. la primera obra) */
   .cap{transition:font-weight .2s ease,opacity .7s ease,filter .7s ease}
   @media(max-width:700px){ .cap{transition:opacity 1.1s ease,filter 1.1s ease} }   /* en el teléfono el dedo scrollea rápido: fundido más largo */
@@ -436,6 +436,7 @@
           if(s.__capw) s.__capw.style.fontSize=cap.style.fontSize;
           cap.style.transform=tf;
           cap.style.opacity=op.toFixed(3);
+          cap.style.pointerEvents=op>0.35?'auto':'none';   // un título invisible no recibe clics (antes el de Artwork, el último, tapaba a los demás)
           cap.style.filter = dis>0.02 ? 'blur('+(dis*dis*(window.innerWidth<700?2:3.2)).toFixed(2)+'px)' : 'none';
 
           /* El título es fijo y la foto pasa por detrás: el cruce parte las
