@@ -29,7 +29,8 @@
 <meta name="twitter:description" content="Sofía Bernasconi, Chilean visual and media artist in Brooklyn, New York (NYU ITP). Video installation, performance, art and technology: body, territory and machine.">
 <meta name="twitter:image" content="https://sofiabernasconi.com/assets/sofia-bernasconi-convey-me-7.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>   <!-- defer: la intro no espera a p5 para aparecer -->
+<link rel="preload" href="/assets/js/p5.min.js" as="script">
+<script defer src="/assets/js/p5.min.js"></script>   <!-- defer: la intro no espera a p5 para aparecer -->
 <style>
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
@@ -249,7 +250,11 @@
   body.menu-on .foot-site{opacity:1}
 
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@500;700&family=Inter:ital,wght@1,800&display=swap" rel="stylesheet">
+<link rel="preload" href="/assets/fonts/syne-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>/* Syne (logo) servida desde el propio sitio: la primera visita no espera a Google Fonts */
+@font-face{font-family:'Syne';font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/syne-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Syne';font-style:normal;font-weight:800;font-display:swap;src:url(/assets/fonts/syne-latin-800-normal.woff2) format('woff2')}</style>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@500;700&family=Inter:ital,wght@1,800&display=swap" rel="stylesheet">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Sofía Bernasconi","primaryImageOfPage":{"@type":"ImageObject","url":"https://sofiabernasconi.com/assets/sofia-bernasconi-convey-me-7.jpg","width":1600,"height":900,"caption":"Convey me, Sofía Bernasconi"}}</script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Person",

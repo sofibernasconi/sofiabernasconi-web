@@ -4,3 +4,9 @@
   X-Robots-Tag: noindex
 /assets/og.jpg
   X-Robots-Tag: noindex
+
+# Logo: p5 and the Syne font are self-hosted and never change -> cache for a year
+/assets/js/*
+  Cache-Control: public, max-age=31536000, immutable
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
