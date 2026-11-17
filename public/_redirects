@@ -8,10 +8,15 @@
 /cv/                             https://drive.google.com/file/d/1jneVjJCI5rqkfz3qecTqCmZNPL_lIVK1/view  302
 /cv-es                           https://drive.google.com/file/d/1ysFE-Vy8KJKX4oCt52fxpgHSILV82T7D/view  302
 /cv-es/                          https://drive.google.com/file/d/1ysFE-Vy8KJKX4oCt52fxpgHSILV82T7D/view  302
-/portfolio                       /assets/sofia-bernasconi-portfolio.pdf    302
-/portfolio/                      /assets/sofia-bernasconi-portfolio.pdf    302
-/portafolio                      /assets/sofia-bernasconi-portafolio.pdf   302
-/portafolio/                     /assets/sofia-bernasconi-portafolio.pdf   302
+
+# Portfolio links (Nov 17, 2026). Official portfolios live in Google Drive, like the CVs:
+# replace the file in Drive (Manage versions) and the site keeps pointing to the latest one.
+/portfolio                       https://drive.google.com/file/d/1ILLzNd-PzHx3d_UG8h3E9e6_PlBx50Kt/view  302
+/portfolio/                      https://drive.google.com/file/d/1ILLzNd-PzHx3d_UG8h3E9e6_PlBx50Kt/view  302
+/portafolio                      https://drive.google.com/file/d/1RGIQIEnKIh5ETiSwKmFWegnSw45cQrJ1/view  302
+/portafolio/                     https://drive.google.com/file/d/1RGIQIEnKIh5ETiSwKmFWegnSw45cQrJ1/view  302
+/assets/sofia-bernasconi-portfolio.pdf    https://drive.google.com/file/d/1ILLzNd-PzHx3d_UG8h3E9e6_PlBx50Kt/view  302
+/assets/sofia-bernasconi-portafolio.pdf   https://drive.google.com/file/d/1RGIQIEnKIh5ETiSwKmFWegnSw45cQrJ1/view  302
 
 # Photos renamed to include the artist's name (Oct 25, 2026)
 /assets/convey_1.jpg                 /assets/sofia-bernasconi-convey-me-1.jpg  301
