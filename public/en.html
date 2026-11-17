@@ -235,6 +235,7 @@
   /* mientras la intro vive, el logo de partículas está oculto */
   body.intro-viva #c,body.intro-viva #blurlayer{opacity:0}
   #c,#blurlayer{transition:opacity .55s ease}
+  body.rapido #c,body.rapido #blurlayer{transition:opacity .18s ease}   /* scroll rápido: el logo chico desaparece al tiro */
   /* al entrar, el fondo ya está claro: no debe asomar el negro */
   body.entrando #bg,body.entrando #topmask{transition:none;background:#f7f6f4}
 
@@ -573,8 +574,15 @@ new p5(function(p){
       document.body.style.cursor=inName(mx,my)?'pointer':'default';});
     // al bajar, el logo se va a la esquina (con su efecto); al volver arriba, regresa grande
     const scroller=()=> (document.body.scrollTop || document.documentElement.scrollTop || 0);
+    let vy0=0, vt0=0;
     const alScroll=()=>{
       const y=scroller(), hh=window.innerHeight;
+      // si bajas rápido, el logo chico se va enseguida (sin esperar los 2 s de llegada a la esquina)
+      const now=performance.now(), dt=now-vt0, v=dt>0&&dt<200 ? (y-vy0)/dt : 0; vy0=y; vt0=now;
+      if(document.body.classList.contains('llegando') && (v>hh*0.0025 || y>hh*1.1)){
+        clearTimeout(window.__lleg); document.body.classList.add('rapido'); document.body.classList.remove('llegando');
+        clearTimeout(window.__rap); window.__rap=setTimeout(()=>document.body.classList.remove('rapido'),900);
+      }
       const hero=document.getElementById('hero');
       document.body.classList.toggle('libre', !!hero && y < hero.offsetHeight*0.9);
       if(!parked && y > hh*0.06){ parked=true; document.body.classList.add('parked','llegando'); clearTimeout(window.__lleg); window.__lleg=setTimeout(()=>document.body.classList.remove('llegando'),2200); }
@@ -1053,12 +1061,10 @@ new p5(function(p){
     ctx.imageSmoothingEnabled = true;
     cont.classList.add('fuera');
     document.body.classList.add('entrando','reveal');
-    // el logo aparece cuando ya empezaron a llegar las primeras palabras
-    setTimeout(()=>{
-      if(window.__park) window.__park();
-      document.body.classList.remove('intro-viva');   // el logo se enciende
-    }, 1600);
-    setTimeout(()=>document.body.classList.add('menu-on'), 1800);
+    // el logo empieza a aparecer apenas se entra, junto con el menú (el fundido sigue igual)
+    if(window.__park) window.__park();
+    document.body.classList.remove('intro-viva');   // el logo se enciende
+    setTimeout(()=>document.body.classList.add('menu-on'), 800);
   }
   cont.addEventListener('click', entrar);
   // en el teléfono no hace falta tocar: basta deslizar el dedo una vez.
