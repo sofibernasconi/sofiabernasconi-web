@@ -233,7 +233,7 @@
   #intro.fuera{background:transparent;pointer-events:none}
   /* mientras la intro vive, el logo de partículas está oculto */
   body.intro-viva #c,body.intro-viva #blurlayer{opacity:0}
-  #c,#blurlayer{transition:opacity .55s ease}
+  #c,#blurlayer{transition:opacity .4s ease}
   /* al entrar, el fondo ya está claro: no debe asomar el negro */
   body.entrando #bg,body.entrando #topmask{transition:none;background:#f7f6f4}
 
@@ -1052,8 +1052,8 @@ new p5(function(p){
     setTimeout(()=>{
       if(window.__park) window.__park();
       document.body.classList.remove('intro-viva');   // el logo se enciende
-    }, 1600);
-    setTimeout(()=>document.body.classList.add('menu-on'), 1800);
+    }, 600);
+    setTimeout(()=>document.body.classList.add('menu-on'), 800);
   }
   cont.addEventListener('click', entrar);
   // en el teléfono no hace falta tocar: basta deslizar el dedo una vez.
